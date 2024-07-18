@@ -12,9 +12,9 @@ function Main() {
 
   const toggleAccordion = (index) => {
     if (expandedIndex === index) {
-      setExpandedIndex(null); // Collapse if already expanded
+      setExpandedIndex(null);
     } else {
-      setExpandedIndex(index); // Expand if not expanded
+      setExpandedIndex(index); 
     }
   };
   

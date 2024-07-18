@@ -2,8 +2,8 @@
     align-items: center; 
     padding: 3em 0 0 0;
     height: 70px;
-    position: fixed; /* Fixes the topbar to the viewport */
-    top: 0; /* Places the topbar at the top of the viewport */
+    position: fixed;
+    top: 0; 
     left: 0; 
     z-index: 1000;
     width: 100%; 
@@ -43,5 +43,25 @@
 @media (max-width: 850px) {
     .topbar_list {
         padding: 0;
+    }
+}
+
+/* Phone version topbar constrains */
+@media (max-width: 650px) {
+    .topbar_list {
+        padding: 0 1em;
+    }
+    .topbar-list li a{
+        font-size: 0.9em;
+        white-space: nowrap;
+    }
+    .right-items {
+        gap: 1em;
+    }
+    .home-link{
+        margin-right: 1em;
+    }
+    .topbar-menu {
+        position: relative; /* Topbar is not fixed on phones */
     }
 }

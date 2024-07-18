@@ -3,6 +3,7 @@ import Start from './pages/Start.jsx';
 import SignIn from './pages/SignIn.jsx';
 import Main from './pages/Body.jsx';
 import Team from './pages/Team.jsx';
+import WhenToMeet from './pages/WhenToMeet.jsx';
 
 import { useRoutes, BrowserRouter as Router } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -26,6 +27,10 @@ function App() {
       {
         path: "/team",
         element:<Team/>
+      },
+      {
+        path: "/whentomeet",
+        element:<WhenToMeet/>
       },
      
     ]);
