@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 7em auto 5em;
+    margin: 5em auto 5em;
 }
 .section-header {
     font-size: 2em;
@@ -30,7 +30,7 @@
 }
 .catchphrase-btn {
     display: inline-block;
-    background-color: #c95454;
+    background-color: var(--color-action-button);
     color: #fff;
     text-align: center;
     letter-spacing: 0.25px;
@@ -38,19 +38,14 @@
     padding: 0.6em 1.2em;
     text-decoration: none;
     border-radius: 8px;
-    border: #c95454 2px solid;
+    border: var(--color-action-button) 2px solid;
 }
 
 .catchphrase-btn:hover {
-    border: #c95454 2px solid;
-    background-color: #f9f9f9;
-    color: #c95454;
+    border: var(--color-action-button) 2px solid;
+    background-color: var(--color-background);
+    color: var(--color-action-button);
     transition: 0.4s;
-}
-
-
-.catchphrase-btn:active {
-    background-color: #d9a8a8;
 }
 
 /* =========== FEATURES AREA =========== */
@@ -155,12 +150,11 @@
     margin: 2.5em;
     font-size: 1.2em;
     line-height: 1.4;
-    color: #666;
     
 }
 
 hr.faq-divider{
-    border: 1px solid #dedede;
+    border: 1px solid var(--gray-color);
 }
 
 /* =========== END AREA =========== */
@@ -171,8 +165,8 @@ hr.faq-divider{
 }
 .underlined-link{
     text-decoration: none;
-    color: #c95454;
-    border-bottom: 1px solid #c95454;
+    color: var(--color-action-button);
+    border-bottom: 1px solid var(--color-action-button);
 }
 .bottom-link-p{
     margin-top: 7em;
@@ -224,5 +218,10 @@ hr.faq-divider{
 
     .faq {
         margin: 2em 1em;
+    }
+}
+@media (max-width: 650px) {
+    .container{
+        margin-top: 0;
     }
 }

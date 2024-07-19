@@ -7,7 +7,7 @@
     left: 0; 
     z-index: 1000;
     width: 100%; 
-    background-color: #f9f9f9e4;
+    background-color: var(--color-background-with-opacity);
 }
 
 .topbar-list {
@@ -29,14 +29,14 @@
 }
 
 .start-button{
-    border: #c95454 2px solid;
-    color: #c95454;
+    border: var(--color-action-button) 2px solid;
+    color: var(--color-action-button);
     padding: 0.6em 1.2em;
     border-radius: 8px;
 }
 .start-button:hover {
-    background-color: #c95454;
-    color: white;
+    background-color: var(--color-action-button);
+    color: var(--color-background);
     transition: 0.4s;
 }
 

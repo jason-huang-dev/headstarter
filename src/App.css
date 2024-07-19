@@ -6,3 +6,9 @@
 .page-wrapper{
   margin-top: 10em;
 }
+
+@media (max-width: 650px) {
+  .page-wrapper {
+      margin-top: 0;
+  }
+}
