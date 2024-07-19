@@ -1,8 +1,21 @@
-# React + Vite
+# headstarter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## packages to download to start
 
-Currently, two official plugins are available:
+We have Body.jsx as the main of the landing page (path '/')
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+All the routings are located in App.jsx
+
+index.css will contain main constrains for the whole website (font/width/dark/light mode/color variables)
+
+App.jsx will contain the wrappers and all the reusable common styles (buttons/common margins patterns etc...)
+
+## npm install
+
+## npm run dev
+
+## install react-router-dom
+
+## install @react-oauth/google
+
+https://vitejs.dev/
