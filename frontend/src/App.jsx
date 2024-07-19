@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn.jsx';
 import Main from './pages/Body.jsx';
 import Team from './pages/Team.jsx';
 import WhenToMeet from './pages/WhenToMeet.jsx';
+import Dashboards from './pages/Dashboards.jsx';
 
 import { useRoutes, BrowserRouter as Router } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -32,7 +33,10 @@ function App() {
         path: "/whentomeet",
         element:<WhenToMeet/>
       },
-     
+      {
+        path: "/dashboards",
+        element:<Dashboards/>
+      }
     ]);
 
   return (

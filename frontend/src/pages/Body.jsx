@@ -27,7 +27,7 @@ function Main() {
         <h5 className='under-catchphrase'>Duis aute irure dolor in reprehenderit 
         in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</h5>
       </div>
-      <Link to="/signin" className='catchphrase-btn'>Try it</Link>
+      <Link to="/signin" className='catchphrase-btn btn-wrap'>Try it</Link>
     </div>  
 
     <div className='cards-container'>
@@ -119,7 +119,7 @@ function Main() {
       <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
       <h5 className='under-catchphrase'>Duis aute irure dolor in reprehenderit 
         in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</h5>
-      <Link to="/signin" className='catchphrase-btn'>Try it</Link>
+      <Link to="/signin" className=' btn-wrap catchphrase-btn'>Try it</Link>
       <p className='bottom-link-p'>Made by <Link to="/team" className='underlined-link'>XYZ team</Link></p>
     </div>
 

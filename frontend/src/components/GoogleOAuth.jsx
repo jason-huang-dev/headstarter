@@ -23,10 +23,12 @@ const GoogleOAuth = () => {
             <img src={user.picture} alt="Profile" />
           </div>
         ) : (
+          <div className='btn-wrap'>
           <GoogleLogin
             onSuccess={handleLoginSuccess}
             onError={handleLoginError}
           />
+          </div>
         )}
       </div>
     </GoogleOAuthProvider>
