@@ -12,14 +12,13 @@ App.jsx will contain the wrappers and all the reusable common styles (buttons/co
 
 
 # Getting started
-1. First you would need to have docker desktop [downloaded](https://www.docker.com/products/docker-desktop/) and open.
-
-## Docker Desktop
-The eveything is containerized in these docker containers so that you will not need to worry about downloading dependencies.
-You need to trust the third party application, and signing in is optional.
+1. First you would need to have docker desktop [downloaded](https://www.docker.com/products/docker-desktop/) and opened.
 
 2. Set your .env file using the .env.sample with your own values
 
+3. Run ```docker compose up --build -d``` in command line in the root working directory
+
+4. To access the web app go to docker desktop and click on the 5173:80 port or [localhost](http://localhost:5173)
 # Docker Commands
 - ```docker compose up -d``` will build all the containers necessary for the application
 - ```docker-compose down``` will stop the containers
