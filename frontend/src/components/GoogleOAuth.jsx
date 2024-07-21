@@ -1,29 +1,65 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
-import GoogleOAuth from './GoogleOAuth';
+import React, { useState } from 'react';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
-function HandleRedirect() {
-  const location = useLocation();
+const GoogleOAuth = () => {
+  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    if (token) {
-      localStorage.setItem('authToken', token);
-      window.location.href = '/'; // Redirect to home page
+  // Parses and stores user profile info obtained from Google
+  const handleLoginSuccess = async (credentialResponse) => {
+    console.log('Login Success:', credentialResponse);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/auth/google/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: credentialResponse.credential,  // Assuming the token is in `credentialResponse.credential`
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Server Response:', data);
+
+      // Assuming the server returns user profile info
+      if (response.ok) {
+        setUser(data);
+      } else {
+       console.error('Error from server:', data);
+        setUser(null);
+      }
+    } catch (error) {
+      console.error('Error sending POST request:', error);
+      setUser(null);
     }
-  }, [location]);
+  };
 
-  return null;
-}
+  const handleLoginError = (error) => {
+    console.error('Login Error:', error);
+    setUser(null);
+  };
 
-function App() {
   return (
-    <Router>
-      <Route exact path="/" component={GoogleOAuth} />
-      <Route path="/oauth-redirect" component={HandleRedirect} />
-    </Router>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
+      <div>
+        <h1>Google OAuth Example</h1>
+        {user ? (
+          <div>
+            <h2>Welcome, {user.name}</h2>
+            <img className='profile-icon' src={user.picture} alt="Profile" />
+          </div>
+        ) : (
+          <div className='btn-wrap'>
+            <GoogleLogin
+              onSuccess={handleLoginSuccess}
+              onError={handleLoginError}
+            />
+          </div>
+        )}
+      </div>
+    </GoogleOAuthProvider>
   );
-}
+};
 
-export default App;
+export default GoogleOAuth;

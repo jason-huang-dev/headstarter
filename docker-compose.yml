@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     environment:
@@ -25,7 +23,7 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "5173:80"
+      - "5173:5173"
     depends_on:
       - backend
 

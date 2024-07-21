@@ -172,8 +172,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # Add your Google OAuth client ID and secret
 SOCIALACCOUNT_PROVIDERS['google']['APP'] = {
-    'client_id': 'YOUR_GOOGLE_CLIENT_ID',
-    'secret': 'YOUR_GOOGLE_CLIENT_SECRET',
+    'client_id': os.getenv('VITE_GOOGLE_OAUTH_ID'),
+    'secret': os.getenv('VITE_GOOGLE_OAUTH_SECRET'),
     'key': ''
 }
 
