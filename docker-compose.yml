@@ -2,10 +2,15 @@ version: '3.8'
 
 services:
   backend:
+    environment:
+      - DJANGO_SETTINGS_MODULE=calendar_app.settings
     build:
       context: ./backend
     container_name: django_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000 &&
+             python manage.py wait_for_db &&
+             python manage.py migrate"
     volumes:
       - ./backend:/app
     ports:

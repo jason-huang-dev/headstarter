@@ -1,38 +1,29 @@
-import React, { useState } from 'react';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
+import GoogleOAuth from './GoogleOAuth';
 
-const GoogleOAuth = () => {
-  const [user, setUser] = useState(null);
+function HandleRedirect() {
+  const location = useLocation();
 
-  const handleLoginSuccess = (credentialResponse) => {
-    console.log('Login Success:', credentialResponse);
-    setUser(credentialResponse); // You might want to parse and use the profile info here.
-  };
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    if (token) {
+      localStorage.setItem('authToken', token);
+      window.location.href = '/'; // Redirect to home page
+    }
+  }, [location]);
 
-  const handleLoginError = (error) => {
-    console.error('Login Error:', error);
-  };
+  return null;
+}
 
+function App() {
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
-      <div>
-        <h1>Google OAuth Example</h1>
-        {user ? (
-          <div>
-            <h2>Welcome, {user.name}</h2>
-            <img src={user.picture} alt="Profile" />
-          </div>
-        ) : (
-          <div className='btn-wrap'>
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginError}
-          />
-          </div>
-        )}
-      </div>
-    </GoogleOAuthProvider>
+    <Router>
+      <Route exact path="/" component={GoogleOAuth} />
+      <Route path="/oauth-redirect" component={HandleRedirect} />
+    </Router>
   );
-};
+}
 
-export default GoogleOAuth;
+export default App;
