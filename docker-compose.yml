@@ -5,6 +5,8 @@ services:
     build:
       context: ./backend
     container_name: django_backend
+    env_file:
+      - .env
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000 &&
              python manage.py wait_for_db &&
@@ -20,6 +22,8 @@ services:
     build:
       context: ./frontend
     container_name: react_frontend
+    env_file:
+      - .env
     volumes:
       - ./frontend:/app
     ports:

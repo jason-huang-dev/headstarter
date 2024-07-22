@@ -1,9 +1,8 @@
-# users/views.py
-
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 from rest_framework import status
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -32,11 +31,18 @@ def google_auth(request):
             user.save()
 
         # Create or update social account
-        SocialAccount.objects.get_or_create(
+        social_account, created = SocialAccount.objects.get_or_create(
             provider='google',
             uid=idinfo['sub'],
             user=user
         )
+        
+        # Update the social account with profile picture if available
+        profile_picture = idinfo.get('picture')
+        if profile_picture:
+            social_account.extra_data = social_account.extra_data or {}
+            social_account.extra_data['picture'] = profile_picture
+            social_account.save()
 
         # Generate or get auth token
         token, _ = Token.objects.get_or_create(user=user)
@@ -44,8 +50,12 @@ def google_auth(request):
         return Response({
             'token': token.key,
             'user_id': user.pk,
-            'email': user.email
+            'email': user.email,
+            'username': user.username,
+            'picture': social_account.extra_data.get('picture')  # Return the picture URL
         })
 
-    except ValueError:
-        return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+    except ValueError as e:
+        return Response({'error': f'Invalid token: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': f'Internal server error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

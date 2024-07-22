@@ -46,7 +46,7 @@ const GoogleOAuth = () => {
         <h1>Google OAuth Example</h1>
         {user ? (
           <div>
-            <h2>Welcome, {user.name}</h2>
+            <h2>Welcome, {user.username}</h2>
             <img className='profile-icon' src={user.picture} alt="Profile" />
           </div>
         ) : (
