@@ -34,4 +34,10 @@ App.jsx will contain the wrappers and all the reusable common styles (buttons/co
 - ```docker-compose down -v``` stops containers and removes the volume
 - ```docker ps``` lists all the docker containers
 
+
+# Creating Admin user
+- ```docker-compose exec backend python manage.py createsuperuser``` will ask for email and password
+- when entering password it wont appear in terminal but it is taking the input, be sure to remember the password
+
+
 https://vitejs.dev/
