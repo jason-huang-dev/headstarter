@@ -22,7 +22,7 @@ App.jsx will contain the wrappers and all the reusable common styles (buttons/co
     ii. ```source .venv/bin/activate```  for Mac
 
         ```source .venv/Scripts/activate``` for Windows
-        
+
         to activate the python virtual environment
     
     iii. ```docker compose up --build -d``` to build all the containers necessary for the application
@@ -44,8 +44,35 @@ App.jsx will contain the wrappers and all the reusable common styles (buttons/co
 
 
 # Creating Admin user
-- ```docker-compose exec backend python manage.py createsuperuser``` will ask for email and password
+- ```docker-compose exec backend python manage.py makemigrations users```
+- ```docker-compose exec backend python manage.py migrate```
+- ```docker compose exec backend python manage.py createsuperuser``` will ask for email and password
 - when entering password it wont appear in terminal but it is taking the input, be sure to remember the password
+
+# Know Docker issues
+
+"Error: Cannot find module @rollup/rollup-linux-arm64-gnu. npm has a bug related to optional dependencies (git repo url link). Please try npm i again after removing both package-lock.json and node_modules directory."
+
+Fix:
+1. Go into frontend/Dockerfile and change:
+CMD [ "npm", "run", "dev" ] ------------> CMD [ "sleep", "infinity" ]
+
+2. Go into docker desktop and obtain the screen attached to this message
+
+3. Click the EXEC tab below 5173:5173 under the container info
+
+4. Run ```ls``` after the # in the cml an make sure you have the same cml output as the attached image
+
+5. If you see "node_modules" and "package-lock.json" remove these files by running 
+```rm -rf node_modules```
+```rm -rf package-lock.json```
+
+6. The reinstall all ReactJS libaries and dependencies with
+```npm i```
+
+7. Click on 5173:5173 and make sure that the web app is not accessible and the react_frontend container is in the running state
+
+8. In local terminal run ```docker-compose down``` and then ```docker-compose up -d --build```
 
 
 https://vitejs.dev/
