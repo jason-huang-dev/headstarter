@@ -2,13 +2,39 @@
 
 ## Quick rundown
 
-We have Body.jsx as the main of the landing page (path '/')
 
-All the routings are located in App.jsx
+## Project Setup and Dependencies
 
-index.css will contain main constrains for the whole website (font/width/dark/light mode/color variables)
+This is a Tailwind CSS, React, and Vite project. Follow the steps below to set up your development environment and install the necessary dependencies.
 
-App.jsx will contain the wrappers and all the reusable common styles (buttons/common margins patterns etc...)
+### Quick Setup Guide
+
+#### Install Tailwind CSS and Related Packages
+
+To set up Tailwind CSS and its related packages, run:
+
+```bash
+npm install -D tailwindcss postcss autoprefixer` 
+
+### Install Routing and Icon Packages
+
+For routing and icons, install:
+
+npm install react-router-dom lucide-react
+
+### Install Animation and Utility Packages
+
+For animations and utility functions, install:
+
+npm install react-just-parallax scroll-lock react-intersection-observer framer-motion
+
+### Install Google OAuth
+
+For Google OAuth authentication, install:
+
+npm install @react-oauth/google
+       
+```
 
 # Getting started
 1. First you would need to have docker desktop [downloaded](https://www.docker.com/products/docker-desktop/) and opened.
