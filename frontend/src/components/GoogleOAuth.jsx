@@ -39,27 +39,25 @@ const GoogleOAuth = () => {
     console.error('Login Error:', error);
     setUser(null);
   };
-
+  
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
-      <div>
-        <h1>Google OAuth Example</h1>
+      <div className="flex justify-center">
         {user ? (
-          <div>
+          <div className="text-center">
             <h2>Welcome, {user.username}</h2>
-            <img className='profile-icon' src={user.picture} alt="Profile" />
+            <img className="profile-icon mt-4 rounded-full" src={user.picture} alt="Profile" />
           </div>
         ) : (
-          <div className='btn-wrap'>
-            <GoogleLogin
-              onSuccess={handleLoginSuccess}
-              onError={handleLoginError}
-            />
-          </div>
+          <GoogleLogin
+            onSuccess={handleLoginSuccess}
+            onError={handleLoginError}
+          />
         )}
       </div>
     </GoogleOAuthProvider>
   );
 };
+
 
 export default GoogleOAuth;
