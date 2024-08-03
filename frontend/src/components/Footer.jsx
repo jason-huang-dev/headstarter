@@ -8,8 +8,15 @@ const Footer = () => {
             © {new Date().getFullYear()}. All rights reserved.
         </p>
 
-        <h4 className="flex gap-5 flex-wrap">
-                Team Project - Jason, Ester, Weijie, Aisha
+        <h4 className="flex flex-wrap">
+            Team Project - 
+            <a className="text-green-700 underline ml-2" target="_blank" href="https://www.linkedin.com/in/jasonhuangdev/">Jason</a>
+            <span className="mr-2">,</span> 
+            <a className="text-green-700 underline " target="_blank" href="https://www.linkedin.com/in/esterlin-jerez-paulino/">Ester</a>
+            <span className="mr-2">,</span> 
+            <a className="text-green-700 underline " target="_blank" href="https://www.linkedin.com/in/weijiew/">Weijie</a>
+            <span className="mr-2">,</span> 
+            <a className="text-green-700 underline" target="_blank" href="https://www.linkedin.com/in/aisha-salimgereyeva/">Aisha</a>
         </h4>
     </div>
 </div>
