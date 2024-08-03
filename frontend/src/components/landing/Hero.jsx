@@ -1,9 +1,8 @@
 import curve from "../../assets/png/curve.png";
 import calendar from "../../assets/png/calendar-hero.png";
-import Button from "../reusable/Button"; 
 import { ScrollParallax } from "react-just-parallax";
 import { useRef } from "react";
-import Notification from "../reusable/Notification";
+import {Notification, Button} from "../reusable";
 import { BackgroundCircles } from "../../assets/design/Hero";
 import {CircleHelp} from "lucide-react";
 

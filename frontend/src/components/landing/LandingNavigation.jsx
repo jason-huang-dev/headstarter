@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
 import iconsite from "../../assets/png/iconsite.png"; // logo of the website
-import Button from "../reusable/Button"; // Custom Button component
+import {Button} from "../reusable"; // Custom Button component
 import MenuSvg from "../../assets/svg/MenuSvg"; // Custom SVG component for the menu icon
 import { useState } from "react";
 

@@ -1,7 +1,7 @@
-import Arrow from "../assets/svg/Arrow";
+import Arrow from "../../assets/svg/Arrow.jsx";
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
-import Tagline from "./Tagline";
+import { TagLine }from '../reusable';
 import Typing from 'react-typing-effect';
 import {CalendarCheck, BellPlus, ListChecks, Users, Earth} from "lucide-react";
 
@@ -86,7 +86,7 @@ const Benefits = () => {
                         >
                             <div className="relative bg-n-1 rounded-[2.4375rem] overflow-hidden h-full flex flex-col">
                                 <div className="relative z-2 flex flex-col h-full p-[2.4rem] bg-white rounded-2xl">
-                                    <Tagline className="mb-3">{item.tagline}</Tagline>
+                                    <TagLine className="mb-3">{item.tagline}</TagLine>
                                     <h5 className="h5 mb-5">{item.title}</h5>
                                     <p className="body-2 mb-6 text-n-9 flex-grow">{item.text}</p>
                             

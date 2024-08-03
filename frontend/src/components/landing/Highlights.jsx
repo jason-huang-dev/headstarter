@@ -1,7 +1,7 @@
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
-import Tagline from "../reusable/Tagline";
+import Tagline from "../reusable/TagLine";
 import Typing from 'react-typing-effect';
 
 import services1 from "../../assets/png/services_1.png";

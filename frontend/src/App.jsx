@@ -1,9 +1,4 @@
-import SignIn from './pages/SignIn.jsx';
-import Body from './pages/Body.jsx';
-import Team from './pages/Team.jsx';
-import WhenToMeet from './pages/WhenToMeet.jsx';
-import Dashboards from './pages/Dashboards.jsx';
-
+import { SignIn, Body, Team, WhenToMeet, Dashboards} from './pages';
 import { useRoutes, BrowserRouter as Router } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import './App.css'

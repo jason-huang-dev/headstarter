@@ -1,6 +1,5 @@
 import React from 'react';
-import GoogleOAuth from '../components/GoogleOAuth';
-import Footer from '../components/Footer';
+import {GoogleOAuth, Footer} from '../components';
 import iconsite from '../assets/png/iconsite.png';
 
 function SignIn() {
