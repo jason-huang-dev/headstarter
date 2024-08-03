@@ -1,11 +1,4 @@
-import Topbar from './components/topbar.jsx';
-import Start from './pages/Start.jsx';
-import SignIn from './pages/SignIn.jsx';
-import Main from './pages/Body.jsx';
-import Team from './pages/Team.jsx';
-import WhenToMeet from './pages/WhenToMeet.jsx';
-import Dashboards from './pages/Dashboards.jsx';
-
+import { SignIn, Body, Team, WhenToMeet, Dashboards} from './pages';
 import { useRoutes, BrowserRouter as Router } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import './App.css'
@@ -14,16 +7,12 @@ function App() {
     // Sets up routes
     let element = useRoutes([
       {
-        path:"/start",
-        element: <Start />
-      }, 
-      {
         path: "/signin",
         element:<SignIn/>
       },
       {
         path: "/",
-        element:<Main/>
+        element:<Body/>
       },
       {
         path: "/team",
@@ -41,7 +30,6 @@ function App() {
 
   return (
     <>
-    <Topbar />
     <div className="page-wrapper">
     {element}
     </div>
