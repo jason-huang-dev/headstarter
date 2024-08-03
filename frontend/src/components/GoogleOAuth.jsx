@@ -43,12 +43,7 @@ const GoogleOAuth = () => {
   
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
-<<<<<<< Updated upstream
       <div className="flex justify-center">
-=======
-      <div>
-        <h1>Sign In with Google</h1>
->>>>>>> Stashed changes
         {user ? (
           <div className="text-center">
             <h2>Welcome, {user.username}</h2>
