@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -10,9 +9,7 @@ const Footer = () => {
         </p>
 
         <h4 className="flex gap-5 flex-wrap">
-            <Link to="/team" className="text-green-700 underline">
-                HeadStarter Group Team
-            </Link>
+                Team Project - Jason, Ester, Weijie, Aisha
         </h4>
     </div>
 </div>

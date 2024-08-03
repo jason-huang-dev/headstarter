@@ -14,9 +14,23 @@ export default {
   ],
   theme: {
     extend: {
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0, transform: 'scale(0.9)' },
+          '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+        fadeOut: {
+          '0%': { opacity: 1, transform: 'scale(1)' },
+          '100%': { opacity: 0, transform: 'scale(0.9)' },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.3s ease-out',
+        fadeOut: 'fadeOut 0.3s ease-out',
+      },
       colors: {
         color: {
-          1: "#AC6AFF",
+          1: "#f9f5e9",
           2: "#FFC876",
           3: "#FF776F",
           4: "#7ADB78", // green
@@ -30,7 +44,7 @@ export default {
           1: "#FFFFFF",
           2: "#e3e3e3",
           3: "#bcbbc0",
-          4: "#757185",
+          4: "#757185", 
           5: "#3F3A52",
           6: "#252134",
           7: "#15131D",

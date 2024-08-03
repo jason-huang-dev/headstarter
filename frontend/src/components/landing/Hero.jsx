@@ -1,21 +1,22 @@
-import curve from "../assets/curve.png";
-import calendar from "../assets/calendar-hero.png";
-import Button from "./Button"; 
+import curve from "../../assets/png/curve.png";
+import calendar from "../../assets/png/calendar-hero.png";
+import Button from "../reusable/Button"; 
 import { ScrollParallax } from "react-just-parallax";
 import { useRef } from "react";
-import Notification from "./Notification";
-import { BackgroundCircles } from "../assets/design/Hero";
+import Notification from "../reusable/Notification";
+import { BackgroundCircles } from "../../assets/design/Hero";
 import {CircleHelp} from "lucide-react";
 
-import avatar1 from "../assets/notification/image-2.png";
-import avatar2 from "../assets/notification/image-3.png";
-import avatar3 from "../assets/notification/image-4.png";
+import avatar1 from "../../assets/notification/image-2.png";
+import avatar2 from "../../assets/notification/image-3.png";
+import avatar3 from "../../assets/notification/image-4.png";
 
 /**
  * Hero component for the landing page.
  * Displays a headline, subheadline, call-to-action button, and image with notifications.
  * The component also includes animated background circles.
  */
+
 
 const Hero = () => {
   const parallaxRef = useRef(null);
@@ -24,6 +25,7 @@ const Hero = () => {
     <div className="container relative" ref={parallaxRef}>
       {/* Logo, hero headline and call to action button */}
       <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[3.875rem] md:mb-20 lg:mb-[10rem]">
+        {/* Headliner */}
         <h1 className="h1 mb-6">
           Unified Calendars, &nbsp;
           <span className="relative inline-block">
@@ -47,7 +49,7 @@ const Hero = () => {
         </Button>
       </div>
 
-      {/* Image with notifications and parallax effect */}
+        {/* Image with notifications and parallax effect */}
       <div className="relative max-w-[23rem] mx-auto md:max-w-5xl xl:mb-24">
         <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient custom-container">
           <div className="relative rounded-2xl overflow-hidden bg-white">
@@ -58,15 +60,16 @@ const Hero = () => {
             />
           </div>
 
-          {/* Notification on the middle right */}
-          <div className="absolute backdrop-blur left-4 right-4 bottom-5 md:left-1/2 md:right-auto md:bottom-8 md:w-[31rem] md:-translate-x-1/2 flex items-center h-auto px-6 py-4 bg-white rounded-[1.7rem] shadow-lg text-base" style={{ boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)' }}>
+           {/* Question pop on the bottom middle  */}
+          <div className="hidden lg:flex absolute backdrop-blur left-4 right-4 bottom-5 md:left-1/2 md:right-auto md:bottom-8 md:w-[31rem] md:-translate-x-1/2 items-center h-auto px-6 py-4 bg-white rounded-[1.7rem] shadow-lg text-base" style={{ boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)' }}>
             <CircleHelp className="w-6 h-6 mr-4" />
             <div className="flex-1">
               Where do I put my study group meeting?
             </div>
           </div>
 
-            {/* message on top of picture - middle right */}
+
+          {/* message on top of picture - middle right  */}
             <ScrollParallax isAbsolutelyPositioned>
               <div className="hidden lg:block absolute right-[-3rem] top-1/2 transform -translate-y-1/2 md:w-[20rem] z-10">
                 <Notification
@@ -79,7 +82,7 @@ const Hero = () => {
               </div>
             </ScrollParallax>
 
-            {/* Notification on top of the picture - top left */}
+           {/* Notification on top of the picture - top left  */}
             <ScrollParallax isAbsolutelyPositioned>
               <div className="hidden lg:block absolute left-[-3rem] top-[17rem] transform -translate-y-1/2 md:w-[20rem] z-10">
                 <Notification

@@ -1,38 +1,40 @@
 import React, { useState } from 'react';
-import calendarImage from "../assets/calendar-hero.png";
-import {ChevronDown, ChevronRight} from "lucide-react";
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 
-const Action = () => {
+// import png
+import ConceptCalAddEvent from "../../assets/png/ConceptCalAddEvent.png";
+import ConceptCalEventDetails from "../../assets/png/ConceptCalEventDetails.png";
+import ConceptCalFriendsDetails from "../../assets/png/ConceptCalFriendsDetails.png";
+import ConceptCalUpdates from "../../assets/png/ConceptCalUpdates.png";
+
+// import lucide icons
+import {ChevronDown, ChevronRight} from "lucide-react";
+
+const Features = () => {
     const actionData = {
-        title: "[PROJECTNAME] in Action",
-        description: "With [PROJECTNAME], you have everything you need to keep life organized.",
+        title: "TimeMesh in Action",
+        description: "With TimeMesh, you have everything you need to keep life organized.",
         sections: [
           {
             title: "Unified Calendars, Simplified Lives",
             text: "Effortlessly schedule and collaborate with shared calendars. Optimize your time and productivity with our unified platform.",
-            imageSrc: calendarImage
+            imageSrc: ConceptCalAddEvent
           },
           {
             title: "Seamless Scheduling",
             text: "Effortlessly coordinate and schedule team meetings and personal appointments, ensuring that everyone's availability is taken into account.",
-            imageSrc: calendarImage
-          },
-          {
-            title: "Real-Time Updates",
-            text: "Receive instant updates and notifications about changes in schedules, helping you stay on top of your commitments and avoid conflicts.",
-            imageSrc: calendarImage
-          },
-          {
-            title: "Enhanced Productivity",
-            text: "Improve productivity by having a clear and organized overview of your work and personal life, helping you manage your time more effectively.",
-            imageSrc: calendarImage
+            imageSrc: ConceptCalEventDetails
           },
           {
             title: "Collaborative Planning",
             text: "Collaborate with your team to plan projects and meetings, ensuring everyone is on the same page and working towards common goals.",
-            imageSrc: calendarImage
+            imageSrc: ConceptCalFriendsDetails
+          },
+          {
+            title: "Real-Time Updates",
+            text: "Receive instant updates and notifications about changes in schedules, helping you stay on top of your commitments and avoid conflicts.",
+            imageSrc: ConceptCalUpdates
           }
         ]};
 
@@ -49,8 +51,8 @@ const Action = () => {
     
       return (
         <motion.div
-          id="action"
-          className="relative mb-10 pb-15 mt-15 lg:py-10 xl:py-15 lg:py-20 xl:py-30 overflow-hidden"
+          id="features"
+          className="relative mb-20 pb-15 mt-15 lg:py-10 xl:py-15 lg:py-20 xl:py-30 overflow-hidden"
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -94,4 +96,4 @@ const Action = () => {
       );
     };
     
-    export default Action;
+    export default Features;

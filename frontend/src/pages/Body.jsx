@@ -1,11 +1,11 @@
-import Hero from '../components/Hero';
-import Benefits from '../components/Benefits';
-import Services from '../components/Services';
-
-import LandingNavigation from '../components/LandingNavigation';
-import Action from '../components/Action';
-import Roadmap from '../components/Roadmap';
+import Hero from '../components/landing/Hero';
+import Highlights from '../components/landing/Highlights';
+import Features from '../components/landing/Features';
 import Footer from '../components/Footer';
+
+import LandingNavigation from '../components/landing/LandingNavigation';
+// import Benefits from '../components/Benefits';
+// <Benefits /> 
 
 
 function Body() {
@@ -14,10 +14,8 @@ function Body() {
     <LandingNavigation/>
     <div className='mt-[5em] pt-[5rem] lg:pt-[6em]'>
     <Hero/>
-    <Benefits />
-    <Services />
-    <Action />
-    <Roadmap />
+    <Highlights />
+    <Features />
     <Footer />
     </div>
 

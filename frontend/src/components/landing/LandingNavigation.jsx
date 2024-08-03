@@ -3,15 +3,15 @@
 import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
-import iconsite from "../assets/iconsite.png"; // logo of the website
-import Button from "./Button"; // Custom Button component
-import MenuSvg from "../assets/svg/MenuSvg"; // Custom SVG component for the menu icon
+import iconsite from "../../assets/png/iconsite.png"; // logo of the website
+import Button from "../reusable/Button"; // Custom Button component
+import MenuSvg from "../../assets/svg/MenuSvg"; // Custom SVG component for the menu icon
 import { useState } from "react";
 
 const LandingNavigation = () => {
   // Get the current location path
   const pathname = useLocation();
-
+ 
   // State to handle the navigation menu toggle
   const [openNavigation, setOpenNavigation] = useState(false);
 
@@ -37,26 +37,21 @@ const LandingNavigation = () => {
   const navigation = [
     {
       id: "0",
+      title: "Home",
+      url: "#hero",
+    },
+    {
+      id: "1",
+      title: "Highlights",
+      url: "#highlights",
+    },
+    {
+      id: "2",
       title: "Features",
       url: "#features",
     },
     {
-      id: "1",
-      title: "How to use",
-      url: "#how-to-use",
-    },
-    {
-      id: "2",
-      title: "In Action",
-      url: "#action",
-    },
-    {
       id: "3",
-      title: "Roadmap",
-      url: "#roadmap",
-    },
-    {
-      id: "4",
       title: "Sign in",
       url: "/signin",
       onlyMobile: true,
@@ -78,7 +73,7 @@ const LandingNavigation = () => {
           <a className="flex items-center w-[12rem] xl:mr-8" href="/">
             <img src={iconsite} width={60} alt="turtle icon" className="mr-2" />
             <span className="font-bold font-grotest text-base md:text-lg lg:text-2xl">
-              HomePage
+              TimeMesh
             </span>
           </a>
 
