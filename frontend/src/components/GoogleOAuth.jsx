@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
 const GoogleOAuth = () => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  // Parses and stores user profile info obtained from Google
   const handleLoginSuccess = async (credentialResponse) => {
     console.log('Login Success:', credentialResponse);
 
@@ -15,18 +16,18 @@ const GoogleOAuth = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: credentialResponse.credential,  // Assuming the token is in `credentialResponse.credential`
+          token: credentialResponse.credential,
         }),
       });
 
       const data = await response.json();
       console.log('Server Response:', data);
 
-      // Assuming the server returns user profile info
       if (response.ok) {
         setUser(data);
+        navigate('/dashboards', { state: { user: data } }); // Navigate to the dashboards page
       } else {
-       console.error('Error from server:', data);
+        console.error('Error from server:', data);
         setUser(null);
       }
     } catch (error) {
@@ -42,7 +43,12 @@ const GoogleOAuth = () => {
   
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
+<<<<<<< Updated upstream
       <div className="flex justify-center">
+=======
+      <div>
+        <h1>Sign In with Google</h1>
+>>>>>>> Stashed changes
         {user ? (
           <div className="text-center">
             <h2>Welcome, {user.username}</h2>
