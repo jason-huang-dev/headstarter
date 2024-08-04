@@ -3,10 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 
 // import png
-import ConceptCalAddEvent from "../../assets/png/ConceptCalAddEvent.png";
-import ConceptCalEventDetails from "../../assets/png/ConceptCalEventDetails.png";
-import ConceptCalFriendsDetails from "../../assets/png/ConceptCalFriendsDetails.png";
-import ConceptCalUpdates from "../../assets/png/ConceptCalUpdates.png";
+import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates} from "../../assets/png";
 
 // import lucide icons
 import {ChevronDown, ChevronRight} from "lucide-react";

@@ -1,5 +1,5 @@
+import Brackets from "./Brackets";
 import Arrow from "./Arrow";
-import brackets from "./Brackets";
 import MenuSvg from "./MenuSvg";
 
-export {Arrow, }
+export {Brackets, Arrow, MenuSvg}
