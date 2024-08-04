@@ -8,7 +8,7 @@ WORKDIR /app
 # Install dependencies
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-
+RUN pip install Pillow
 
 # Copy project files
 COPY . .
