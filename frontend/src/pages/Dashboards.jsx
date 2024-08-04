@@ -1,12 +1,12 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Drawer } from '../components/dashboard';
+import { SideBar } from '../components/dashboard';
 
 /**
- * Dashboards component that renders the dashboard with a drawer/sidebar.
+ * Dashboards component that renders the dashboard with a SideBar.
  * 
  * This component uses `useLocation` from `react-router-dom` to access user data
- * from the state passed through the location object. It then renders the `Drawer`
+ * from the state passed through the location object. It then renders the `SideBar`
  * component, passing the user data as a prop.
  * 
  * @component
@@ -41,7 +41,7 @@ const Dashboards = () => {
 
   return (
     <div>
-      <Drawer user={user} />
+      <SideBar user={user} />
     </div>
   );
 };
