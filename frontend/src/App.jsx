@@ -30,11 +30,11 @@ function App() {
 
   return (
     <>
-    <div className="page-wrapper">
-    {element}
-    </div>
+      <div className="page-wrapper">
+      {element}
+      </div>
     </>
-  )
+  );
 }
 
 export default function AppWithRouter() {
@@ -44,4 +44,3 @@ export default function AppWithRouter() {
     </Router>
   );
 }
-

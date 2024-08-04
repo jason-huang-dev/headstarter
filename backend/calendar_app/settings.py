@@ -191,3 +191,13 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only. Use specific origins in production.
+
+# Base dir of your project
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Default profile picture
+DEFAULT_PROFILE_PIC = os.path.join(MEDIA_URL, '/image/default_profile.jpg')
