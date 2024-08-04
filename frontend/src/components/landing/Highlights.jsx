@@ -59,7 +59,7 @@ const Services = () => {
                     <TagLine className="mb-4 md:justify-center">What we're working on</TagLine>
                     {inView && (
                         <Typing
-                            text={["Plan Smarter, Not Harder with TimeMesh"]}
+                            text={["Plan Smarter, Not Harder"]}
                             className="h2"
                             speed={100}
                             eraseSpeed={50}

@@ -13,7 +13,7 @@ function SignIn() {
         </div>
         <h2 className="text-2xl font-semibold text-center mb-4">Sign in with Google</h2>
         <p className="text-center text-gray-600 mb-6">
-          to continue to your [ProjectName] account.
+          to continue to your TimeMesh account.
         </p>
         <GoogleOAuth />
        
