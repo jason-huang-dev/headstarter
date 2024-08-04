@@ -6,6 +6,7 @@ import {iconsite} from "../../assets/png"; // logo of the website
 import {Button} from "../reusable"; // Custom Button component
 import {MenuSvg} from "../../assets/svg"; // Custom SVG component for the menu icon
 import { useState } from "react";
+import {navigation} from "../../constants/index";
 
 /**
  * LandingNavigation component provides a responsive top navigation bar for the landing page.
@@ -43,30 +44,6 @@ const LandingNavigation = () => {
     enablePageScroll(); // Enable page scroll when link is clicked
     setOpenNavigation(false); // Close navigation menu when link is clicked
   };
-
-  const navigation = [
-    {
-      id: "0",
-      title: "Home",
-      url: "#hero",
-    },
-    {
-      id: "1",
-      title: "Highlights",
-      url: "#highlights",
-    },
-    {
-      id: "2",
-      title: "Features",
-      url: "#features",
-    },
-    {
-      id: "3",
-      title: "Sign in",
-      url: "/signin",
-      onlyMobile: true,
-    },
-  ];
 
   return (
     <>

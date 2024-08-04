@@ -21,7 +21,7 @@ const Dashboards = () => {
     <div>
       <SideBar user={user} />
     </div>
-  );
+  ); 
 };
 
 export default Dashboards;
