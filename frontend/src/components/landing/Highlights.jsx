@@ -8,6 +8,8 @@ import Typing from 'react-typing-effect';
 import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
 
+import {services} from "../../constants/index"; // import text contents from constants/index.js
+
 /**
  * Services component showcases the services and features of the application.
  * 
@@ -30,13 +32,8 @@ const Services = () => {
             setHasTyped(true);
         }
     }, [inView, hasTyped]);
+    
 
-    // List of services to be displayed in the first card
-    const services = [
-        "See schedules of people in your calendar",
-        "Find a common time for meetings",
-        "Add and edit your shared schedules",
-    ];
 
     // Animation variants for framer-motion
     const variants = {

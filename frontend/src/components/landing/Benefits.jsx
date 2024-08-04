@@ -3,8 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import { TagLine }from '../reusable';
 import Typing from 'react-typing-effect';
-import {CalendarCheck, BellPlus, ListChecks, Users, Earth} from "lucide-react";
-
+import {benefits} from "../../constants/index"; // import text contents from constants/index.js
 /**
  * Benefits component that showcases key features and benefits with interactive elements.
  * 
@@ -18,51 +17,6 @@ import {CalendarCheck, BellPlus, ListChecks, Users, Earth} from "lucide-react";
  * @returns {JSX.Element} The rendered Benefits component.
  */
 const Benefits = () => {
-    const benefits = [
-        {
-          id: "0",
-          tagline: "Seamless Scheduling",
-          title: "All-in-One Scheduling",
-          text: "Effortlessly coordinate and schedule team meetings and personal appointments, ensuring that everyone's availability is taken into account.",
-          iconUrl: CalendarCheck,
-          imageUrl: "#",
-        },
-        {
-          id: "1",
-          tagline: "Real-Time Updates",
-          title: "Effortless Coordination",
-          text: "Receive instant updates and notifications about changes in schedules, helping you stay on top of your commitments and avoid conflicts.",
-          iconUrl: BellPlus,
-          imageUrl: "#",
-          light: true,
-        },
-        {
-          id: "2",
-          tagline: "Enhanced Productivity",
-          title: "Never Miss a Beat",
-          text: "Improve productivity by having a clear and organized overview of your work and personal life, helping you manage your time more effectively.",
-          iconUrl: ListChecks,
-          imageUrl: "#",
-        },
-        // {
-        //   id: "3",
-        //   tagline: "Collaborative Planning",
-        //   title: "Organize and Conquer",
-        //   text: "Collaborate with your team to plan projects and meetings, ensuring everyone is on the same page and working towards common goals.",
-        //   iconUrl: Users,
-        //   imageUrl: "#",
-        //   light: true,
-        // },
-        // {
-        //   id: "4",
-        //   tagline: "Universal Access",
-        //   title: "Teamwork Made Easy",
-        //   text: "Access your calendar from any device, anywhere, ensuring you always have your schedule at your fingertips.",
-        //   iconUrl: Earth,
-        //   imageUrl: "#",
-        // },
-    
-      ];
 
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
