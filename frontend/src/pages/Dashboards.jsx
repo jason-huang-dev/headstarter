@@ -1,16 +1,23 @@
-import { useState } from 'react'
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-
-function Dashboards() {
-
+const Dashboards = () => {
+  const location = useLocation();
+  const user = location.state?.user; // Access user data from state
 
   return (
-    <>
-    <h1>there will be some dashboards on calendars</h1>
-      
-        
-    </>
-  )
-}
+    <div>
+      <h1>Dashboards</h1>
+      {user ? (
+        <div>
+          <h2>Welcome, {user.username}</h2>
+          <img className='profile-icon' src={user.picture} alt="Profile" />
+        </div>
+      ) : (
+        <p>No user data available</p>
+      )}
+    </div>
+  );
+};
 
-export default Dashboards
+export default Dashboards;

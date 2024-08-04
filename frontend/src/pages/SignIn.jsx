@@ -1,6 +1,6 @@
 import React from 'react';
 import {GoogleOAuth, Footer} from '../components';
-import iconsite from '../assets/png/iconsite.png';
+import {iconsite} from '../assets/png';
 
 function SignIn() {
   return (

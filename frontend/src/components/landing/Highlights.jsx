@@ -1,12 +1,10 @@
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
-import Tagline from "../reusable/TagLine";
+import { TagLine } from "../reusable";
 import Typing from 'react-typing-effect';
 
-import services1 from "../../assets/png/services_1.png";
-import services2 from "../../assets/png/services_2.png";
-import services3 from "../../assets/png/services_3.png";
+import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
 
 const Services = () => {
@@ -58,7 +56,7 @@ const Services = () => {
                     animate={inView ? "visible" : "hidden"}
                     variants={slideUpEffect}
                 >
-                    <Tagline className="mb-4 md:justify-center">What we're working on</Tagline>
+                    <TagLine className="mb-4 md:justify-center">What we're working on</TagLine>
                     {inView && (
                         <Typing
                             text={["Plan Smarter, Not Harder with TimeMesh"]}

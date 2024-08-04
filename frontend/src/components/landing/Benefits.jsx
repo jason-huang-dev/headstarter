@@ -1,4 +1,4 @@
-import Arrow from "../../assets/svg/Arrow.jsx";
+import { Arrow } from "../../assets/svg";
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import { TagLine }from '../reusable';

@@ -1,7 +1,5 @@
-import {Hero, Services, Features }from '../components/landing';
+import {Hero, Services, Features, LandingNavigation }from '../components/landing';
 import {Footer} from '../components';
-
-import LandingNavigation from '../components/landing/LandingNavigation';
 // import Benefits from '../components/Benefits';
 // <Benefits /> 
 

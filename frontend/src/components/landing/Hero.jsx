@@ -1,14 +1,11 @@
-import curve from "../../assets/png/curve.png";
-import calendar from "../../assets/png/calendar-hero.png";
+import {curve,calendar}  from "../../assets/png";
 import { ScrollParallax } from "react-just-parallax";
 import { useRef } from "react";
-import {Notification, Button} from "../reusable";
+import { Notification, Button} from "../reusable";
 import { BackgroundCircles } from "../../assets/design/Hero";
 import {CircleHelp} from "lucide-react";
 
-import avatar1 from "../../assets/notification/image-2.png";
-import avatar2 from "../../assets/notification/image-3.png";
-import avatar3 from "../../assets/notification/image-4.png";
+import {avatar1, avatar2, avatar3} from "../../assets/notification";
 
 /**
  * Hero component for the landing page.
