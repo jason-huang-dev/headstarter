@@ -1,5 +1,15 @@
 import React from "react";
 
+/**
+ * Footer component that displays the footer section of the website.
+ * 
+ * This component renders a footer with:
+ * - A copyright notice including the current year.
+ * - A list of dev team members with their LinkedIn profiles.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Footer component.
+ */
 const Footer = () => {
   return (
     <div className="lg:pb-16 xl:pb-20 lg:pb-32 xl:pb-20 !px-0">

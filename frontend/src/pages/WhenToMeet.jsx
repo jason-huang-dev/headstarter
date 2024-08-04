@@ -1,8 +1,14 @@
+'use client'
 import { useState } from 'react'
 
 
+/**
+ * WhenToMeet page sill needs to be worked on
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered WhenToMeet component.
+ */
 function WhenToMeet() {
-
 
   return (
     <>

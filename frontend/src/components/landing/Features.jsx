@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
@@ -8,6 +9,17 @@ import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, Co
 // import lucide icons
 import {ChevronDown, ChevronRight} from "lucide-react";
 
+/**
+ * Features component that displays various features of the TimeMesh platform with interactive sections.
+ * 
+ * This component includes:
+ * - A title and description for the features section.
+ * - Interactive sections for each feature that expand to show more details when clicked.
+ * - An image associated with the currently selected feature displayed on the right.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Features component.
+ */
 const Features = () => {
     const actionData = {
         title: "TimeMesh in Action",

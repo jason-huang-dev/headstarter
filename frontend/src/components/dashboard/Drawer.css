@@ -1,0 +1,62 @@
+/* Drawer container */
+.drawer {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #cecece;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+/* Drawer when it's open */
+.drawer.open {
+    width: 250px;
+}
+
+/* Drawer menu items */
+.drawer-menu {
+    list-style-type: none;
+    padding: 0;
+}
+
+.drawer-menu li {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.drawer-menu li:hover {
+    color: #f1f1f1;
+}
+
+/* Menu button */
+.menu-button {
+    font-size: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+}
+
+/* Close button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 36px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}

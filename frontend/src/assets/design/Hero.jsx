@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { MouseParallax } from "react-just-parallax";
 
+/**
+ * Gradient component that renders two gradient background elements.
+ * 
+ * This component:
+ * - Displays two gradient elements with different background shades and sizes.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered gradient background elements.
+ */
 export const Gradient = () => {
   return (
     <>
@@ -10,6 +19,15 @@ export const Gradient = () => {
   );
 };
 
+/**
+ * Rings component that renders multiple circular rings with borders.
+ * 
+ * This component:
+ * - Displays a series of concentric circular rings positioned in the center.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered circular rings.
+ */
 const Rings = () => {
   return (
     <>
@@ -21,6 +39,19 @@ const Rings = () => {
   );
 };
 
+/**
+ * BackgroundCircles component that renders a series of moving colored circles in the background.
+ * 
+ * This component:
+ * - Renders circular elements with different gradients and animations.
+ * - Uses MouseParallax for parallax effect based on mouse movement.
+ * - Displays circles in various sizes and colors, with transitions based on component mounting.
+ * 
+ * @component
+ * @param {Object} props - The props object.
+ * @param {React.RefObject} props.parallaxRef - Reference to the parallax container for the MouseParallax component.
+ * @returns {JSX.Element} The rendered background circles with parallax effect.
+ */
 export const BackgroundCircles = ({ parallaxRef }) => {
   const [mounted, setMounted] = useState(false);
 
