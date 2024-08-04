@@ -8,12 +8,16 @@ import {CircleHelp} from "lucide-react";
 import {avatar1, avatar2, avatar3} from "../../assets/notification";
 
 /**
- * Hero component for the landing page.
- * Displays a headline, subheadline, call-to-action button, and image with notifications.
- * The component also includes animated background circles.
+ * Hero component that serves as the landing section of the website.
+ * 
+ * This component includes:
+ * - A headline and call-to-action button.
+ * - An image with parallax effect and notifications overlaid.
+ * - Background circles animation for visual enhancement.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Hero component.
  */
-
-
 const Hero = () => {
   const parallaxRef = useRef(null);
 

@@ -2,6 +2,16 @@ import React from 'react';
 import {GoogleOAuth, Footer} from '../components';
 import {iconsite} from '../assets/png';
 
+/**
+ * SignIn component that renders the sign-in page.
+ * 
+ * This component displays a sign-in form where users can sign in with Google
+ * to access their TimeMesh account. It includes a logo, a title, a description,
+ * and Google OAuth integration.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered SignIn component.
+ */
 function SignIn() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center ">

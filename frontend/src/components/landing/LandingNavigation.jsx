@@ -1,5 +1,5 @@
 // Responsible topbar component
-
+'use client'
 import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import {iconsite} from "../../assets/png"; // logo of the website
@@ -7,6 +7,17 @@ import {Button} from "../reusable"; // Custom Button component
 import {MenuSvg} from "../../assets/svg"; // Custom SVG component for the menu icon
 import { useState } from "react";
 
+/**
+ * LandingNavigation component provides a responsive top navigation bar for the landing page.
+ * 
+ * This component:
+ * - Displays a logo and site name.
+ * - Includes navigation links that adjust visibility based on the screen size.
+ * - Manages the state for a responsive navigation menu with scroll lock.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered LandingNavigation component.
+ */
 const LandingNavigation = () => {
   // Get the current location path
   const pathname = useLocation();

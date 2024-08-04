@@ -1,5 +1,24 @@
 import React from 'react';
 
+/**
+ * Notification component displays a notification with a title, avatars, time, and message.
+ * 
+ * This component includes:
+ * - A title at the top of the notification.
+ * - A list of avatars represented as circular images.
+ * - The time when the notification was created.
+ * - A message providing additional details.
+ * - Customizable styles through className and inline styles.
+ * 
+ * @component
+ * @param {object} props - The props for the component.
+ * @param {string} [props.className] - Optional additional CSS classes to apply to the container.
+ * @param {string} props.title - The title of the notification.
+ * @param {string} props.time - The time when the notification was created.
+ * @param {string[]} props.avatars - An array of URLs for the avatar images.
+ * @param {string} props.message - The notification message.
+ * @returns {JSX.Element} The rendered Notification component.
+ */
 const Notification = ({ className, title, time, avatars, message }) => {
   return (
     <div

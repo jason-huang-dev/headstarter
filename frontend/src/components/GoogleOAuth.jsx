@@ -1,7 +1,18 @@
+'use client'
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * GoogleOAuth component that handles Google OAuth authentication.
+ * 
+ * This component provides Google login functionality using `@react-oauth/google`.
+ * It manages user authentication state, sends the login token to the server, and
+ * navigates to the dashboards page upon successful login.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered GoogleOAuth component with login functionality.
+ */
 const GoogleOAuth = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();

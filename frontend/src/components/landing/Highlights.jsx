@@ -1,3 +1,4 @@
+'use client'
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
@@ -7,6 +8,17 @@ import Typing from 'react-typing-effect';
 import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
 
+/**
+ * Services component showcases the services and features of the application.
+ * 
+ * This component:
+ * - Uses the `react-intersection-observer` to trigger animations when in view.
+ * - Displays a list of services with animated effects.
+ * - Includes responsive design for various screen sizes.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Services component.
+ */
 const Services = () => {
     // Use the useInView hook to track the visibility of the component
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });

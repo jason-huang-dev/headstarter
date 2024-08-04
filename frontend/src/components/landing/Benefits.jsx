@@ -5,6 +5,18 @@ import { TagLine }from '../reusable';
 import Typing from 'react-typing-effect';
 import {CalendarCheck, BellPlus, ListChecks, Users, Earth} from "lucide-react";
 
+/**
+ * Benefits component that showcases key features and benefits with interactive elements.
+ * 
+ * This component includes:
+ * - A header section with a title.
+ * - A grid layout displaying various benefit items.
+ * - Each benefit item features a tagline, title, description, and icon.
+ * - A "Join waitlist" link that is animated on hover.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Benefits component.
+ */
 const Benefits = () => {
     const benefits = [
         {

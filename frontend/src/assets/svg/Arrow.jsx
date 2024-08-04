@@ -1,3 +1,13 @@
+/**
+ * Arrow component that renders a right-pointing arrow icon.
+ * 
+ * This component:
+ * - Displays an SVG graphic of an arrow pointing to the right.
+ * - Uses a green color for the arrow stroke.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered SVG element for the arrow icon.
+ */
 const Arrow = () => {
   return (
     <svg className="ml-5 " width="24" height="24">
