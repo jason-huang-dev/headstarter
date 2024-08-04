@@ -1,3 +1,3 @@
-import Drawer from "./Drawer.jsx";
+import SideBar from "./SideBar.jsx";
 
-export {Drawer}
+export {SideBar}
