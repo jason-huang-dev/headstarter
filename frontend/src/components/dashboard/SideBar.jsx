@@ -1,11 +1,12 @@
 'use client'
-import React, {useState} from "react";
+import React, {useContext, createContext, useState} from "react";
 import PropTypes from "prop-types";
 import { MenuSvg } from "../../assets/svg";
 import { Button, ProfileIcon } from "../reusable";
 import { iconsite} from "../../assets/png";
-import './Drawer.css';
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
+
+const SidebarContext = createContext()
 
 /**
  * Drawer component that provides a sidebar navigation.
@@ -39,7 +40,9 @@ const SideBar = ({ user, children }) => {
                     </button>
                 </div>
                 
-                <ul className="flex-1 px-3"> {children} </ul>
+                <SidebarContext.Provider value={{ isOpen }}>
+                    <ul className="flex-1 px-3">{children({isOpen})}</ul>
+                </SidebarContext.Provider>
 
                 <div className="boarder-t flex p-3 items-center">
                     <ProfileIcon user={user} size={40} username={isOpen}></ProfileIcon>
@@ -50,7 +53,9 @@ const SideBar = ({ user, children }) => {
     );
 };
 
-export function SideBarItem({icon, text, active, alert}) {
+function SideBarItem({icon, text, active, alert}) {
+    const { isOpen } = useContext(SidebarContext);
+
     return (
         <li
             className={`
@@ -63,7 +68,33 @@ export function SideBarItem({icon, text, active, alert}) {
             `}
         >
         {icon}
-        
+        <span
+            className={`overflow-hidden transition-all ${
+            isOpen ? "w-52 ml-3" : "w-0"
+            }`}
+        >
+            {text}
+        </span>
+        {alert && (
+            <div
+            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
+                isOpen ? "" : "top-2"
+            }`}
+            />
+        )}
+
+        {!isOpen && (
+            <div
+            className={`
+            absolute left-full rounded-md px-2 py-1 ml-6
+            bg-indigo-100 text-indigo-800 text-sm
+            invisible opacity-20 -translate-x-3 transition-all
+            group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+        `}
+            >
+            {text}
+            </div>
+        )}
         </li>
     )
 }
@@ -76,4 +107,4 @@ SideBar.propTypes = {
     }).isRequired,
   };
 
-export default SideBar;
+export {SideBar, SideBarItem}

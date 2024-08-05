@@ -1,3 +1,3 @@
-import SideBar from "./SideBar.jsx";
+import {SideBar, SideBarItem} from "./SideBar.jsx";
 
-export {SideBar}
+export {SideBar, SideBarItem}
