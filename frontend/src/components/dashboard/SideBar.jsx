@@ -43,8 +43,10 @@ const SideBar = ({ user, children }) => {
                     {isOpen ? <ChevronFirst /> : <ChevronLast />}
                     </button>
                 </div>
-        
-                <ul className="flex-1 px-3">{children}</ul>
+                
+                <SidebarContext.Provider value={{ isOpen }}>
+                    <ul className="flex-1 px-3">{children({isOpen})}</ul>
+                </SidebarContext.Provider>
         
                 <div className="border-t flex p-3 items-center">
                     <ProfileIcon user={user} size={40} username={isOpen}></ProfileIcon>
