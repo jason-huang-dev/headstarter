@@ -22,34 +22,36 @@ const SideBar = ({ user, children }) => {
     const [isOpen, setIsOpen] = useState(true);
     
     return (
-        <aside className="h-screen">
-            <nav className="h-full inline-flex flex-col bg-white border-r shadow-sm">
+        <aside
+            className={`h-screen transition-width duration-300 ease-in-out ${
+            isOpen ? "w-64" : "w-20"
+            }`}
+        >
+            <nav className="h-full flex flex-col bg-white border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
                     <img
-                        src={iconsite}
-                        className={`overflow-hidden transition-all ${
-                        isOpen ? "w-16" : "w-0"
-                        }`}
-                        alt=""
+                    src={iconsite}
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        isOpen ? "w-[45px]" : "w-0"
+                    }`}
+                    alt="Logo"
                     />
                     <button
-                        onClick={() => setIsOpen((curr) => !curr)}
-                        className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+                    onClick={() => setIsOpen((curr) => !curr)}
+                    className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
                     >
-                        {isOpen ? <ChevronFirst /> : <ChevronLast />}
+                    {isOpen ? <ChevronFirst /> : <ChevronLast />}
                     </button>
                 </div>
-                
-                <SidebarContext.Provider value={{ isOpen }}>
-                    <ul className="flex-1 px-3">{children({isOpen})}</ul>
-                </SidebarContext.Provider>
-
-                <div className="boarder-t flex p-3 items-center">
+        
+                <ul className="flex-1 px-3">{children}</ul>
+        
+                <div className="border-t flex p-3 items-center">
                     <ProfileIcon user={user} size={40} username={isOpen}></ProfileIcon>
-                    {isOpen && <MoreVertical size={30}/>}
+                    {isOpen && <MoreVertical size={30} />}
                 </div>
             </nav>
-        </aside>
+        </aside> 
     );
 };
 
