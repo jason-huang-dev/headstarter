@@ -2,7 +2,7 @@
 import React, { useState }from 'react';
 import { useLocation} from 'react-router-dom';
 import { SideBar } from '../components/dashboard';
-import { Accordion } from '../components/reusable';
+import { Accordion, Button} from '../components/reusable';
 import { sideBarAccordians } from '../constants';
 
 /**
@@ -30,24 +30,27 @@ const Dashboards = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <SideBar user={user}>
         {({ isOpen }) => (
-          <>
-            {sideBarAccordians.map((item, index) => (
-              <Accordion
-                key={index}
-                title={item.title}
-                icon={item.iconUrl}
-                displayTitle={isOpen} 
-                isActive={activeIndices.includes(index)} // Check if index is in activeIndices
-                onTitleClick={() => handleTitleClick(index)} // Pass index to click handler
-              >
-                {/* You can put content for each AccordionItem here */}
-                <p>Content for {item.title}</p>
-              </Accordion>
-            ))}
-          </>
+          <div className="flex flex-col flex-grow">
+            <div className="flex flex-col flex-grow overflow-y-auto">
+              {sideBarAccordians.map((item, index) => (
+                <Accordion
+                  key={index}
+                  title={item.title}
+                  icon={item.iconUrl}
+                  displayTitle={isOpen} 
+                  isActive={activeIndices.includes(index)} // Check if index is in activeIndices
+                  onTitleClick={() => handleTitleClick(index)} // Pass index to click handler
+                >
+                  {/* You can put content for each AccordionItem here */}
+                  <p>Content for {item.title}</p>
+                </Accordion>
+              ))}
+            </div>
+            {isOpen && <Button className="mt-auto">Add Event</Button>}
+          </div>
         )}
       </SideBar>
     </div>
