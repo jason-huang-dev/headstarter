@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBar } from '../components/dashboard';
+import { SideBar, CalendarOverview } from '../components/dashboard';
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -18,9 +18,14 @@ const Dashboards = () => {
   const user = location.state?.user; // Access user data from state
 
   return (
-    <div>
-      <SideBar user={user} />
+    <div className="flex h-screen">
+    <SideBar user={user}>
+  
+    </SideBar>
+    <div className="flex-grow h-full">
+      <CalendarOverview />
     </div>
+  </div>
   ); 
 };
 
