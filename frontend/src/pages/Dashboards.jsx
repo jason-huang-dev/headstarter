@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBar, CalendarOverview } from '../components/dashboard';
+import { SideBar, SideBarItem, CalendarOverview } from '../components/dashboard';
+import { sideBarAccordians } from "../constants/index"; // import text contents from constants/index.js
+import { Accordion, Button} from '../components/reusable';
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -16,16 +18,44 @@ import { SideBar, CalendarOverview } from '../components/dashboard';
 const Dashboards = () => {
   const location = useLocation();
   const user = location.state?.user; // Access user data from state
+  const [activeIndices, setActiveIndices] = useState([]); // Manage active accordion states
+
+  const handleTitleClick = (index) => {
+    setActiveIndices((prevIndices) => 
+      prevIndices.includes(index)
+        ? prevIndices.filter((i) => i !== index) // Remove index if already active
+        : [...prevIndices, index] // Add index if not active
+    );
+  };
 
   return (
-    <div className="flex h-screen">
-    <SideBar user={user}>
-  
-    </SideBar>
-    <div className="flex-grow h-full">
+    <div className="flex h-screen font-sora">
+      <SideBar user={user}>
+        {({ isOpen }) => (
+          <div className="flex flex-col flex-grow">
+            <div className="flex flex-col flex-grow overflow-y-auto">
+              {sideBarAccordians.map((item, index) => (
+                <Accordion
+                  key={index}
+                  title={item.title}
+                  icon={item.iconUrl}
+                  displayTitle={isOpen} 
+                  isActive={activeIndices.includes(index)} // Check if index is in activeIndices
+                  onTitleClick={() => handleTitleClick(index)} // Pass index to click handler
+                >
+                  {/* You can put content for each AccordionItem here */}
+                  <p>Content for {item.title}</p>
+                </Accordion>
+              ))}
+            </div>
+            {isOpen && <Button className="mt-auto">Add Event</Button>}
+          </div>
+        )}
+      </SideBar>
+      <div className="flex-grow h-full">
       <CalendarOverview />
+      </div>
     </div>
-  </div>
   ); 
 };
 

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { useRef, useEffect, useState } from "react";
 import { MouseParallax } from "react-just-parallax";
