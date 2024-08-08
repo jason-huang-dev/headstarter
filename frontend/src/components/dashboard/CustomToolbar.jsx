@@ -23,7 +23,7 @@ const CustomToolbar = (toolbar) => {
   };
 
   return (
-    <div className="flex justify-between items-center p-4 font-sora bg-white shadow-sm w-full">
+    <div className="flex justify-between items-center px-4 pb-4 pt-1 font-sora bg-white shadow-sm w-full">
       <div className="flex items-center">
         <button
           onClick={goToCurrent}

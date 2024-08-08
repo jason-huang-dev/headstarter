@@ -48,7 +48,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent }) => {
             </div>
       
             {/* Buttons Add Calendar and Add Event */}
-            <div className={`flex ${isOpen ? 'flex-row' : 'flex-col'} justify-center px-4 py-2`}>
+            <div className={`flex ${isOpen ? 'flex-row' : 'flex-col border-b'} justify-center mx-4 py-4`}>
               <div className="flex flex-col items-center mx-3 my-1">
                 <button
                   onClick={() => addCalendar()}
@@ -61,7 +61,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent }) => {
               <div className="flex flex-col items-center mx-3 my-1">
                 <button
                   onClick={() => addEvent()}
-                  className={`px-4 py-2 rounded-lg ${isOpen ? 'bg-gray-100 hover:bg-gray-200' : ' transition-colors group hover:bg-gray-100 bg-white'}`}
+                  className={`py-2 rounded-lg ${isOpen ? 'px-3 bg-gray-100 hover:bg-gray-200' : 'px-3 transition-colors group hover:bg-gray-100 bg-white'}`}
                 >
                   <Plus style={{ width: '30px', height: '30px' }} />
                 </button>

@@ -4,28 +4,35 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from './CustomToolbar';
 
-// Sample events data
-const events = [
-  {
-    id: 0,
-    title: 'Board meeting',
-    start: new Date(2023, 7, 7, 9, 0, 0),
-    end: new Date(2023, 7, 7, 13, 0, 0),
-  },
-  {
-    id: 1,
-    title: 'Birthday Party',
-    start: new Date(2023, 7, 13, 7, 0, 0),
-    end: new Date(2023, 7, 13, 10, 30, 0),
-  },
-  // Add more events here
-];
 
 // Initialize the moment localizer
 const localizer = momentLocalizer(moment);
 
 const CalendarOverview = () => {
-  const [myEvents, setMyEvents] = useState(events);
+  const [myEvents, setMyEvents] = useState([]);
+  const [newEvent, setNewEvent] = useState({
+    title: '',
+    start: '',
+    end: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewEvent({ ...newEvent, [name]: value });
+  };
+
+  const handleAddEvent = () => {
+    const start = new Date(newEvent.start);
+    const end = new Date(newEvent.end);
+    const eventToAdd = {
+      id: myEvents.length, // Simple id generation, ideally use a more robust method
+      title: newEvent.title,
+      start: start,
+      end: end
+    };
+    setMyEvents([...myEvents, eventToAdd]);
+    setNewEvent({ title: '', start: '', end: '' }); // Reset form
+  };
 
   return (
     <div className="h-full pt-5">

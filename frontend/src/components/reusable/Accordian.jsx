@@ -16,17 +16,22 @@ import { ChevronDown, ChevronLeft } from "lucide-react";
  * @param {React.ReactNode} props.children - Content to be displayed within the item
  * @returns {JSX.Element} AccordionItem component
  */
-const Accordion = ({ title, isActive, onTitleClick, children, displayTitle = true, icon: Icon = null }) => {
+const Accordion = ({ title, isActive, onTitleClick, children, displayTitle = true, iconType, icon: Icon = null }) => {
     return (
     <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-gray-100 ${isActive ? 'bg-gray-100' : ''}`}>
         <div 
             className={`accordion-title flex items-center justify-between w-full ${displayTitle ? '' : 'justify-center'}`} 
             onClick={onTitleClick}
-        >
+            >
             <div className={`flex items-center ${displayTitle ? '' : 'justify-center w-full'}`}>
-                {Icon && (
+                {iconType === 'component' && Icon && (
                     <div className="flex items-center justify-center leading-4">
-                        <Icon style={{ width: '32px', height: '32px' }} />
+                        {React.createElement(Icon, { style: { width: '32px', height: '32px' } })}
+                    </div>
+                )}
+                {iconType === 'url' && Icon && (
+                    <div className="flex items-center justify-center leading-4">
+                        <img src={Icon} alt={title} style={{ width: '32px', height: '32px' }} />
                     </div>
                 )}
                 {displayTitle && title && (

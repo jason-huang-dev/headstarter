@@ -34,7 +34,7 @@ const Benefits = () => {
     };
 
     return (
-        <div id="features" className="relative py-15 lg:py-16 xl:py-20 lg:py-32 xl:py-40 overflow-hidden">
+        <div id="features" className="relative py-15 lg:py-32 xl:py-40 overflow-hidden">
             <div className="container relative z-2">
                 {/* Header */}
                 <div className="md:max-w-md lg:max-w-2xl max-w-[50rem] mx-auto mb-12 lg:mb-20 md:text-center">
