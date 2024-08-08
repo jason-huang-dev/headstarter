@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./CalendarOverview.css"; // Import the custom CSS file
 import CustomToolbar from './CustomToolbar';
 
 // Sample events data

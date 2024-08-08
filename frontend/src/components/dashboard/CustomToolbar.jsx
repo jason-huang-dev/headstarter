@@ -1,6 +1,10 @@
 import React from 'react';
 import {ChevronRight, ChevronLeft} from 'lucide-react';
 
+/**
+ * Custom toolbar for calendar overview in dashboards, topbar of the calendar overview
+ */
+
 const CustomToolbar = (toolbar) => {
   const goToBack = () => {
     toolbar.onNavigate('PREV');
@@ -19,8 +23,8 @@ const CustomToolbar = (toolbar) => {
   };
 
   return (
-    <div className="flex justify-between items-center p-4 font-sora bg-white shadow-sm">
-      <div className="flex justify-center">
+    <div className="flex justify-between items-center p-4 font-sora bg-white shadow-sm w-full">
+      <div className="flex items-center">
         <button
           onClick={goToCurrent}
           className="btn px-6 py-2.5 text-md lg:text-sm uppercase text-gray-400 hover:text-black hover:font-bold transition-colors"
@@ -40,8 +44,8 @@ const CustomToolbar = (toolbar) => {
           <ChevronRight />
         </button>
       </div>
-      <span className="text-lg font-semibold text-black">{toolbar.label}</span>
-      <div>
+      <span className="text-lg font-semibold text-black flex-grow text-center">{toolbar.label}</span>
+      <div className="flex items-center">
         <button
           onClick={() => goToView('month')}
           className={`btn px-6 py-2.5 text-md lg:text-sm uppercase ${

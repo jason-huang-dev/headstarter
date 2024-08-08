@@ -1,3 +1,24 @@
 .hover-menu:hover .menu-rect {
     fill: white;
 }
+
+/* For Webkit browsers (Chrome, Safari, and newer versions of Edge) */
+ul::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+  
+ul::-webkit-scrollbar-track {
+    background: white; /* Track color */
+}
+  
+ul::-webkit-scrollbar-thumb {
+    background: #d0d0d0; /* Thumb color */
+    border-radius: 4px; /* Roundness of the thumb */
+}
+  
+  /* For Firefox */
+ul {
+    scrollbar-width: thin;
+    scrollbar-color: #d0d0d0 white;
+  }
+  

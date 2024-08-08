@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBar, SideBarItem, CalendarOverview } from '../components/dashboard';
+import { SideBar, CalendarOverview } from '../components/dashboard';
 import { sideBarAccordians } from "../constants/index"; // import text contents from constants/index.js
-import { Accordion, Button} from '../components/reusable';
+import {Accordion, AccordionItem} from '../components/reusable';
+
+import {ContactRound, Handshake, Apple} from "lucide-react";
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -28,30 +30,66 @@ const Dashboards = () => {
     );
   };
 
+
+  // Add calendar function that is passed to the Sidebar
+  const addCalendar = () => {
+    console.log("addCalendar is activated");
+  };
+
+  // Add Event function that is passed to the Sidebar
+  const addEvent = () => {
+    console.log("addEvent is activated");
+  };
+
+  // Example accordion items
+  const exampleItems = [
+      { id: 1, title: "Example Item 1", icon: ContactRound},
+      { id: 2, title: "Example Item 2", icon: Handshake},
+      { id: 3, title: "Example Item 3", icon: Apple},
+      { id: 1, title: "Example Item 1", icon: ContactRound},
+      { id: 2, title: "Example Item 2", icon: Handshake},
+      { id: 3, title: "Example Item 3", icon: Apple},
+      { id: 1, title: "Example Item 1", icon: ContactRound},
+      { id: 2, title: "Example Item 2", icon: Handshake},
+      { id: 3, title: "Example Item 3", icon: Apple},
+  ];
+
   return (
     <div className="flex h-screen font-sora">
-      <SideBar user={user}>
-        {({ isOpen }) => (
+
+      {/* SideBar Component */}
+      <SideBar user={user} addCalendar={addCalendar} addEvent={addEvent}>
+      {({ isOpen }) => (
           <div className="flex flex-col flex-grow">
-            <div className="flex flex-col flex-grow overflow-y-auto">
+            <div className="flex flex-col flex-grow">
               {sideBarAccordians.map((item, index) => (
                 <Accordion
                   key={index}
                   title={item.title}
                   icon={item.iconUrl}
                   displayTitle={isOpen} 
-                  isActive={activeIndices.includes(index)} // Check if index is in activeIndices
+                  isActive={isOpen && activeIndices.includes(index)} // Check if index is in activeIndices, pass isOpen and activeIndices display Accordion icons without grey bg when sidebar is closed
                   onTitleClick={() => handleTitleClick(index)} // Pass index to click handler
                 >
-                  {/* You can put content for each AccordionItem here */}
-                  <p>Content for {item.title}</p>
+                  {exampleItems.map((exampleItem) => (
+                    <AccordionItem
+                      key={exampleItem.id}
+                      title={exampleItem.title}
+                      IconComponent={exampleItem.icon} // Pass the icon component
+                      displayTitle={isOpen}
+                      isActive={isOpen && activeIndices.includes(index)}
+                      onTitleClick={() => handleTitleClick(index)}
+                      link={`/dashboards/${exampleItem.id}`} // Example link, adjust as needed
+                    />
+                  ))}
                 </Accordion>
               ))}
             </div>
-            {isOpen && <Button className="mt-auto">Add Event</Button>}
           </div>
-        )}
+        )} 
       </SideBar>
+
+      {/* Main calendar view component */}
       <div className="flex-grow h-full">
       <CalendarOverview />
       </div>
@@ -60,3 +98,4 @@ const Dashboards = () => {
 };
 
 export default Dashboards;
+
