@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -7,31 +7,17 @@ import CustomToolbar from './CustomToolbar';
 // Initialize the moment localizer
 const localizer = momentLocalizer(moment);
 
-const CalendarOverview = ({ addEventToCalendar }) => {
-  const [myEvents, setMyEvents] = useState([]);
-
-  const handleAddEvent = (event) => {
-    const start = new Date(event.start);
-    const end = new Date(event.end);
-    const eventToAdd = {
-      id: myEvents.length, // Simple id generation, ideally use a more robust method
-      title: event.title,
-      start: start,
-      end: end
-    };
-    setMyEvents([...myEvents, eventToAdd]);
-  };
-
+const CalendarOverview = ({ events }) => {
   return (
     <div className="h-full pt-5">
       <Calendar
         localizer={localizer}
-        events={myEvents}
+        events={events} // Events passed as a prop
         startAccessor="start"
         endAccessor="end"
-        views={{ month: true, week: true, agenda: true }} // Exclude 'day' view
+        views={{ month: true, week: true, agenda: true }}
         defaultView={Views.MONTH}
-        components={{ toolbar: CustomToolbar }} // Use the custom toolbar
+        components={{ toolbar: CustomToolbar }}
         style={{ height: '100%' }}
       />
     </div>

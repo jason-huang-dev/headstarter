@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
-import { sideBarAccordians } from "../constants/index"; // import text contents from constants/index.js
+import { sideBarAccordians } from "../constants/index"; 
 import { Accordion, AccordionItem } from '../components/reusable';
-
 import { ContactRound, Handshake, Apple } from "lucide-react";
 
 /**
@@ -20,34 +19,42 @@ import { ContactRound, Handshake, Apple } from "lucide-react";
 
 const Dashboards = () => {
   const location = useLocation();
-  const user = location.state?.user; // Access user data from state
-  const [activeIndices, setActiveIndices] = useState([]); // Manage active accordion states
-  const [isRightBarOpen, setIsRightBarOpen] = useState(false); // Manage right sidebar visibility
-  const [rightBarContent, setRightBarContent] = useState(''); // Track which content to show
+  const user = location.state?.user; 
+  const [activeIndices, setActiveIndices] = useState([]); 
+  const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
+  const [rightBarContent, setRightBarContent] = useState(''); 
+  const [events, setEvents] = useState([]); 
 
   const handleTitleClick = (index) => {
     setActiveIndices((prevIndices) => 
       prevIndices.includes(index)
-        ? prevIndices.filter((i) => i !== index) // Remove index if already active
-        : [...prevIndices, index] // Add index if not active
+        ? prevIndices.filter((i) => i !== index) 
+        : [...prevIndices, index] 
     );
   };
 
-  // Add calendar function that is passed to the Sidebar
   const addCalendar = (setIsOpen) => {
-    setRightBarContent('calendar'); // Set right bar content to calendar
-    setIsRightBarOpen(true); // Open the right sidebar
-    setIsOpen(false); // Close the main sidebar
+    setRightBarContent('calendar'); 
+    setIsRightBarOpen(true); 
+    setIsOpen(false);
   };
-
-  // Add Event function that is passed to the Sidebar
+  
   const addEvent = (setIsOpen) => {
-    setRightBarContent('event'); // Set right bar content to event
-    setIsRightBarOpen(true); // Open the right sidebar
-    setIsOpen(false); // Close the main sidebar
+    setRightBarContent('event'); 
+    setIsRightBarOpen(true); 
+    setIsOpen(false); 
   };
 
-  // Example accordion items
+  const handleAddEvent = (eventDetails) => {
+    const newEvent = {
+      id: events.length,
+      title: eventDetails.title,
+      start: new Date(eventDetails.start), 
+      end: new Date(eventDetails.end) 
+    };
+    setEvents([...events, newEvent]); 
+  };
+
   const exampleItems = [
     { id: 1, title: "Example Item 1", icon: ContactRound },
     { id: 2, title: "Example Item 2", icon: Handshake },
@@ -68,18 +75,18 @@ const Dashboards = () => {
                   displayTitle={isOpen} 
                   icon={item.iconUrl}
                   iconType={item.iconType}
-                  isActive={isOpen && activeIndices.includes(index)} // Check if index is in activeIndices
-                  onTitleClick={() => handleTitleClick(index)} // Pass index to click handler
+                  isActive={isOpen && activeIndices.includes(index)} 
+                  onTitleClick={() => handleTitleClick(index)} 
                 >
                   {exampleItems.map((exampleItem) => (
                     <AccordionItem
                       key={exampleItem.id}
                       title={exampleItem.title}
-                      IconComponent={exampleItem.icon} // Pass the icon component
+                      IconComponent={exampleItem.icon} 
                       displayTitle={isOpen}
                       isActive={isOpen && activeIndices.includes(index)}
                       onTitleClick={() => handleTitleClick(index)}
-                      link={`/dashboards/${exampleItem.id}`} // Example link, adjust as needed
+                      link={`/dashboards/${exampleItem.id}`} 
                     />
                   ))}
                 </Accordion>
@@ -91,17 +98,17 @@ const Dashboards = () => {
 
       {/* Main calendar view component */}
       <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        <CalendarOverview />
+        <CalendarOverview events={events} />  {/* Pass events to CalendarOverview */}
       </div>
 
       {/* Right Sidebar Component */}
       {isRightBarOpen && (
         <RightBar 
-          isRightBarOpen={isRightBarOpen} 
-          setIsRightBarOpen={setIsRightBarOpen} 
-          content={rightBarContent} 
-          addEventToCalendar={addEvent}
-        />
+         isRightBarOpen={isRightBarOpen} 
+         setIsRightBarOpen={setIsRightBarOpen} 
+         content={rightBarContent} 
+         addEventToCalendar={handleAddEvent}
+       />
       )}
     </div>
   ); 
