@@ -1,4 +1,9 @@
 """
+File: wsgi.py
+Author: Ester
+Documentation updated by: Jason
+Date: 2024-08-09
+
 WSGI config for calendar_app project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.

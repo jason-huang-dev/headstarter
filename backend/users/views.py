@@ -1,3 +1,11 @@
+"""
+google_auth.py
+
+Author: Your Name
+Date: 2024-08-09
+
+This module contains a Django view for authenticating users via Google OAuth2.
+"""
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -20,6 +28,36 @@ User = get_user_model()
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def google_auth(request):
+    """
+    Authenticate a user using a Google OAuth2 token. Create or update a user based on the token information.
+
+    #### Parameters
+     token : str
+        - The OAuth2 token received from Google, sent in the request body.
+
+    #### Returns
+    - Response
+        - A JSON response containing the authentication token, user ID, email, username, and profile picture URL.
+
+    #### Raises
+    - ValueError
+        - Raised if the token is invalid or cannot be verified.
+    - IntegrityError
+        - Raised if there is an issue creating or updating the user in the database.
+    - Exception
+        - Catches any other unexpected errors and logs them.
+
+    #### Response Example
+    ```python
+    {
+        "token": "<Auth_Token>",
+        "user_id": 1,
+        "email": "user@example.com",
+        "username": "User Name",
+        "picture": "http://example.com/media/profile_pics/profile_1.jpg"
+    }
+    ```
+    """
     token = request.data.get('token')
     if not token:
         return Response({'error': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)

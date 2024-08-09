@@ -1,18 +1,19 @@
 """
 File: apps.py
-Author: Ester
+Author: Jason
 Documentation updated by: Jason
 Date: 2024-08-09
 
-Configuration for the 'events' Django application.
+Configuration for the 'Friendships' Django application.
 
-This module defines the configuration class for the 'events' application, which includes settings for auto-generated primary key fields and the application name.
+This module defines the configuration class for the 'Friendships' application, which includes settings for auto-generated primary key fields and the application name.
 """
+
 from django.apps import AppConfig
 
-class EventsConfig(AppConfig):
+class FriendshipsConfig(AppConfig):
     """
-    Configuration class for the 'events' application.
+    Configuration class for the 'Friendships' application.
 
     This class inherits from `AppConfig` and is used to specify application-specific settings and behaviors.
 
@@ -20,14 +21,14 @@ class EventsConfig(AppConfig):
     - `default_auto_field` : str
         - Specifies the default type of auto-generated primary key fields for the application. Set to 'django.db.models.BigAutoField'.
     - `name` : str
-        - The full Python path to the application. Set to 'events'.
+        - The full Python path to the application. Set to 'friendships'.
 
     Example:
     ```python
     # In settings.py
     INSTALLED_APPS = [
         ...
-        'events.apps.EventsConfig',
+        'friendships.apps.FriendshipsConfig',
         ...
     ]
     ```
@@ -37,4 +38,4 @@ class EventsConfig(AppConfig):
     - The `name` attribute specifies the application name as Django identifies it in settings and migration files.
     """
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'events'
+    name = 'friendships'
