@@ -7,7 +7,7 @@ import { X } from "lucide-react";
  *
  * This component slides in from the right and displays different forms based on the
  * content type passed in the `content` prop. It handles the submission of new events
- * to be added to the main calendar.
+ * or calendars to be added to the main application.
  *
  * @component
  * @param {Object} props - The component props.
@@ -15,14 +15,21 @@ import { X } from "lucide-react";
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @param {string} props.content - Determines what content to display in the RightBar ('calendar' or 'event').
  * @param {Function} props.addEventToCalendar - Function to add the event to the calendar.
+ * @param {Function} props.addCalendar - Function to add a new calendar.
  * @returns {JSX.Element} The RightBar component.
  */
-export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventToCalendar }) => {
+export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventToCalendar, addCalendar }) => {
   // State to manage the details of the event being added
   const [eventDetails, setEventDetails] = useState({
     title: '',
     start: '',
     end: ''
+  });
+
+  // State to manage the details of the calendar being added
+  const [calendarDetails, setCalendarDetails] = useState({
+    name: '',
+    description: ''
   });
 
   /**
@@ -31,9 +38,20 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
    *
    * @param {Object} e - The event object from the input field.
    */
-  const handleInputChange = (e) => {
+  const handleEventInputChange = (e) => {
     const { name, value } = e.target;
     setEventDetails({ ...eventDetails, [name]: value });
+  };
+
+  /**
+   * Handles input changes in the calendar form.
+   * Updates the calendarDetails state with the new values.
+   *
+   * @param {Object} e - The event object from the input field.
+   */
+  const handleCalendarInputChange = (e) => {
+    const { name, value } = e.target;
+    setCalendarDetails({ ...calendarDetails, [name]: value });
   };
 
   /**
@@ -44,6 +62,16 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
     addEventToCalendar(eventDetails); // Call the function to add the event to the calendar
     setEventDetails({ title: '', start: '', end: '' }); // Reset the form fields
     setIsRightBarOpen(false); // Close the right sidebar after adding the event
+  };
+
+  /**
+   * Handles the submission of the calendar form.
+   * Calls the addCalendar function passed from props and closes the sidebar.
+   */
+  const handleAddCalendar = () => {
+    addCalendar(calendarDetails); // Call the function to add the calendar
+    setCalendarDetails({ name: '', description: '' }); // Reset the form fields
+    setIsRightBarOpen(false); // Close the right sidebar after adding the calendar
   };
 
   return (
@@ -70,8 +98,31 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
           {/* Content for adding a new calendar */}
           {content === 'calendar' && (
             <div>
-              <p>This is where you can add a new calendar.</p>
-              {/* Additional fields and functionality for adding a calendar can be added here */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Calendar Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={calendarDetails.name}
+                  onChange={handleCalendarInputChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  name="description"
+                  value={calendarDetails.description}
+                  onChange={handleCalendarInputChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                />
+              </div>
+              <button
+                onClick={handleAddCalendar}
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Add Calendar
+              </button>
             </div>
           )}
 
@@ -84,7 +135,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                   type="text"
                   name="title"
                   value={eventDetails.title}
-                  onChange={handleInputChange}
+                  onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
@@ -94,7 +145,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                   type="datetime-local"
                   name="start"
                   value={eventDetails.start}
-                  onChange={handleInputChange}
+                  onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
@@ -104,7 +155,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                   type="datetime-local"
                   name="end"
                   value={eventDetails.end}
-                  onChange={handleInputChange}
+                  onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
@@ -124,8 +175,9 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
 
 // Define the PropTypes for the RightBar component
 RightBar.propTypes = {
-  isRightBarOpen: PropTypes.bool.isRequired, // Boolean to control the visibility of the RightBar
-  setIsRightBarOpen: PropTypes.func.isRequired, // Function to set the visibility of the RightBar
-  content: PropTypes.string.isRequired, // String to determine what content to show ('calendar' or 'event')
-  addEventToCalendar: PropTypes.func.isRequired, // Function to add the event to the calendar
+  isRightBarOpen: PropTypes.bool.isRequired, 
+  setIsRightBarOpen: PropTypes.func.isRequired, 
+  content: PropTypes.string.isRequired, 
+  addEventToCalendar: PropTypes.func.isRequired, 
+  addCalendar: PropTypes.func.isRequired, // Add this prop for calendar creation
 };

@@ -24,6 +24,7 @@ const Dashboards = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [events, setEvents] = useState([]); 
+  const [calendars, setCalendars] = useState([]); // New state for calendars
 
   const handleTitleClick = (index) => {
     setActiveIndices((prevIndices) => 
@@ -55,7 +56,17 @@ const Dashboards = () => {
     setEvents([...events, newEvent]); 
   };
 
+  const handleAddCalendar = (calendarDetails) => {
+    const newCalendar = {
+      id: calendars.length,
+      title: calendarDetails.name,
+      icon: ContactRound, // or any icon you prefer
+    };
+    setCalendars([...calendars, newCalendar]); // Update calendars state
+  };
+
   const exampleItems = [
+    ...calendars, // Add the dynamically added calendars
     { id: 1, title: "Example Item 1", icon: ContactRound },
     { id: 2, title: "Example Item 2", icon: Handshake },
     { id: 3, title: "Example Item 3", icon: Apple },
@@ -76,7 +87,10 @@ const Dashboards = () => {
                   icon={item.iconUrl}
                   iconType={item.iconType}
                   isActive={isOpen && activeIndices.includes(index)} 
-                  onTitleClick={() => handleTitleClick(index)} 
+                  onTitleClick={() => {
+                    if (!isOpen) setIsOpen(true); // open the sidebar if it's closed
+                    handleTitleClick(index); // handle the accordion logic
+                  }}
                 >
                   {exampleItems.map((exampleItem) => (
                     <AccordionItem
@@ -108,6 +122,7 @@ const Dashboards = () => {
          setIsRightBarOpen={setIsRightBarOpen} 
          content={rightBarContent} 
          addEventToCalendar={handleAddEvent}
+         addCalendar={handleAddCalendar} // Pass the function to RightBar
        />
       )}
     </div>
