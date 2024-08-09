@@ -1,6 +1,8 @@
-import {CalendarCheck, BellPlus, ListChecks, Calendar as CalendarIcon} from 'lucide-react';
+import {CalendarCheck, BellPlus, ListChecks, UserRoundPlus, Calendar as CalendarIcon} from 'lucide-react';
 // import png for Features
-import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates, CalendarUser} from "../assets/png";
+import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates} from "../assets/png";
+
+import {CalendarUser} from "../assets/svg";
 
 /**
  * List of item text that is displayed on the benefits cards
@@ -106,8 +108,8 @@ const sideBarAccordians = [
   },
   {
     title: "Shared Calendar",
-    iconUrl: CalendarUser, // URL to PNG image
-    iconType: 'url'
+    iconUrl: CalendarUser, // Icon component
+    iconType: 'component'
   }
 ];
 

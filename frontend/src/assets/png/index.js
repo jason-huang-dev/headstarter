@@ -8,7 +8,7 @@ import iconsite from './iconsite.png';
 import services1 from './services_1.png';
 import services2 from './services_2.png';
 import services3 from './services_3.png';
-import CalendarUser from './Calendar_user.png';
+// import CalendarUser from '../svg';
 
 export {
     calendar, 
@@ -21,5 +21,5 @@ export {
     services1,
     services2,
     services3,
-    CalendarUser
+    // CalendarUser
 }

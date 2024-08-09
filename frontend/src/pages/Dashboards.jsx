@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBar, CalendarOverview } from '../components/dashboard';
+import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
 import { sideBarAccordians } from "../constants/index"; // import text contents from constants/index.js
-import {Accordion, AccordionItem} from '../components/reusable';
+import { Accordion, AccordionItem } from '../components/reusable';
 
-import {ContactRound, Handshake, Apple} from "lucide-react";
+import { ContactRound, Handshake, Apple } from "lucide-react";
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -22,6 +22,8 @@ const Dashboards = () => {
   const location = useLocation();
   const user = location.state?.user; // Access user data from state
   const [activeIndices, setActiveIndices] = useState([]); // Manage active accordion states
+  const [isRightBarOpen, setIsRightBarOpen] = useState(false); // Manage right sidebar visibility
+  const [rightBarContent, setRightBarContent] = useState(''); // Track which content to show
 
   const handleTitleClick = (index) => {
     setActiveIndices((prevIndices) => 
@@ -32,27 +34,31 @@ const Dashboards = () => {
   };
 
   // Add calendar function that is passed to the Sidebar
-  const addCalendar = () => {
-    console.log("addCalendar is activated");
+  const addCalendar = (setIsOpen) => {
+    setRightBarContent('calendar'); // Set right bar content to calendar
+    setIsRightBarOpen(true); // Open the right sidebar
+    setIsOpen(false); // Close the main sidebar
   };
 
   // Add Event function that is passed to the Sidebar
-  const addEvent = () => {
-    console.log("addEvent is activated");
+  const addEvent = (setIsOpen) => {
+    setRightBarContent('event'); // Set right bar content to event
+    setIsRightBarOpen(true); // Open the right sidebar
+    setIsOpen(false); // Close the main sidebar
   };
 
   // Example accordion items
   const exampleItems = [
-      { id: 1, title: "Example Item 1", icon: ContactRound },
-      { id: 2, title: "Example Item 2", icon: Handshake },
-      { id: 3, title: "Example Item 3", icon: Apple },
+    { id: 1, title: "Example Item 1", icon: ContactRound },
+    { id: 2, title: "Example Item 2", icon: Handshake },
+    { id: 3, title: "Example Item 3", icon: Apple },
   ];
 
   return (
     <div className="flex h-screen font-sora">
       {/* SideBar Component */}
-      <SideBar user={user} addCalendar={addCalendar} addEvent={addEvent}>
-        {({ isOpen }) => (
+      <SideBar user={user} addCalendar={addCalendar} addEvent={addEvent} isRightBarOpen={isRightBarOpen}>
+        {({ isOpen, setIsOpen }) => (
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col flex-grow">
               {sideBarAccordians.map((item, index) => (
@@ -84,9 +90,19 @@ const Dashboards = () => {
       </SideBar>
 
       {/* Main calendar view component */}
-      <div className="flex-grow h-full">
+      <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
         <CalendarOverview />
       </div>
+
+      {/* Right Sidebar Component */}
+      {isRightBarOpen && (
+        <RightBar 
+          isRightBarOpen={isRightBarOpen} 
+          setIsRightBarOpen={setIsRightBarOpen} 
+          content={rightBarContent} 
+          addEventToCalendar={addEvent}
+        />
+      )}
     </div>
   ); 
 };
