@@ -40,8 +40,6 @@ def create_calendar(request):
     title = request.data.get('title')
     description = request.data.get('description', '')  # Optional field
     
-    logger.log(title + "\n" + description)
-
     if not title:
         return Response({'error': 'Title is required'}, status=status.HTTP_400_BAD_REQUEST)
 
