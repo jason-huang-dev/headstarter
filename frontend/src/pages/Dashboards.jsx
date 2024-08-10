@@ -81,17 +81,19 @@ const Dashboards = () => {
             <div className="flex flex-col flex-grow">
               {sideBarAccordians.map((item, index) => (
                 <Accordion
-                  key={index}
-                  title={item.title}
-                  displayTitle={isOpen} 
-                  icon={item.iconUrl}
-                  iconType={item.iconType}
-                  isActive={isOpen && activeIndices.includes(index)} 
-                  onTitleClick={() => {
-                    if (!isOpen) setIsOpen(true); // open the sidebar if it's closed
-                    handleTitleClick(index); // handle the accordion logic
-                  }}
-                >
+                    key={index}
+                    title={item.title}
+                    displayTitle={isOpen} 
+                    icon={item.iconUrl}
+                    iconType={item.iconType}
+                    isActive={isOpen && activeIndices.includes(index)} 
+                    onTitleClick={() => {
+                      if (window.innerWidth >= 1160 || !isRightBarOpen) {
+                        if (!isOpen) setIsOpen(true); // open the sidebar if it's closed
+                        handleTitleClick(index); // handle the accordion logic
+                      }
+                    }}
+                  >
                   {exampleItems.map((exampleItem) => (
                     <AccordionItem
                       key={exampleItem.id}

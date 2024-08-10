@@ -15,11 +15,14 @@ const SidebarContext = React.createContext();
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @returns {JSX.Element} The Drawer component.
  */
-export const SideBar = ({ user, children, addCalendar, addEvent }) => {
+export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setIsOpen((curr) => !curr);
+    // Block opening if the screen width is less than 1160px and the right sidebar is open
+    if (window.innerWidth >= 1160 || !isRightBarOpen) {
+      setIsOpen((curr) => !curr);
+    }
   };
 
   return (
@@ -102,4 +105,5 @@ SideBar.propTypes = {
     username: PropTypes.string.isRequired,
     picture: PropTypes.string.isRequired,
   }).isRequired,
+  isRightBarOpen: PropTypes.bool.isRequired, // Add prop type for isRightBarOpen
 };
