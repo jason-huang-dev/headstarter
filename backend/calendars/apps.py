@@ -41,4 +41,4 @@ class CalendarConfig(AppConfig):
     - The `name` attribute specifies the application name as Django identifies it in settings and migration files.
     """
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'calendar'
+    name = 'calendars'

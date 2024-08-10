@@ -32,4 +32,4 @@ class SharedCalendarAdmin(admin.ModelAdmin):
     Note:
     - The `list_display` attribute determines which fields are shown in the list view of the admin interface.
     """
-    list_display = ('share_cal_id', 'calendar', 'shared_users')
+    list_display = ('share_cal_id', 'calendar')

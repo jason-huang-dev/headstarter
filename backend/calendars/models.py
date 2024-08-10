@@ -26,6 +26,8 @@ class Calendar(models.Model):
         - The user who owns the calendar. Links to the `User` model.
     - title : CharField
         - The title of the calendar.
+    - description : TextField
+        - A description of the calendar.
 
     #### Methods
     - __str__() : str
@@ -33,13 +35,14 @@ class Calendar(models.Model):
 
     #### Example
     ```python
-    calendar = Calendar(user=user_instance, title="My Calendar")
+    calendar = Calendar(user=user_instance, title="My Calendar", desciption="desciption")
     print(calendar)  # Output: My Calendar
     ```
     """
     cal_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='calendars')
     title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         """

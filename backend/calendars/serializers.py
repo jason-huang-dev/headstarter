@@ -28,6 +28,8 @@ class CalendarSerializer(serializers.ModelSerializer):
         - The ID of the user who owns the calendar.
     - title : str
         - The title of the calendar.
+    - description : TextField
+        - A description of the calendar.
 
     #### Example
     ```json
@@ -40,4 +42,4 @@ class CalendarSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Calendar
-        fields = ('cal_id', 'user', 'title')
+        fields = ('cal_id', 'user', 'title', 'description')

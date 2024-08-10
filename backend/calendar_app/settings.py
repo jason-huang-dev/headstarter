@@ -63,9 +63,9 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'users.apps.UsersConfig',
     'calendars.apps.CalendarConfig',
-    'shared_calendar.apps.SharedCalendarConfig',
+    'shared_calendars.apps.SharedCalendarConfig',
     'events.apps.EventsConfig',
-    'friends.apps.FrendshipsConfig',
+    'friends.apps.FriendshipsConfig',
 ]
 
 MIDDLEWARE = [
@@ -176,6 +176,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 

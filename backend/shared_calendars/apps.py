@@ -43,4 +43,4 @@ class SharedCalendarConfig(AppConfig):
       and migration files.
     """
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'shared_calendar'
+    name = 'shared_calendars'

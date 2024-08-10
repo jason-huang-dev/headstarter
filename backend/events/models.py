@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/topics/db/models/
 """
 from django.db import models
 from django.conf import settings
+from calendars.models import Calendar
     
 class Event(models.Model):
     """
@@ -38,7 +39,7 @@ class Event(models.Model):
     - `__str__()` :
         - Returns a string representation of the event in the format "title - calendar title".
     """
-    calendar = models.ForeignKey('Calendars', on_delete=models.CASCADE, related_name='events')
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     start_time = models.DateTimeField()

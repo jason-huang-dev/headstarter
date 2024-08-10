@@ -5,6 +5,28 @@ const Dashboards = () => {
   const location = useLocation();
   const user = location.state?.user; // Access user data from state
 
+  const createCalendar = async (token, title, description) =>{
+    console.log(token)
+    const response = await fetch('http://localhost:8000/api/calendars/', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify({
+        title: title, 
+        description: description,
+      })
+    });
+
+    const data = await response.json();
+    return data;
+  }
+
+  createCalendar(user.token, "Test", "Test Discription")
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
   return (
     <div>
       <h1>Dashboards</h1>
