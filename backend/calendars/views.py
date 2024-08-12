@@ -1,6 +1,5 @@
 """
-views.py
-
+File: views.py
 Author: Jason
 Documentation updated by: Jason
 Date: 2024-08-10
@@ -23,29 +22,26 @@ def create_calendar(request):
     """
     Create a new calendar for the authenticated user.
 
-    #### Parameters
-    - title : str
-        - The title of the calendar.
-    - description : str
-        - An optional description of the calendar.
-
-    #### Returns
-    - Response
-        - A JSON response containing the calendar details.
-
-    #### Raises
-    - ValidationError
-        - Raised if the provided data is invalid.
+    ::param str title : The title of the calendar.
+    ::param str  description : An optional description of the calendar.
+    ::return Response : A JSON response containing the calendar details.
+    ::raises ValidationError : Raised if the provided data is invalid.
     """
-    title = request.data.get('title')
-    description = request.data.get('description', '')  # Optional field
-    
-    if not title:
-        return Response({'error': 'Title is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:# Check if user already has a calendar
+        existing_calendar = Calendar.objects.filter(user=request.user).first()
+        if existing_calendar:# Use the existing calendar
+            calendar = existing_calendar
+            created = False
+            logger.info(f"Using existing calendar for user {request.user.id}")
+        else:# Create new calendar
+            title = request.data.get('title', 'My Calendar')
+            description = request.data.get('description', '')
+            calendar = Calendar.objects.create(user=request.user, title=title, description=description)
+            created = True
+            logger.info(f"Created new calendar for user {request.user.id}")
 
-    try:
-        calendar = Calendar.objects.create(user=request.user, title=title, description=description)
-        serializer = CalendarSerializer(calendar)
-        return Response(serializer.fields, status=status.HTTP_201_CREATED)
+            serializer = CalendarSerializer(calendar)
+            return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
+        logger.exception("Error retrieving or creating calendar")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

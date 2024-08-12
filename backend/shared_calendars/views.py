@@ -1,6 +1,5 @@
 """
-views.py
-
+File: views.py
 Author: Jason
 Documentation updated by: Jason
 Date: 2024-08-10
@@ -22,20 +21,11 @@ def create_shared_calendar(request):
     Share a calendar with multiple users.
 
     #### Parameters
-    - calendar_id : int
-        - The ID of the calendar to be shared.
-    - user_ids : list
-        - A list of user IDs to whom the calendar should be shared.
-
-    #### Returns
-    - Response
-        - A JSON response indicating success or failure.
-
-    #### Raises
-    - ValidationError
-        - Raised if the provided data is invalid.
-    - NotFound
-        - Raised if the specified calendar does not exist.
+    ::param int calendar_id : The ID of the calendar to be shared.
+    ::param list user_ids : A list of user IDs to whom the calendar should be shared.
+    ::return Response : A JSON response indicating success or failure.
+    ::raises ValidationError : Raised if the provided data is invalid.
+    ::raises NotFound : Raised if the specified calendar does not exist.
     """
     calendar_id = request.data.get('calendar_id')
     user_ids = request.data.get('user_ids', [])

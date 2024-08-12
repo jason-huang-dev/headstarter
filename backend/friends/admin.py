@@ -15,18 +15,11 @@ from .models import Friendships
 @admin.register(Friendships)
 class FriendshipsAdmin(admin.ModelAdmin):
     """
-    Admin configuration for the `Friendships` model.
+    Customize the display and behavior of the `Friendships` model in the Django admin interface.
 
-    This class inherits from `admin.ModelAdmin` and is used to customize the display and behavior of the `Friendships`
-    model in the Django admin interface.
-
-    Attributes:
-    - `list_display` : tuple
-        - Specifies the fields to be displayed in the list view of the Django admin.
-    - `search_fields` : tuple
-        - Specifies the fields to be used for searching in the Django admin interface.
-    - `ordering` : tuple
-        - Specifies the default ordering of the records in the Django admin list view.
+    ::field tuple list_display : Specifies the fields to be displayed in the list view of the Django admin.
+    ::field tuple search_fields : Specifies the fields to be used for searching in the Django admin interface.
+    ::field tuple ordering: Specifies the default ordering of the records in the Django admin list view.
     """
     list_display = ('user', 'friend')
     search_fields = ('user__username', 'friend__username')

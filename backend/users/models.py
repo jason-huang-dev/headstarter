@@ -4,8 +4,6 @@ Author: Ester
 Documentation updated by: Jason
 Date: 2024-08-09
 
-Custom user model with email-based authentication and additional fields.
-
 This model inherits from `AbstractBaseUser` and `PermissionsMixin` to provide a custom user model with email as the primary identifier.
 """
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -18,31 +16,16 @@ from .managers import CustomUserManager
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
-    Represents a custom user model with email-based authentication and additional fields.
+    Represents a custom user model with email-based authentication and additional field.
 
-    #### Parameters
-    - email : str
-        - The email address of the user, which is unique and used for authentication.
-    - username : str
-        - The username of the user.
-    - profile_picture : ImageField
-        - The profile picture of the user. Defaults to `settings.DEFAULT_PROFILE_PIC`.
-    - is_staff : bool
-        - A boolean indicating whether the user has access to the admin interface. Defaults to `False`.
-    - is_active : bool
-        - A boolean indicating whether the user account is active. Defaults to `True`.
-    - date_joined : DateTimeField
-        - The date and time when the user account was created. Defaults to the current timestamp.
-    - friends : ManyToManyField
-        - A many-to-many relationship with the `CustomUser` model itself to manage user friendships. 
-
-    #### Returns
-    - str
-        - The email address of the user as a string.
-
-    #### Raises
-    - ValueError
-        - Raised if there is an issue with user creation or authentication.
+    ::field str email : The email address of the user, which is unique and used for authentication.
+    ::field str username : The username of the user.
+    ::field ImageField profile_picture : The profile picture of the user. Defaults to `settings.DEFAULT_PROFILE_PIC`.
+    ::field bool is_staff : A boolean indicating whether the user has access to the admin interface. Defaults to `False`.
+    ::field bool is_active : A boolean indicating whether the user account is active. Defaults to `True`.
+    ::field DateTimeField date_joined : The date and time when the user account was created. Defaults to the current timestamp.
+    ::return str : The email address of the user as a string.
+    ::raises ValueError : Raised if there is an issue with user creation or authentication.
     """
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(_('username'), max_length=255)
@@ -52,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_field = ['username']
 
     objects = CustomUserManager()
 

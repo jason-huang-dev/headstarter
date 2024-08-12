@@ -32,35 +32,16 @@ def google_auth(request):
     """
     Authenticate a user using a Google OAuth2 token. Create or update a user based on the token information.
 
-    #### Parameters
-    ```python
-    request: {
-        "token" : str - The OAuth2 token received from Google, sent in the request body.
-    }
-    ```
-    
-    #### Returns
-    - Response
-        - A JSON response containing the authentication token, user ID, email, username, and profile picture URL.
-
-    #### Raises
-    - ValueError
-        - Raised if the token is invalid or cannot be verified.
-    - IntegrityError
-        - Raised if there is an issue creating or updating the user in the database.
-    - Exception
-        - Catches any other unexpected errors and logs them.
-
-    #### Response Example
+    ::param JSON request:
     ```python
     {
-        "token": "<Auth_Token>",
-        "user_id": 1,
-        "email": "user@example.com",
-        "username": "User Name",
-        "picture": "http://example.com/media/profile_pics/profile_1.jpg"
+     "token" : str - The OAuth2 token received from Google, sent in the request body.
     }
     ```
+    ::return Response : A JSON response containing the authentication token, user ID, email, username, and profile picture URL.
+    ::raises ValueError : Raised if the token is invalid or cannot be verified.
+    ::raises IntegrityError : Raised if there is an issue creating or updating the user in the database.
+    ::raises Exception : Catches any other unexpected errors and logs them.
     """
     token = request.data.get('token')
     if not token:

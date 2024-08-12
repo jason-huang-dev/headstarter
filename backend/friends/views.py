@@ -21,17 +21,9 @@ def add_friendship(request):
     """
     Create a new friendship between the authenticated user and another user.
 
-    #### Parameters
-    - friend_id : int
-        - The ID of the user to be added as a friend.
-
-    #### Returns
-    - Response
-        - A JSON response indicating the success or failure of the operation.
-
-    #### Raises
-    - ValidationError
-        - Raised if the friendship already exists or if an invalid user ID is provided.
+    ::param int friend_id : The ID of the user to be added as a friend.
+    ::return Response : A JSON response indicating the success or failure of the operation.
+    ::raises ValidationError : Raised if the friendship already exists or if an invalid user ID is provided.
     """
     friend_id = request.data.get('friend_id')
 

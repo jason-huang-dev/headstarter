@@ -21,29 +21,15 @@ def create_event(request):
     """
     Create a new event in a calendar.
 
-    #### Parameters
-    - calendar_id : int
-        - The ID of the calendar to which the event will be added.
-    - title : str
-        - The title of the event.
-    - description : str, optional
-        - A description of the event.
-    - start_time : datetime
-        - The start date and time of the event.
-    - end_time : datetime
-        - The end date and time of the event.
-    - bg_color : str, optional
-        - The background color for the event in hexadecimal format. Defaults to '#FFFFFF'.
-
-    #### Returns
-    - Response
-        - A JSON response with the created event's details.
-
-    #### Raises
-    - ValidationError
-        - Raised if the provided data is invalid.
-    - NotFound
-        - Raised if the specified calendar does not exist.
+    ::param int calendar_id : The ID of the calendar to which the event will be added
+    ::param str title : The title of the event
+    ::param str/optional description : A description of the event
+    ::param datetime start_time : The start date and time of the event
+    ::param datetime end_time : The end date and time of the event
+    ::param str/optional bg_color : The background color for the event in hexadecimal format (default: '#FFFFFF')
+    ::return Response : A JSON response with the created event's details
+    ::raises ValidationError : Raised if the provided data is invalid
+    ::raises NotFound : Raised if the specified calendar does not exist
     """
     calendar_id = request.data.get('calendar_id')
     title = request.data.get('title')
