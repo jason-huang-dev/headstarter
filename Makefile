@@ -1,5 +1,6 @@
 COMMIT_MSG ?= no message update
 BRANCH_NAME ?= main
+PARAMS ?= ""
 DOCKER_COMPOSE= docker compose
 DJANGO_MANAGE= $(DOCKER_COMPOSE) exec backend python manage.py
 .DEFAULT_GOAL := update
@@ -46,7 +47,7 @@ createsuperuser:
 .PHONY:update_from_branch
 update_from_branch:
 	git stash
-	git pull origin $(BRANCH_NAME)
+	git pull origin $(BRANCH_NAME) $(PARAMS)
 	git stash pop
 	$(MAKE) run
 
@@ -64,13 +65,13 @@ push_to_branch:
 .PHONY: update
 update:
 	git stash
-	git pull
+	git pull $(PARAMS)
 	git stash pop
 
 .PHONY: update_run
 update_run:
 	git stash
-	git pull
+	git pull $(PARAMS)
 	git stash pop
 	$(MAKE) run
 	$(MAKE) migrate
@@ -78,7 +79,7 @@ update_run:
 .PHONY:
 push: 
 	git stash
-	git pull
+	git pull $(PARAMS)
 	git stash pop
 	git add .
 	git commit -m "$(COMMIT_MSG)"
