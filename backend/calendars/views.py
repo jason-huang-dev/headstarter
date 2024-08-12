@@ -33,6 +33,7 @@ def create_calendar(request):
             calendar = existing_calendar
             created = False
             logger.info(f"Using existing calendar for user {request.user.id}")
+            return Response(CalendarSerializer(calendar).data, status=status.HTTP_200_OK)
         else:# Create new calendar
             title = request.data.get('title', 'My Calendar')
             description = request.data.get('description', '')
