@@ -46,17 +46,17 @@ createsuperuser:
 # General git hub commands
 .PHONY:update_from_branch
 update_from_branch:
-	git stash
+	@git stash
 	git pull origin $(BRANCH_NAME) $(PARAMS)
-	git stash pop
+	@git stash pop
 	$(MAKE) run
 
 .PHONY: push_to_branch
 push_to_branch: 
-	git stash;
+	@git stash;
 	git pull origin $(BRANCH_NAME) $(PARAMS)
-	git stash pop;
-	git add .
+	@git stash pop;
+	@git add .
 	git commit -m "$(COMMIT_MSG)"
 	git push origin $(BRANCH_NAME)
 
@@ -64,29 +64,29 @@ push_to_branch:
 # General update recipies
 .PHONY: update
 update:
-	git stash
+	@git stash
 	git pull $(PARAMS)
-	git stash pop
+	@git stash pop
 
 .PHONY: deep_update
 deep_update:
-	git stash
+	@git stash
 	git pull origin main $(PARAMS)
-	git stash pop
+	@git stash pop
 
 .PHONY: update_run
 update_run:
-	git stash
+	@git stash
 	git pull $(PARAMS)
-	git stash pop
+	@git stash pop
 	$(MAKE) run
 	$(MAKE) migrate
 
 .PHONY: push
 push: 
-	git stash
+	@git stash
 	git pull $(PARAMS)
-	git stash pop
+	@git stash pop
 	git add .
 	git commit -m "$(COMMIT_MSG)"
 	git push
