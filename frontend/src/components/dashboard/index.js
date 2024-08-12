@@ -1,4 +1,5 @@
-import SideBar from "./SideBar.jsx";
+import { SideBar } from "./SideBar.jsx";
 import CalendarOverview from "./CalendarOverview.jsx";
+import {RightBar} from "./RightBar.jsx";
 
-export {SideBar, CalendarOverview};
+export { SideBar, RightBar, CalendarOverview };
