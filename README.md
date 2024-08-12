@@ -33,6 +33,9 @@ npm install react-just-parallax scroll-lock react-intersection-observer framer-m
 For Google OAuth authentication, install:
 
 npm install @react-oauth/google
+
+### Install Calendar for Dashboard
+ npm install --save react-big-calendar
        
 ```
 

@@ -1,5 +1,12 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+"""
+File: manage.py
+Author: Ester
+Documentation updated by: Jason
+Date: 2024-08-09
+
+Django's command-line utility for administrative tasks.
+"""
 import os
 import sys
 

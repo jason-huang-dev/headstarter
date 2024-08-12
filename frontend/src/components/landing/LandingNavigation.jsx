@@ -1,13 +1,24 @@
 // Responsible topbar component
-
+'use client'
 import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
-
-import iconsite from "../../assets/png/iconsite.png"; // logo of the website
+import {iconsite} from "../../assets/png"; // logo of the website
 import {Button} from "../reusable"; // Custom Button component
-import MenuSvg from "../../assets/svg/MenuSvg"; // Custom SVG component for the menu icon
+import {MenuSvg} from "../../assets/svg"; // Custom SVG component for the menu icon
 import { useState } from "react";
+import {navigation} from "../../constants/index";
 
+/**
+ * LandingNavigation component provides a responsive top navigation bar for the landing page.
+ * 
+ * This component:
+ * - Displays a logo and site name.
+ * - Includes navigation links that adjust visibility based on the screen size.
+ * - Manages the state for a responsive navigation menu with scroll lock.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered LandingNavigation component.
+ */
 const LandingNavigation = () => {
   // Get the current location path
   const pathname = useLocation();
@@ -33,30 +44,6 @@ const LandingNavigation = () => {
     enablePageScroll(); // Enable page scroll when link is clicked
     setOpenNavigation(false); // Close navigation menu when link is clicked
   };
-
-  const navigation = [
-    {
-      id: "0",
-      title: "Home",
-      url: "#hero",
-    },
-    {
-      id: "1",
-      title: "Highlights",
-      url: "#highlights",
-    },
-    {
-      id: "2",
-      title: "Features",
-      url: "#features",
-    },
-    {
-      id: "3",
-      title: "Sign in",
-      url: "/signin",
-      onlyMobile: true,
-    },
-  ];
 
   return (
     <>
@@ -106,8 +93,8 @@ const LandingNavigation = () => {
           </nav>
 
           {/* Sign in button, visible only on large screens */}
-          <Button outlined className="hidden lg:flex" href="#hero">
-            Join waitlist
+          <Button outlined className="hidden lg:flex" href="/signin">
+            Sign in
           </Button>
 
           {/* Menu SVG for toggling navigation on smaller screens */}

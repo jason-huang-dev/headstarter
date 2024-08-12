@@ -1,10 +1,10 @@
 """
-ASGI config for calendar_app project.
+File: asgi.py
+Author: Ester
+Documentation updated by: Jason
+Date: 2024-08-09
 
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/
+This module exposes the ASGI callable as a module-level variable named ``application``.
 """
 
 import os

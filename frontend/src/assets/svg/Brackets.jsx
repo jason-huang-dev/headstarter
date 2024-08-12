@@ -1,4 +1,16 @@
-const brackets = (position) =>
+/**
+ * Brackets component that renders an SVG element representing brackets on either the left or right side.
+ * 
+ * This component:
+ * - Renders an SVG graphic with a gradient stroke based on the `position` prop.
+ * - Displays the brackets in a vertical orientation.
+ * - Uses a gradient fill for the stroke of the brackets.
+ * 
+ * @component
+ * @param {string} position - Determines the position of the brackets. Can be "left" or "right".
+ * @returns {JSX.Element} The rendered SVG element for the brackets.
+ */
+const Brackets = (position) =>
   position === "left" ? (
     <svg
       width="5"
@@ -42,4 +54,4 @@ const brackets = (position) =>
     </svg>
   );
 
-export default brackets;
+export default Brackets;

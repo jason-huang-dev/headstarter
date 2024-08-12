@@ -1,4 +1,9 @@
 """
+File: urls.py
+Author: Ester
+Documentation updated by: Jason
+Date: 2024-08-09
+
 URL configuration for calendar_app project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -17,11 +22,36 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.views import google_auth
+from django.conf import settings
+from django.conf.urls.static import static
+
+from calendars.views import create_calendar
+from events.views import create_event
+from friends.views import add_friendship
+from shared_calendars.views import create_shared_calendar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    ## Authorization Paths
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/auth/social/', include('allauth.socialaccount.urls')),
     path('api/auth/google/', google_auth, name='google_auth'),
+
+    ## Event Paths
+    path('api/events/', create_event, name='create_event'),
+
+    ## Calendar Paths
+    path('api/calendars/', create_calendar, name='create_calendar'),
+    
+    ## Shared Calendar Paths
+    path('api/shared_calendars/', create_shared_calendar, name='create_shared_calendar'),
+    
+    ## Friends Paths
+    path('api/friends/', add_friendship, name='add_friendship'),
 ]
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

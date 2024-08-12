@@ -1,14 +1,24 @@
+'use client'
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
-import Tagline from "../reusable/TagLine";
+import { TagLine } from "../reusable";
 import Typing from 'react-typing-effect';
-
-import services1 from "../../assets/png/services_1.png";
-import services2 from "../../assets/png/services_2.png";
-import services3 from "../../assets/png/services_3.png";
+import { services } from '../../constants';
+import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
 
+/**
+ * Services component showcases the services and features of the application.
+ * 
+ * This component:
+ * - Uses the `react-intersection-observer` to trigger animations when in view.
+ * - Displays a list of services with animated effects.
+ * - Includes responsive design for various screen sizes.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Services component.
+ */
 const Services = () => {
     // Use the useInView hook to track the visibility of the component
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -20,13 +30,8 @@ const Services = () => {
             setHasTyped(true);
         }
     }, [inView, hasTyped]);
+    
 
-    // List of services to be displayed in the first card
-    const services = [
-        "See schedules of people in your calendar",
-        "Find a common time for meetings",
-        "Add and edit your shared schedules",
-    ];
 
     // Animation variants for framer-motion
     const variants = {
@@ -58,10 +63,10 @@ const Services = () => {
                     animate={inView ? "visible" : "hidden"}
                     variants={slideUpEffect}
                 >
-                    <Tagline className="mb-4 md:justify-center">What we're working on</Tagline>
+                    <TagLine className="mb-4 md:justify-center">What we're working on</TagLine>
                     {inView && (
                         <Typing
-                            text={["Plan Smarter, Not Harder with TimeMesh"]}
+                            text={["Plan Smarter, Not Harder"]}
                             className="h2"
                             speed={100}
                             eraseSpeed={50}

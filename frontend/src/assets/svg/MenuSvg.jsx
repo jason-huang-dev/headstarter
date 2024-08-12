@@ -1,7 +1,20 @@
 import React from 'react';
 import Button from '../../components/reusable/Button';
 
-
+/**
+ * MenuSvg component that provides a responsive menu button with a toggle animation.
+ * 
+ * This component:
+ * - Renders a button that displays an SVG icon.
+ * - The SVG icon changes appearance based on the `openNavigation` prop, indicating whether the menu is open or closed.
+ * - Uses the `Button` component for styling and interaction.
+ * 
+ * @component
+ * @param {object} props - The props for the component.
+ * @param {boolean} props.openNavigation - Boolean indicating if the menu is currently open. This affects the SVG icon's appearance.
+ * @param {function} props.toggleNavigation - Function to handle the button click event, typically used to open or close the navigation menu.
+ * @returns {JSX.Element} The rendered MenuSvg component.
+ */
 const MenuSvg = ({ openNavigation, toggleNavigation }) => {
   return (
     <Button
