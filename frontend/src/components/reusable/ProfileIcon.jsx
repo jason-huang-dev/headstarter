@@ -12,7 +12,7 @@ import { MoreVertical } from "lucide-react";
  * @param {string} props.user.picture - The profile picture URL of the user.
  * @param {number} [props.size=60] - The size of the profile icon in pixels. Defaults to 60.
  * @param {boolean} [props.username=true] - Boolean for display of username. Defaults to true.
- * @param {string} [props.bgColor="bg-color-color-4"] - Background color for the profile icon. Defaults to "bg-color-color-4".
+ * @param {string} [props.bgColor="n-1"] - Background color for the profile icon. Defaults to "n-1".
  * @returns {JSX.Element} The rendered profile icon.
  */
 const ProfileIcon = ({ user, size = 60, username = true, bgColor = "bg-color-color-4" }) => {

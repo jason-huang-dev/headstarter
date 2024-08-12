@@ -1,7 +1,7 @@
-'use client'
-import React, { useState }from 'react';
-import { useLocation} from 'react-router-dom';
-import { SideBar } from '../components/dashboard';
+import React, {useState} from 'react';
+import { useLocation } from 'react-router-dom';
+import { SideBar, SideBarItem, CalendarOverview } from '../components/dashboard';
+import { sideBarAccordians } from "../constants/index"; // import text contents from constants/index.js
 import { Accordion, Button} from '../components/reusable';
 import { sideBarAccordians } from '../constants';
 
@@ -10,15 +10,6 @@ import { sideBarAccordians } from '../constants';
  * 
  * This component uses `useLocation` from `react-router-dom` to access user data
  * from the state passed through the location object. It then renders the `SideBar`
-=======
-import { Drawer } from '../components/dashboard';
-
-/**
- * Dashboards component that renders the dashboard with a drawer/sidebar.
- * 
- * This component uses `useLocation` from `react-router-dom` to access user data
- * from the state passed through the location object. It then renders the `Drawer`
->>>>>>> 9c0deb7 (Added documentation to all compoents, on hover will give description along with taken fields)
  * component, passing the user data as a prop.
  * 
  * @component
@@ -39,7 +30,7 @@ const Dashboards = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex h-screen font-sora">
       <SideBar user={user}>
         {({ isOpen }) => (
           <div className="flex flex-col flex-grow">
@@ -62,6 +53,9 @@ const Dashboards = () => {
           </div>
         )}
       </SideBar>
+      <div className="flex-grow h-full">
+      <CalendarOverview />
+      </div>
     </div>
   ); 
 };

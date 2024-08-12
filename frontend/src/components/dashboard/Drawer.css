@@ -10,11 +10,13 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    border-right: 2px solid #000; 
 }
 
 /* Drawer when it's open */
 .drawer.open {
     width: 250px;
+    border-right: 2px solid #000;
 }
 
 /* Drawer menu items */
