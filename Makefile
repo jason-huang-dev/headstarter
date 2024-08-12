@@ -68,6 +68,12 @@ update:
 	git pull $(PARAMS)
 	git stash pop
 
+.PHONY: deep_update
+deep_update:
+	git stash
+	git pull origin main $(PARAMS)
+	git stash pop
+
 .PHONY: update_run
 update_run:
 	git stash
