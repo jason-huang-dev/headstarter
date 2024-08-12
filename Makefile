@@ -1,3 +1,6 @@
+# Detect the operating system
+OS := $(shell uname -s)
+
 COMMIT_MSG ?= no message update
 BRANCH_NAME ?= main
 PARAMS ?= "--ff-only"
@@ -27,6 +30,19 @@ clean_docker:
 	$(DOCKER_COMPOSE) down --rmi all --volumes --remove-orphans
 
 # Django backend related commands
+.PHONY: venv
+venv:
+	python -m venv .venv
+ifeq ($(OS),Windows_NT)
+	source .venv/Scripts/activate
+else
+	source .venv/bin/activate
+endif
+	pip install -r ./backend/requirements.txt
+	cd frontend
+	npm install
+	cd ..
+
 .PHONY: migrate
 migrate:
 	$(DJANGO_MANAGE) migrate
