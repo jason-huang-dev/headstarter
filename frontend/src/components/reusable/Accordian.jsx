@@ -16,37 +16,37 @@ import { ChevronDown, ChevronLeft } from "lucide-react";
  * @param {React.ReactNode} props.children - Content to be displayed within the item
  * @returns {JSX.Element} AccordionItem component
  */
-const Accordion = ({ title, isActive, onTitleClick, children, displayTitle = true, icon: Icon = null, iconSize = 40 }) => {
+const Accordion = ({ title, isActive, onTitleClick, children, displayTitle = true, iconType, icon: Icon = null }) => {
     return (
-        <div className={`accordion-item ${isActive ? 'active' : ''}`}>
-            <div 
-                className={`accordion-title flex items-center justify-between ${(isActive && displayTitle) ? 'text-blue-600' : 'text-gray-700'}`} 
-                onClick={() => {
-                    console.log('Title clicked'); // Debug statement
-                    onTitleClick(); // Ensure click handler is called
-                  }}
+    <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-gray-100 ${isActive ? 'bg-gray-100' : ''}`}>
+        <div 
+            className={`accordion-title flex items-center justify-between w-full ${displayTitle ? '' : 'justify-center'}`} 
+            onClick={onTitleClick}
             >
-                <div className="flex items-center">
-                    {Icon && (
-                        <div
-                            className="flex items-center justify-center overflow-hidden leading-4"
-                            style={{ width: iconSize, height: iconSize }}
-                        >
-                            <Icon className="w-full h-full" />
-                        </div>
-                    )}
-                    {displayTitle && title && (
-                        <span className="ml-2 text-sm">
-                            {title}
-                        </span>
-                    )}
-                </div>
-                {displayTitle && isActive ? <ChevronDown/>:''}
-                {displayTitle && !isActive ? <ChevronLeft/>:''}
+            <div className={`flex items-center ${displayTitle ? '' : 'justify-center w-full'}`}>
+                {iconType === 'component' && Icon && (
+                    <div className="flex items-center justify-center leading-4">
+                        {React.createElement(Icon, { style: { width: '32px', height: '32px' } })}
+                    </div>
+                )}
+                {iconType === 'url' && Icon && (
+                    <div className="flex items-center justify-center leading-4">
+                        <img src={Icon} alt={title} style={{ width: '32px', height: '32px' }} />
+                    </div>
+                )}
+                {displayTitle && title && (
+                    <span className="ml-2 text-sm">
+                        {title}
+                    </span>
+                )}
             </div>
-            {(isActive && displayTitle) && <div className="accordion-content">{children}</div>}
+            {displayTitle && isActive ? <ChevronDown /> : ''}
+            {displayTitle && !isActive ? <ChevronLeft /> : ''}
         </div>
+        {(isActive && displayTitle) && <div className="accordion-content">{children}</div>}
+    </div>
     );
 };
+
 
 export default Accordion;

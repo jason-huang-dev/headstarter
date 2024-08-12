@@ -1,6 +1,8 @@
-import {CalendarCheck, BellPlus, ListChecks, Users, Earth, Calendar as CalendarIcon, CalendarPlus} from 'lucide-react';
+import {CalendarCheck, BellPlus, ListChecks, UserRoundPlus, Calendar as CalendarIcon} from 'lucide-react';
 // import png for Features
 import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates} from "../assets/png";
+
+import {CalendarUser} from "../assets/svg";
 
 /**
  * List of item text that is displayed on the benefits cards
@@ -30,24 +32,7 @@ const benefits = [
     text: "Improve productivity by having a clear and organized overview of your work and personal life, helping you manage your time more effectively.",
     iconUrl: ListChecks,
     imageUrl: "#",
-  },
-  // {
-  //   id: "3",
-  //   tagline: "Collaborative Planning",
-  //   title: "Organize and Conquer",
-  //   text: "Collaborate with your team to plan projects and meetings, ensuring everyone is on the same page and working towards common goals.",
-  //   iconUrl: Users,
-  //   imageUrl: "#",
-  //   light: true,
-  // },
-  // {
-  //   id: "4",
-  //   tagline: "Universal Access",
-  //   title: "Teamwork Made Easy",
-  //   text: "Access your calendar from any device, anywhere, ensuring you always have your schedule at your fingertips.",
-  //   iconUrl: Earth,
-  //   imageUrl: "#",
-  // },
+  }
 ];
 
 /**
@@ -118,12 +103,15 @@ const navigation = [
 const sideBarAccordians = [
   {
     title: "Calendar",
-    iconUrl: CalendarIcon
+    iconUrl: CalendarIcon, // Icon component
+    iconType: 'component'
   },
   {
     title: "Shared Calendar",
-    iconUrl: CalendarPlus
+    iconUrl: CalendarUser, // Icon component
+    iconType: 'component'
   }
-]
+];
+
 
 export { benefits, actionData, services, navigation, sideBarAccordians }; 

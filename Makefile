@@ -1,6 +1,6 @@
 COMMIT_MSG ?= no message update
 BRANCH_NAME ?= main
-PARAMS ?= ""
+PARAMS ?= "--ff-only"
 DOCKER_COMPOSE= docker compose
 DJANGO_MANAGE= $(DOCKER_COMPOSE) exec backend python manage.py
 .DEFAULT_GOAL := update
@@ -54,7 +54,7 @@ update_from_branch:
 .PHONY: push_to_branch
 push_to_branch: 
 	git stash;
-	git pull origin $(BRANCH_NAME)
+	git pull origin $(BRANCH_NAME) $(PARAMS)
 	git stash pop;
 	git add .
 	git commit -m "$(COMMIT_MSG)"
@@ -76,7 +76,7 @@ update_run:
 	$(MAKE) run
 	$(MAKE) migrate
 
-.PHONY:
+.PHONY: push
 push: 
 	git stash
 	git pull $(PARAMS)
@@ -88,3 +88,9 @@ push:
 # Combined migration and update target
 .PHONY: migrate_and_update
 migrate_and_update: update makemigrations migrate 
+
+# Local recipies
+.PHONY: run_local
+run_local:
+	cd frontend
+	npm run dev

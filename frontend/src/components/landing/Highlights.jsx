@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
 import { TagLine } from "../reusable";
 import Typing from 'react-typing-effect';
-import { services } from '../../constants';
+
 import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
+
+import {services} from "../../constants/index"; // import text contents from constants/index.js
 
 /**
  * Services component showcases the services and features of the application.
