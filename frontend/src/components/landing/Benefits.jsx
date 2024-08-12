@@ -3,7 +3,12 @@ import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import { TagLine }from '../reusable';
 import Typing from 'react-typing-effect';
+<<<<<<< HEAD
 import {benefits} from "../../constants/index"; // import text contents from constants/index.js
+=======
+import {CalendarCheck, BellPlus, ListChecks, Users, Earth} from "lucide-react";
+
+>>>>>>> 9c0deb7 (Added documentation to all compoents, on hover will give description along with taken fields)
 /**
  * Benefits component that showcases key features and benefits with interactive elements.
  * 

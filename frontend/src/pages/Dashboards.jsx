@@ -10,6 +10,15 @@ import { sideBarAccordians } from '../constants';
  * 
  * This component uses `useLocation` from `react-router-dom` to access user data
  * from the state passed through the location object. It then renders the `SideBar`
+=======
+import { Drawer } from '../components/dashboard';
+
+/**
+ * Dashboards component that renders the dashboard with a drawer/sidebar.
+ * 
+ * This component uses `useLocation` from `react-router-dom` to access user data
+ * from the state passed through the location object. It then renders the `Drawer`
+>>>>>>> 9c0deb7 (Added documentation to all compoents, on hover will give description along with taken fields)
  * component, passing the user data as a prop.
  * 
  * @component

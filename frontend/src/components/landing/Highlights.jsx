@@ -8,8 +8,11 @@ import Typing from 'react-typing-effect';
 import {services1, services2, services3} from "../../assets/png";
 import { CircleCheck } from "lucide-react";
 
+<<<<<<< HEAD
 import {services} from "../../constants/index"; // import text contents from constants/index.js
 
+=======
+>>>>>>> 9c0deb7 (Added documentation to all compoents, on hover will give description along with taken fields)
 /**
  * Services component showcases the services and features of the application.
  * 
