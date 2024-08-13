@@ -47,14 +47,35 @@ const Dashboards = () => {
     setIsOpen(false); 
   };
 
-  const handleAddEvent = (eventDetails) => {
-    const newEvent = {
-      id: events.length,
-      title: eventDetails.title,
-      start: new Date(eventDetails.start), 
-      end: new Date(eventDetails.end) 
-    };
-    setEvents([...events, newEvent]); 
+  const handleAddEvent = async (eventDetails) => {
+    const dataToSend = {
+      ...eventDetails, // Spread existing event details
+      calendar_id: calendars[2].cal_id, // Add calendar_id property
+      bg_color: "#FFFFFF" // Add bg_color property
+    };    
+    console.log('Adding Event:', dataToSend)
+
+    try {
+      const response = await fetch('http://localhost:8000/api/events/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      const data = await response.json();
+      console.log('Response from Add Event:', data)
+      
+      if (response.ok) {
+        setEvents([...events, data]); // Update events state
+      } else {
+        console.error('Error from server:', data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleAddCalendar = async (calendarDetails) => {
@@ -110,7 +131,6 @@ const Dashboards = () => {
     };
   
     fetchCalendars(); // Call the async function
-    // Optionally, return a cleanup function here if needed
   }, [user.token]);
 
   return (

@@ -15,6 +15,9 @@ from .models import Event
 from calendars.models import Calendar
 from django.shortcuts import get_object_or_404
 
+import logging
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_event(request):
@@ -31,6 +34,8 @@ def create_event(request):
     ::raises ValidationError : Raised if the provided data is invalid
     ::raises NotFound : Raised if the specified calendar does not exist
     """
+    logger.debug('Request data: %s', request.data)
+    
     calendar_id = request.data.get('calendar_id')
     title = request.data.get('title')
     description = request.data.get('description', '')
@@ -39,7 +44,7 @@ def create_event(request):
     bg_color = request.data.get('bg_color', '#FFFFFF')
 
     if not (calendar_id and title and start_time and end_time):
-        return Response({'error': 'Calendar ID, title, start time, and end time are required'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'calendar_id, title, start_time, and end_time are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         calendar = get_object_or_404(Calendar, cal_id=calendar_id)

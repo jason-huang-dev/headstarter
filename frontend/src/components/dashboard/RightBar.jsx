@@ -22,8 +22,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
   // State to manage the details of the event being added
   const [eventDetails, setEventDetails] = useState({
     title: '',
-    start: '',
-    end: ''
+    start_time: '',
+    end_time: ''
   });
 
   // State to manage the details of the calendar being added
@@ -60,7 +60,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
    */
   const handleAddEvent = () => {
     addEventToCalendar(eventDetails); // Call the function to add the event to the calendar
-    setEventDetails({ title: '', start: '', end: '' }); // Reset the form fields
+    setEventDetails({ title: '', start_time: '', end_time: '' }); // Reset the form fields
     setIsRightBarOpen(false); // Close the right sidebar after adding the event
   };
 
@@ -143,8 +143,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">Start Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="start"
-                  value={eventDetails.start}
+                  name="start_time"
+                  value={eventDetails.start_time}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
@@ -153,8 +153,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">End Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="end"
-                  value={eventDetails.end}
+                  name="end_time"
+                  value={eventDetails.end_time}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
