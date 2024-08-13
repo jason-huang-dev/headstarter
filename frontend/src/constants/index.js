@@ -114,4 +114,14 @@ const sideBarAccordians = [
 ];
 
 
-export { benefits, actionData, services, navigation, sideBarAccordians }; 
+const colorsForEvent = [
+  { color: "#15803d", label: "1" }, // green
+  { color: "#FFC876", label: "2" }, // yellow
+  { color: "#FF776F", label: "3" }, // red
+  { color: "#7ADB78", label: "4" }, // light green
+  { color: "#858DFF", label: "5" }, // purple
+  { color: "#FF98E2", label: "6" }, // pink 
+]
+
+
+export { benefits, actionData, services, navigation, sideBarAccordians, colorsForEvent }; 

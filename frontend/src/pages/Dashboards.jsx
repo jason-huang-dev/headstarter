@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sideBarAccordians } from "../constants/index"; 
 import { Accordion, AccordionItem } from '../components/reusable';
-import { ContactRound, Handshake, Apple } from "lucide-react";
 import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
 
 /**
