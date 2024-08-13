@@ -28,7 +28,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
 
   // State to manage the details of the calendar being added
   const [calendarDetails, setCalendarDetails] = useState({
-    name: '',
+    title: '',
     description: ''
   });
 
@@ -70,7 +70,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
    */
   const handleAddCalendar = () => {
     addCalendar(calendarDetails); // Call the function to add the calendar
-    setCalendarDetails({ name: '', description: '' }); // Reset the form fields
+    setCalendarDetails({ title: '', description: '' }); // Reset the form fields
     setIsRightBarOpen(false); // Close the right sidebar after adding the calendar
   };
 
@@ -102,8 +102,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">Calendar Name</label>
                 <input
                   type="text"
-                  name="name"
-                  value={calendarDetails.name}
+                  name="title"
+                  value={calendarDetails.title}
                   onChange={handleCalendarInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />

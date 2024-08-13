@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
 import { sideBarAccordians } from "../constants/index"; 
 import { Accordion, AccordionItem } from '../components/reusable';
 import { ContactRound, Handshake, Apple } from "lucide-react";
+import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -27,6 +27,7 @@ const Dashboards = () => {
   const [calendars, setCalendars] = useState([]); // New state for calendars
 
   const handleTitleClick = (index) => {
+    console.log(`Title clicked: ${index}`);
     setActiveIndices((prevIndices) => 
       prevIndices.includes(index)
         ? prevIndices.filter((i) => i !== index) 
@@ -56,21 +57,61 @@ const Dashboards = () => {
     setEvents([...events, newEvent]); 
   };
 
-  const handleAddCalendar = (calendarDetails) => {
-    const newCalendar = {
-      id: calendars.length,
-      title: calendarDetails.name,
-      icon: ContactRound, // or any icon you prefer
-    };
-    setCalendars([...calendars, newCalendar]); // Update calendars state
+  const handleAddCalendar = async (calendarDetails) => {
+    console.log('Adding Calendar:', calendarDetails)
+
+    try {
+      const response = await fetch('http://localhost:8000/api/calendars/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+        body: JSON.stringify(calendarDetails),
+      });
+
+      const data = await response.json();
+      console.log('Response from Add Calendar:', data)
+      
+      if (response.ok) {
+        setCalendars([...calendars, data]); // Update calendars state
+      } else {
+        console.error('Error from server:', data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
-  const exampleItems = [
-    ...calendars, // Add the dynamically added calendars
-    { id: 1, title: "Example Item 1", icon: ContactRound },
-    { id: 2, title: "Example Item 2", icon: Handshake },
-    { id: 3, title: "Example Item 3", icon: Apple },
-  ];
+  useEffect(() => {
+    // Define the async function inside useEffect
+    const fetchCalendars = async () => {
+      console.log('Fetching calendars...');
+      try {
+        const response = await fetch('http://localhost:8000/api/calendars/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${user.token}`,
+          },
+        });
+  
+        const data = await response.json();
+        console.log('Response from Get Calendars:', data);
+  
+        if (response.ok) {
+          setCalendars(data); // Update calendars state
+        } else {
+          console.error('Error from server:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    fetchCalendars(); // Call the async function
+    // Optionally, return a cleanup function here if needed
+  }, [user.token]);
 
   return (
     <div className="flex h-screen font-sora">
@@ -94,15 +135,15 @@ const Dashboards = () => {
                       }
                     }}
                   >
-                  {exampleItems.map((exampleItem) => (
+                  {calendars.map((calendar) => (
                     <AccordionItem
-                      key={exampleItem.id}
-                      title={exampleItem.title}
-                      IconComponent={exampleItem.icon} 
+                      key={calendar.cal_id}
+                      title={calendar.title}
+                      IconComponent={calendar.icon} 
                       displayTitle={isOpen}
                       isActive={isOpen && activeIndices.includes(index)}
                       onTitleClick={() => handleTitleClick(index)}
-                      link={`/dashboards/${exampleItem.id}`} 
+                      link={`/dashboards/${calendar.id}`} 
                     />
                   ))}
                 </Accordion>

@@ -65,7 +65,6 @@ update_from_branch:
 	git stash
 	git pull origin $(BRANCH_NAME) $(PARAMS)
 	git stash pop
-	$(MAKE) run
 
 .PHONY: push_to_branch
 push_to_branch: 

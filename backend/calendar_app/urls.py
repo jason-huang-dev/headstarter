@@ -25,7 +25,7 @@ from users.views import google_auth
 from django.conf import settings
 from django.conf.urls.static import static
 
-from calendars.views import create_calendar
+from calendars.views import calendar_view
 from events.views import create_event
 from friends.views import add_friendship
 from shared_calendars.views import create_shared_calendar
@@ -43,7 +43,7 @@ urlpatterns = [
     path('api/events/', create_event, name='create_event'),
 
     ## Calendar Paths
-    path('api/calendars/', create_calendar, name='create_calendar'),
+    path('api/calendars/', calendar_view, name='calendar_view'),
     
     ## Shared Calendar Paths
     path('api/shared_calendars/', create_shared_calendar, name='create_shared_calendar'),
