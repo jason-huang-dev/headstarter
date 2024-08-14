@@ -27,8 +27,8 @@ def create_event(request):
     ::param int calendar_id : The ID of the calendar to which the event will be added
     ::param str title : The title of the event
     ::param str/optional description : A description of the event
-    ::param datetime start_time : The start date and time of the event
-    ::param datetime end_time : The end date and time of the event
+    ::param datetime start : The start date and time of the event
+    ::param datetime end : The end date and time of the event
     ::param str/optional bg_color : The background color for the event in hexadecimal format (default: '#FFFFFF')
     ::return Response : A JSON response with the created event's details
     ::raises ValidationError : Raised if the provided data is invalid
@@ -36,25 +36,25 @@ def create_event(request):
     """
     logger.debug('Request data: %s', request.data)
     
-    calendar_id = request.data.get('calendar')
+    cal_id = request.data.get('cal_id')
     title = request.data.get('title')
     description = request.data.get('description', '')
-    start_time = request.data.get('start_time')
-    end_time = request.data.get('end_time')
+    start = request.data.get('start')
+    end = request.data.get('end')
     bg_color = request.data.get('color', '#FFFFFF')
 
-    if not (calendar_id and title and start_time and end_time):
-        return Response({'error': 'calendar_id, title, start_time, and end_time are required'}, status=status.HTTP_400_BAD_REQUEST)
+    if not (cal_id and title and start and end):
+        return Response({'error': 'cal_id, title, start, and end are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        calendar = get_object_or_404(Calendar, cal_id=calendar_id)
+        calendar = get_object_or_404(Calendar, cal_id=cal_id)
 
         event = Event.objects.create(
             calendar=calendar,
             title=title,
             description=description,
-            start_time=start_time,
-            end_time=end_time,
+            start=start,
+            end=end,
             bg_color=bg_color,
             user=request.user
         )
@@ -63,8 +63,8 @@ def create_event(request):
             'event_id': event.pk,
             'title': event.title,
             'description': event.description,
-            'start_time': event.start_time,
-            'end_time': event.end_time,
+            'start': event.start,
+            'end': event.end,
             'bg_color': event.bg_color,
             'calendar_title': event.calendar.title
         }, status=status.HTTP_201_CREATED)

@@ -44,13 +44,12 @@ const Dashboards = () => {
     setRightBarContent('event'); 
     setIsRightBarOpen(true); 
     setIsOpen(false); 
+    console.log(events)
   };
 
   const handleAddEvent = async (eventDetails) => {
     const dataToSend = {
       ...eventDetails, // Spread existing event details
-      calendar_id: calendars[2].cal_id, // Add calendar_id property
-      bg_color: "#FFFFFF" // Add bg_color property
     };    
     console.log('Adding Event:', dataToSend)
 
@@ -162,7 +161,7 @@ const Dashboards = () => {
                       displayTitle={isOpen}
                       isActive={isOpen && activeIndices.includes(index)}
                       onTitleClick={() => handleTitleClick(index)}
-                      link={`/dashboards/${calendar.id}`} 
+                      link={`/dashboards/${calendar.cal_id}`} 
                     />
                   ))}
                 </Accordion>

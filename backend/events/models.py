@@ -18,16 +18,16 @@ class Event(models.Model):
     ::field ForeignKey calendar : Links the event to a calendar. Uses the 'Calendars' model with a CASCADE delete policy.
     ::field CharField title : The title of the event. Max length of 255 characters.
     ::field TextField description : A textual description of the event. Can be null or blank.
-    ::field DateTimeField start_time : The start date and time of the event.
-    ::field DateTimeField end_time : The end date and time of the event.
+    ::field DateTimeField start : The start date and time of the event.
+    ::field DateTimeField end : The end date and time of the event.
     ::field CharField bg_color : Background color for the event in hexadecimal format. Defaults to '#FFFFFF'.
     ::field ForeignKey user : Links the event to a user. Uses the `AUTH_USER_MODEL` with a CASCADE delete policy.
     """
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
     bg_color = models.CharField(max_length=7, default='#FFFFFF')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 

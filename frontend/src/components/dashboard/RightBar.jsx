@@ -34,10 +34,10 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
   // ]
   // State to manage the details of the event being added
   const [eventDetails, setEventDetails] = useState({
-    calendar: calendars[0],
+    cal_id: calendars[0].cal_id,
     title: '',
-    start_time: '',
-    end_time: '',
+    start: '',
+    end: '',
     color: '#15803d', // Default color selection
   });
 
@@ -111,6 +111,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
    */
   const handleEventInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, " : ", value)
     setEventDetails({ ...eventDetails, [name]: value });
   };
 
@@ -131,7 +132,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
    */
   const handleAddEvent = () => {
     addEventToCalendar(eventDetails); // Call the function to add the event to the calendar
-    setEventDetails({ title: '', start_time: '', end_time: '', color: '#15803d' }); // Reset the form fields
+    setEventDetails({ title: '', start: '', end: '', color: '#15803d' }); // Reset the form fields
     setIsRightBarOpen(false); // Close the right sidebar after adding the event
   };
 
@@ -230,7 +231,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">Calendar</label>
                 <select
                   name="calendar"
-                  value={eventDetails.calendar}
+                  value={eventDetails.cal_id}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 >
@@ -261,8 +262,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">Start Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="start_time"
-                  value={eventDetails.start_time}
+                  name="start"
+                  value={eventDetails.start}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
@@ -273,8 +274,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">End Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="end_time"
-                  value={eventDetails.end_time}
+                  name="end"
+                  value={eventDetails.end}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />

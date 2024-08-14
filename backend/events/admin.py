@@ -16,7 +16,7 @@ class EventAdmin(admin.ModelAdmin):
 
     ::field str title : The title of the calendar
     ::field str user : The user who owns the calendar a foreign key
-    ::field datetime start_time: The start time of the event
-    ::field datetime end_time: The end time of the event
+    ::field datetime start: The start time of the event
+    ::field datetime end: The end time of the event
     """
-    list_display = ('title', 'start_time', 'end_time', 'user')
+    list_display = ('title', 'start', 'end', 'user')
