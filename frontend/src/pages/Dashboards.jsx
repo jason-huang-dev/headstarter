@@ -185,6 +185,7 @@ const Dashboards = () => {
          content={rightBarContent} 
          addEventToCalendar={handleAddEvent}
          addCalendar={handleAddCalendar} // Pass the function to RightBar
+         calendars={calendars}
        />
       )}
     </div>

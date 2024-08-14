@@ -36,12 +36,12 @@ def create_event(request):
     """
     logger.debug('Request data: %s', request.data)
     
-    calendar_id = request.data.get('calendar_id')
+    calendar_id = request.data.get('calendar')
     title = request.data.get('title')
     description = request.data.get('description', '')
     start_time = request.data.get('start_time')
     end_time = request.data.get('end_time')
-    bg_color = request.data.get('bg_color', '#FFFFFF')
+    bg_color = request.data.get('color', '#FFFFFF')
 
     if not (calendar_id and title and start_time and end_time):
         return Response({'error': 'calendar_id, title, start_time, and end_time are required'}, status=status.HTTP_400_BAD_REQUEST)

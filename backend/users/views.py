@@ -18,6 +18,7 @@ from django.conf import settings
 from django.db import IntegrityError
 from allauth.socialaccount.models import SocialAccount
 from rest_framework.authtoken.models import Token
+from calendars.models import Calendar
 import requests
 from django.core.files.base import ContentFile
 
@@ -71,6 +72,7 @@ def google_auth(request):
         else:
             # Create a new user
             user = User.objects.create(email=email, username=name)
+            Calendar.objects.create(user=user, title="Default", description="Default Calendar")
             user.set_unusable_password()
             user.save()
 

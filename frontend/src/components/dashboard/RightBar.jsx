@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { X } from "lucide-react";
 import { Button } from '../reusable';
 import { colorsForEvent } from "../../constants/index"; 
+import { calendar } from "../../assets/png";
 
 /**
  * RightBar component that provides a right sidebar for adding calendars or events.
@@ -18,9 +19,10 @@ import { colorsForEvent } from "../../constants/index";
  * @param {string} props.content - Determines what content to display in the RightBar ('calendar' or 'event').
  * @param {Function} props.addEventToCalendar - Function to add the event to the calendar.
  * @param {Function} props.addCalendar - Function to add a new calendar.
+ * @param {Object} props.calendars - The current user's list of calendars
  * @returns {JSX.Element} The RightBar component.
  */
-export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventToCalendar, addCalendar }) => {
+export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventToCalendar, addCalendar, calendars }) => {
 
   // const colorsForEvent = [
   //   { color: "#15803d", label: "1" }, // green
@@ -32,6 +34,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
   // ]
   // State to manage the details of the event being added
   const [eventDetails, setEventDetails] = useState({
+    calendar: calendars[0],
     title: '',
     start_time: '',
     end_time: '',
@@ -43,7 +46,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
     title: '',
     addPeople: false,
     emails: '',
-    emailList: [] // Maintain a list of emails
+    email_list: [] // Maintain a list of emails
   });
 
   // Handles the checkbox change for adding people to the calendar
@@ -55,7 +58,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
   const handleRemoveEmail = (index) => {
     setCalendarDetails({
       ...calendarDetails,
-      emailList: calendarDetails.emailList.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
+      email_list: calendarDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
     });
   };
 
@@ -72,7 +75,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
       if (calendarDetails.emails.trim() && isValidEmail(calendarDetails.emails.trim())) { // Check for non-empty and valid email
         setCalendarDetails({
           ...calendarDetails,
-          emailList: [...calendarDetails.emailList, calendarDetails.emails.trim()], // Add email to the list
+          email_list: [...calendarDetails.email_list, calendarDetails.emails.trim()], // Add email to the list
           emails: '' // Clear the input field
         });
       } else {
@@ -92,7 +95,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
     }
     
     addCalendar(calendarDetails); // Call the function to add the calendar
-    setCalendarDetails({ title: '', addPeople: false, emails: '', emailList: [] }); // Reset the form fields
+    setCalendarDetails({ title: '', addPeople: false, emails: '', email_list: [] }); // Reset the form fields
     
     setIsRightBarOpen(false); // Close the right sidebar after adding the calendar
     
@@ -157,7 +160,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
           {/* Content for adding a new calendar */}
           {content === 'calendar' && (
             <div>
-              {/* Calendar Name Input */}
+              {/* Calendar Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Calendar Name</label>
                 <input
@@ -188,7 +191,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                   <label className="block text-sm font-medium text-gray-700">Send Email Invitations:</label>
                   <div className="mb-2">
                     {/* Display each email with a delete button */}
-                    {calendarDetails.emailList.map((email, index) => (
+                    {calendarDetails.email_list.map((email, index) => (
                       <div
                         key={index}
                         className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
@@ -222,6 +225,25 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
           {/* Content for adding a new event */}
           {content === 'event' && (
             <div>
+              {/* Event Calendar Selection */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Calendar</label>
+                <select
+                  name="calendar"
+                  value={eventDetails.calendar}
+                  onChange={handleEventInputChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                >
+                  <option value="" disabled>Select a Calendar</option>
+                  {calendars.map((calendar) => (
+                    <option key={calendar.cal_id} value={calendar.cal_id}>
+                      {calendar.title}
+                    </option>
+                  ))}
+                </select>
+              
+              </div>
+
               {/* Event Title Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Event Title</label>
@@ -239,8 +261,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">Start Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="start"
-                  value={eventDetails.start}
+                  name="start_time"
+                  value={eventDetails.start_time}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
@@ -251,8 +273,8 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
                 <label className="block text-sm font-medium text-gray-700">End Date & Time</label>
                 <input
                   type="datetime-local"
-                  name="end"
-                  value={eventDetails.end}
+                  name="end_time"
+                  value={eventDetails.end_time}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />

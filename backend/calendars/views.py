@@ -11,8 +11,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Calendar
-from django.contrib.auth import get_user_model
-from friends.models import Friendships
 from .serializers import CalendarSerializer
 
 import logging
@@ -69,22 +67,13 @@ def create_calendar(request):
     try:
         title = request.data.get('title', 'My Calendar')
         description = request.data.get('description', '')
-        shared_users_emails = request.data.get('shared_users', [])
+        # shared_users_emails = request.data.get('email_list', [])
+        # logger.debug(f"Received shared user list: {shared_users_emails}")
         
         # Create the calendar instance
-        calendar = Calendar.objects.create(user=request.user, title=title, description=description)
+        calendar = Calendar.objects.create(user=request.user, title=title, description=description)        
         
-        # Handle shared users
-        if shared_users_emails:
-            shared_users = get_user_model.objects.filter(email__in=shared_users_emails)
-            calendar.shared_users.set(shared_users)
-            
-            # Create Friendship instances
-            for shared_user in shared_users:
-                if shared_user != request.user:  # Prevent self-friendship
-                    Friendships.objects.create(creator=request.user, shared_user=shared_user)
-        
-        logger.info(f"Created new calendar for user {request.user.id}")
+        logger.debug(f"Created new calendar for user {request.user.id}")
 
         serializer = CalendarSerializer(calendar)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
