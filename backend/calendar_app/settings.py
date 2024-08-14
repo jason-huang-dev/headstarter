@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'users.apps.UsersConfig',
     'calendars.apps.CalendarConfig',
-    'shared_calendars.apps.SharedCalendarConfig',
     'events.apps.EventsConfig',
     'friends.apps.FriendshipsConfig',
 ]

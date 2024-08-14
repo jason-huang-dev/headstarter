@@ -17,5 +17,17 @@ class CalendarAdmin(admin.ModelAdmin):
     ::field str title : The title of the calendar
     ::field str user : The user who owns the calendar a foreign key
     ::field int cal_id: The id of the calendar in the database
+    ::field list(str) shared_users: The list of user emails that the calendar is shared to
     """
-    list_display = ('title', 'user', 'cal_id')
+    list_display = ('title', 'user', 'get_shared_users', 'description')
+    search_fields = ('title', 'user__email', 'shared_users__email')
+    list_filter = ('user', 'shared_users')
+    
+    def get_shared_users(self, user_list):
+        """
+        Customizes the display of the shared users array in the admin interface.
+        
+        ::param list user_list: list of user emails
+        ::return str : comma sparated str of user emails
+        """
+        return ", ".join([user.email for user in user_list.shared_users.all()])

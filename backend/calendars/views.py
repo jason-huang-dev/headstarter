@@ -11,6 +11,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Calendar
+from django.contrib.auth import get_user_model
+from friends.models import Friendships
 from .serializers import CalendarSerializer
 
 import logging
@@ -60,25 +62,32 @@ def create_calendar(request):
 
     ::param str title : The title of the calendar.
     ::param str description : An optional description of the calendar.
+    ::param list shared_users : List of emails to share the calendar with.
     ::return Response : A JSON response containing the calendar details.
     ::raises ValidationError : Raised if the provided data is invalid.
     """
-    try:# Check if user already has a calendar
-        # existing_calendar = Calendar.objects.filter(user=request.user).first()
-        # if existing_calendar:# Use the existing calendar
-        #     calendar = existing_calendar
-        #     created = False
-        #     logger.info(f"Using existing calendar for user {request.user.id}")
-        #     return Response(CalendarSerializer(calendar).data, status=status.HTTP_200_OK)
-        # else:# Create new calendar
+    try:
         title = request.data.get('title', 'My Calendar')
         description = request.data.get('description', '')
+        shared_users_emails = request.data.get('shared_users', [])
+        
+        # Create the calendar instance
         calendar = Calendar.objects.create(user=request.user, title=title, description=description)
-        created = True
+        
+        # Handle shared users
+        if shared_users_emails:
+            shared_users = get_user_model.objects.filter(email__in=shared_users_emails)
+            calendar.shared_users.set(shared_users)
+            
+            # Create Friendship instances
+            for shared_user in shared_users:
+                if shared_user != request.user:  # Prevent self-friendship
+                    Friendships.objects.create(creator=request.user, shared_user=shared_user)
+        
         logger.info(f"Created new calendar for user {request.user.id}")
 
         serializer = CalendarSerializer(calendar)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as e:
-        logger.exception("Error retrieving or creating calendar")
+        logger.exception("Error creating calendar")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

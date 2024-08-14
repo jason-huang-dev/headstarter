@@ -28,7 +28,6 @@ from django.conf.urls.static import static
 from calendars.views import calendar_view
 from events.views import create_event
 from friends.views import add_friendship
-from shared_calendars.views import create_shared_calendar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,10 +43,7 @@ urlpatterns = [
 
     ## Calendar Paths
     path('api/calendars/', calendar_view, name='calendar_view'),
-    
-    ## Shared Calendar Paths
-    path('api/shared_calendars/', create_shared_calendar, name='create_shared_calendar'),
-    
+        
     ## Friends Paths
     path('api/friends/', add_friendship, name='add_friendship'),
 ]
