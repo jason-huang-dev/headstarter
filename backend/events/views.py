@@ -10,33 +10,22 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def event_view(request, event_id=None):
+def event_view(request):
     """
     Manage events for the authenticated user
 
     ::param HTTPRequest request : The HTTP request object
-    ::param int event_id : The ID of the event (only used for PUT and DELETE methods)
     ::return JSON : a JSON response with the event data or an error message
 
     - @GET: Retrieve all events for the user.
     - @POST: Create a new event for the user.
-    - @PUT: Update an existing event for the user.
-    - @DELETE: Delete an existing event for the user.
     """
     if request.method == 'GET':
         return get_events(request)
     elif request.method == 'POST':
         return create_event(request)
-    elif request.method == 'PUT':
-        if not event_id:
-            return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-        return update_event(request, event_id)
-    elif request.method == 'DELETE':
-        if not event_id:
-            return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-        return delete_event(request, event_id)
 
 def get_events(request):
     """
@@ -98,6 +87,46 @@ def create_event(request):
         return Response({'error': 'Calendar not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         logger.exception("Error creating event")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def event_detailed_view(request, event_id=None):
+    """
+    Manage events for the authenticated user
+
+    ::param HTTPRequest request : The HTTP request object
+    ::param int event_id : The ID of the event (only used for PUT and DELETE methods)
+    ::return JSON : a JSON response with the event data or an error message
+
+    - @GET: Retrieve all events for the user.
+    - @PUT: Update an existing event for the user.
+    - @DELETE: Delete an existing event for the user.
+    """
+    if not event_id:
+        return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        return get_events(request, event_id)
+    elif request.method == 'PUT':
+        return update_event(request, event_id)
+    elif request.method == 'DELETE':
+        return delete_event(request, event_id)
+    
+def get_events(request, event_id):
+    """
+    Retrieve an event for the user based on event_id
+
+    ::param HTTPRequest request : The HTTP request object
+    ::return Response : A JSON response containing all the events related to the user
+    ::raises ValidationError : Raised if the provided data is invalid
+    """
+    try:
+        event = get_object_or_404(Event, pk=event_id, user=request.user)
+        serializer = EventSerializer(event)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception("Error retrieving events")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def update_event(request, event_id):

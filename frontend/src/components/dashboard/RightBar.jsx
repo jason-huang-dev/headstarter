@@ -34,7 +34,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
   // ]
   // State to manage the details of the event being added
   const [eventDetails, setEventDetails] = useState({
-    cal_id: calendars[0].cal_id,
+    cal_id: calendars[0].cal_id || NOne,
     title: '',
     start: '',
     end: '',
