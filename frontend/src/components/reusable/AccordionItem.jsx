@@ -38,10 +38,14 @@ const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleCl
         <div className="flex justify-between cursor-pointer ml-5 p-3" onClick={handleToggle}>
             <div className="flex items-center text-gray-400 hover:text-black transition-colors">
                 {IconComponent && <IconComponent className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
-                {displayTitle && (
+                {displayTitle && link ? (
                     <Link to={link} className="text-sm ml-1 hover:font-semibold hover:text-black transition-colors">
-                    {title}
+                        {title}
                     </Link>
+                ) : (
+                    <span className="text-sm ml-1">
+                        {title}
+                    </span>
                 )}
             </div>
         </div>

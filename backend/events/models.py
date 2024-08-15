@@ -23,7 +23,7 @@ class Event(models.Model):
     ::field CharField bg_color : Background color for the event in hexadecimal format. Defaults to '#FFFFFF'.
     ::field ForeignKey user : Links the event to a user. Uses the `AUTH_USER_MODEL` with a CASCADE delete policy.
     """
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
+    cal_id = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     start = models.DateTimeField()

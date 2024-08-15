@@ -107,13 +107,13 @@ def event_detailed_view(request, event_id=None):
         return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
-        return get_events(request, event_id)
+        return get_event(request, event_id)
     elif request.method == 'PUT':
         return update_event(request, event_id)
     elif request.method == 'DELETE':
         return delete_event(request, event_id)
     
-def get_events(request, event_id):
+def get_event(request, event_id):
     """
     Retrieve an event for the user based on event_id
 

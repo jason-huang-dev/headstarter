@@ -20,9 +20,11 @@ const Dashboards = () => {
   const location = useLocation();
   const user = location.state?.user; 
   const [activeIndices, setActiveIndices] = useState([]); 
+  const [activeItems, setActiveItems] = useState([]);
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [events, setEvents] = useState([]); 
+  const [filteredEvents, setFilteredEvents] = useState(events);
   const [calendars, setCalendars] = useState([]); // New state for calendars
 
   const handleTitleClick = (index) => {
@@ -32,6 +34,25 @@ const Dashboards = () => {
         ? prevIndices.filter((i) => i !== index) 
         : [...prevIndices, index] 
     );
+  };
+
+  const handleItemClick = (index) => {
+    console.log(`Item clicked: ${index}`);
+    
+    setActiveItems((prevIndices) => {
+      // Toggle the active item
+      const updatedIndices = prevIndices.includes(index)
+        ? prevIndices.filter((i) => i !== index)
+        : [...prevIndices, index];
+      
+      // Filter events based on the updated active items
+      const newFilteredEvents = events.filter(event =>
+        updatedIndices.some(idx => event.cal_id === calendars[idx].cal_id)
+      );
+      
+      setFilteredEvents(newFilteredEvents);
+      return updatedIndices;
+    });
   };
 
   const addCalendar = (setIsOpen) => {
@@ -127,8 +148,34 @@ const Dashboards = () => {
         console.error('Error:', error);
       }
     };
+
+    const fetchEvents = async () => {
+      console.log('Fetching events...');
+      try {
+        const response = await fetch('http://localhost:8000/api/events/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${user.token}`,
+          },
+        });
   
-    fetchCalendars(); // Call the async function
+        const data = await response.json();
+        console.log('Response from Get Events:', data);
+  
+        if (response.ok) {
+          setEvents(data); // Update calendars state
+          setFilteredEvents(data) // Update calendars state
+        } else {
+          console.error('Error from server:', data);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    
+    fetchCalendars(); // Call the async function to get all calendars
+    fetchEvents(); // Call the async function to get all events 
   }, [user.token]);
 
   return (
@@ -160,8 +207,8 @@ const Dashboards = () => {
                       IconComponent={calendar.icon} 
                       displayTitle={isOpen}
                       isActive={isOpen && activeIndices.includes(index)}
-                      onTitleClick={() => handleTitleClick(index)}
-                      link={`/dashboards/${calendar.cal_id}`} 
+                      onTitleClick={() => handleItemClick(index)}
+                      // link={`/dashboards/${calendar.cal_id}`} 
                     />
                   ))}
                 </Accordion>
@@ -173,7 +220,7 @@ const Dashboards = () => {
 
       {/* Main calendar view component */}
       <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        <CalendarOverview events={events} />  {/* Pass events to CalendarOverview */}
+        <CalendarOverview events={filteredEvents} />  {/* Pass events to CalendarOverview */}
       </div>
 
       {/* Right Sidebar Component */}
