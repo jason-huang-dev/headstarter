@@ -59,7 +59,7 @@ AccordionItem.propTypes = {
     displayTitle: PropTypes.bool,
     isActive: PropTypes.bool,
     onTitleClick: PropTypes.func.isRequired,
-    link: PropTypes.string.isRequired,
+    link: PropTypes.string,
     children: PropTypes.node,
 };
 
