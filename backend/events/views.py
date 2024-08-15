@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Event
+from .serializers import EventSerializer
 from calendars.models import Calendar
 from django.shortcuts import get_object_or_404
 
@@ -20,6 +21,39 @@ logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+def calendar_view(request):
+    """
+    Manage events for the authenticated user
+    
+    ::param HTTPRequest request : The HTTP request object
+    ::return JSON : a JSON response with the calendar data or an error message
+
+    - @GET: Retrieve all event for the user.
+    - @POST: Create a new event for the user.
+    
+    """
+    if request.method == 'GET':
+        return get_events(request)
+    elif request.method == 'POST':
+        return create_event(request)
+    
+def get_events(request):
+    """
+    Retrieve all events for the user.
+
+    ::param user.token user : The user key to filter for
+    ::return Response : A JSON response containing all the calendars related to an user
+    ::raises ValidationError : Raised if the provided data is invalid 
+    """
+    try:
+        events = Event.objects.filter(user=request.user)
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception("Error retrieving or creating calendar")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 def create_event(request):
     """
     Create a new event in a calendar.
