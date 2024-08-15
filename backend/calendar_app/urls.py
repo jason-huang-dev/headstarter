@@ -26,7 +26,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from calendars.views import calendar_view
-from events.views import create_event
+from events.views import event_view
 from friends.views import add_friendship
 
 urlpatterns = [
@@ -39,10 +39,12 @@ urlpatterns = [
     path('api/auth/google/', google_auth, name='google_auth'),
 
     ## Event Paths
-    path('api/events/', create_event, name='create_event'),
+    path('api/events/', event_view, name='create_view'), # Updated to handle all event actions
+    path('api/events/<int:event_id>/', event_view, name='event_view'),  # Updated for PUT and DELETE
 
     ## Calendar Paths
-    path('api/calendars/', calendar_view, name='calendar_view'),
+    path('api/calendars/', calendar_view, name='calendar_view'),  # Updated to handle all calendar actions
+    path('api/calendars/<int:calendar_id>/', calendar_view, name='calendar_view'),  # Updated for PUT and DELETE
         
     ## Friends Paths
     path('api/friends/', add_friendship, name='add_friendship'),
