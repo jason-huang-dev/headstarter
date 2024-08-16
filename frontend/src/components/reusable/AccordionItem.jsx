@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Eye } from 'lucide-react';
 
 /**
  * AccordionItem component that represents an individual item within an accordion list.
@@ -48,6 +49,7 @@ const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleCl
                     </span>
                 )}
             </div>
+            {isActive && <Eye color="#7ADB78" className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
         </div>
     </div>
     );

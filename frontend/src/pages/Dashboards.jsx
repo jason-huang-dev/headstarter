@@ -200,14 +200,14 @@ const Dashboards = () => {
                       }
                     }}
                   >
-                  {calendars.map((calendar) => (
+                  {calendars.map((calendar, calIndex) => (
                     <AccordionItem
                       key={calendar.cal_id}
                       title={calendar.title}
                       IconComponent={calendar.icon} 
                       displayTitle={isOpen}
-                      isActive={isOpen && activeIndices.includes(index)}
-                      onTitleClick={() => handleItemClick(index)}
+                      isActive={isOpen && activeItems.includes(calIndex)}
+                      onTitleClick={() => handleItemClick(calIndex)}
                       // link={`/dashboards/${calendar.cal_id}`} 
                     />
                   ))}
