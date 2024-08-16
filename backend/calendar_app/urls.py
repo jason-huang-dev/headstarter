@@ -21,7 +21,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from users.views import google_auth
+from users.views import google_auth, sign_out
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/auth/social/', include('allauth.socialaccount.urls')),
     path('api/auth/google/', google_auth, name='google_auth'),
+    path('api/auth/signout/', sign_out, name="google_signout"),
 
     ## Event Paths
     path('api/events/', event_view, name='event_view'), # Handles GET and POST for all events

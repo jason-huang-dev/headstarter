@@ -4,5 +4,6 @@ import TagLine from "./TagLine";
 import ProfileIcon from "./ProfileIcon";
 import Accordion from "./Accordian";
 import AccordionItem from "./AccordionItem";
+import ProfileMenu from "./ProfileMenu";
 
-export {Button, Notification, TagLine, ProfileIcon, Accordion, AccordionItem}
+export {Button, Notification, TagLine, ProfileIcon, Accordion, AccordionItem, ProfileMenu}

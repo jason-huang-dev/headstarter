@@ -9,7 +9,7 @@ This module contains a Django view for authenticating users via Google OAuth2.
 """
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from google.oauth2 import id_token
@@ -21,6 +21,8 @@ from rest_framework.authtoken.models import Token
 from calendars.models import Calendar
 import requests
 from django.core.files.base import ContentFile
+from django.contrib.auth import logout
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -110,3 +112,11 @@ def google_auth(request):
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}", exc_info=True)
         return Response({'error': f'Internal server error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def sign_out(request):
+    if request.method == 'POST':
+        logout(request)
+        return Response({'message': 'Successfully signed out'}, status=status.HTTP_202_ACCEPTED)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ProfileIcon } from "../reusable";
+import { ProfileIcon, ProfileMenu } from "../reusable";
 import { iconsite } from "../../assets/png";
-import { ChevronFirst, ChevronLast, MoreVertical, CalendarPlus, Plus } from "lucide-react";
+import { ChevronFirst, ChevronLast, CalendarPlus, Plus } from "lucide-react";
+import { googleLogout } from "@react-oauth/google";
 
 const SidebarContext = React.createContext();
 
@@ -22,6 +23,38 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen 
     // Block opening if the screen width is less than 1160px and the right sidebar is open
     if (window.innerWidth >= 1160 || !isRightBarOpen) {
       setIsOpen((curr) => !curr);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      // Frontend: Sign out of Google OAuth
+      googleLogout();
+
+      // Backend: Sign out from Django backend
+      const response = await fetch('http://localhost:8000/api/auth/signout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`, // Replace with your token
+        },
+        body: JSON.stringify({
+          user: user,
+        }),
+      });
+
+      if (response.ok) {
+        // Sign out was successful
+        console.log("Successfully signed out");
+        window.location.href = '/'; // Redirect to the root (home) page
+      } else {
+        console.error("Failed to sign out from the backend");
+      }
+
+      // Optional: Handle any local state cleanup, e.g., redirect to login
+      // redirectToLogin();
+    } catch (error) {
+      console.error("Sign out failed", error);
     }
   };
 
@@ -92,7 +125,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen 
           <div className={`flex ${isOpen ? "w-full justify-center" : "mx-3"}`}>
             <ProfileIcon user={user} size={35} username={isOpen}></ProfileIcon>
           </div>
-          {isOpen && <MoreVertical size={30} className="ml-auto" />}
+          {isOpen && <ProfileMenu onSignOut={handleSignOut}/>}
         </div>
       </nav>
     </aside>

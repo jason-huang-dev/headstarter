@@ -7,6 +7,11 @@ import CustomToolbar from './CustomToolbar';
 // Initialize the moment localizer
 const localizer = momentLocalizer(moment);
 
+/**
+ * Returns a calendar view component
+ * @param {Array[Object]} events
+ * @returns A div containing the Calendar component
+ */
 const CalendarOverview = ({ events }) => {
   return (
     <div className="h-full pt-5">
