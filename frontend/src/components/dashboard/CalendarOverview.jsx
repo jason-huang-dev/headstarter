@@ -18,8 +18,8 @@ const CalendarOverview = ({ events }) => {
       <Calendar
         localizer={localizer}
         events={events} // Events passed as a prop
-        startAccessor="start"
-        endAccessor="end"
+        startAccessor={(event) => { return new Date(event.start) }}
+        endAccessor={(event) => { return new Date(event.end) }}
         views={{ month: true, week: true, agenda: true }}
         defaultView={Views.MONTH}
         components={{ toolbar: CustomToolbar }}
