@@ -72,7 +72,7 @@ def create_event(request):
     try:
         calendar = get_object_or_404(Calendar, pk=cal_id)
         event = Event.objects.create(
-            calendar=calendar,
+            cal_id=calendar,
             title=title,
             description=description,
             start=start,

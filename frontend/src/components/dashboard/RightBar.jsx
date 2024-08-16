@@ -230,7 +230,7 @@ export const RightBar = ({ isRightBarOpen, setIsRightBarOpen, content, addEventT
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Calendar</label>
                 <select
-                  name="calendar"
+                  name="cal_id"
                   value={eventDetails.cal_id}
                   onChange={handleEventInputChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
