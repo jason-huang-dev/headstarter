@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { sideBarAccordians, calendarForm, eventForm } from "../constants"; 
+import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../constants"; 
 import { Accordion, AccordionItem, RightBar, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, userDataHandler} from '../components/dashboard';
 import { X } from 'lucide-react';
@@ -121,18 +121,6 @@ const Dashboards = () => {
       <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
         <CalendarOverview events={filteredEvents} />  {/* Pass events to CalendarOverview */}
       </div>
-
-      {/* Right Sidebar Component */}
-      {/* {isRightBarOpen && (
-        <RightBar 
-         isRightBarOpen={isRightBarOpen} 
-         setIsRightBarOpen={setIsRightBarOpen} 
-         content={rightBarContent} 
-         addEventToCalendar={handleAddEvent}
-         addCalendar={handleAddCalendar} // Pass the function to RightBar
-         calendars={calendars}
-       />
-      )} */}
       
       {/* Content for adding a new calendar */}
       {isRightBarOpen && rightBarContent === 'calendar' && (
@@ -176,30 +164,56 @@ const Dashboards = () => {
           </Form>
         </RightBar>
       )}
-
+      
+      {/* Content for adding a new event */}
       {isRightBarOpen && rightBarContent === 'event' && (
-        <RightBar 
-         isRightBarOpen={isRightBarOpen} 
-         setIsRightBarOpen={setIsRightBarOpen} 
-         rightBarTitle="Add Event"
+      <RightBar 
+        isRightBarOpen={isRightBarOpen} 
+        setIsRightBarOpen={setIsRightBarOpen} 
+        rightBarTitle="Add Event"
+      >
+        <Form
+          formFields={{
+            cal_id: calendars[0]?.cal_id || 'None',
+            title: '',
+            start: '',
+            end: '',
+            color: '#15803d', // Default color selection
+          }}
+          fields={eventForm(calendars)}
         >
-          <Form
-            formFields={{
-              cal_id: calendars[0].cal_id || NOne,
-              title: '',
-              start: '',
-              end: '',
-              color: '#15803d', // Default color selection
-            }}
-            fields={eventForm(calendars)}
-          >
-            {({ formDetails, setFormDetails }) => (
-              <div className="mb-2">
-                <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+          {({ formDetails, setFormDetails }) => (
+            <div className="mb-2">
+              {/* Color Selection */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
+                <div className="flex items-center space-x-2 mt-2">
+                  {colorsForEvent.map((option, index) => (
+                    <label key={index} className="flex items-center">
+                      <input
+                        type="radio"
+                        name="color"
+                        value={option.color}
+                        checked={formDetails.color === option.color}
+                        onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
+                        className="hidden"
+                      />
+                      <span
+                        className="w-6 h-6 rounded-full cursor-pointer"
+                        style={{
+                          backgroundColor: option.color,
+                          border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
+                        }}
+                      ></span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            )}
-          </Form>
-        </RightBar>
+              <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+            </div>
+          )}
+        </Form>
+      </RightBar>
       )}
     </div>
   ); 
