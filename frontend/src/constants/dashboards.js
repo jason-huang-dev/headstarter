@@ -57,116 +57,18 @@ const calendarForm = [
     },
 ];
   
-const eventForm = [
+const eventForm = (calendars) => [
     {
       label: "Calendar",
       type: "select",
       name: "cal_id",
-      options: [], // Update options as needed
+      options: calendars, // Update options as needed
+      option_label: "title",
+      option_key: "cal_id"
     },
     { label: 'Event Title', type: 'text', name: 'title' },
     { label: 'Start Date & Time', name: 'start', type: 'datetime-local' },
     { label: 'End Date & Time', name: 'end', type: 'datetime-local' },
-    { label: 'Select Event Color', name: 'color', type: 'select', options: colorsForEvent },
 ];
-  
-const fetchCalendars = async (token) => {
-    try {
-        const response = await fetch('http://localhost:8000/api/calendars/', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-        },
-        });
 
-        const data = await response.json();
-        if (response.ok) {
-        return data;
-        } else {
-        console.error('Error from server:', data);
-        throw new Error('Error fetching calendars');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-};
-
-const fetchEvents = async (token) => {
-    try {
-        const response = await fetch('http://localhost:8000/api/events/', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-        },
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-        return data;
-        } else {
-        console.error('Error from server:', data);
-        throw new Error('Error fetching events');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-};
-
-const addEvent = async (eventDetails, token) => {
-    if (!eventDetails.title.trim()) {
-        alert("Event title is required!");
-        return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:8000/api/events/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-        },
-        body: JSON.stringify(eventDetails),
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-        return data;
-        } else {
-        console.error('Error from server:', data);
-        throw new Error('Error adding event');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-};
-
-const addCalendar = async (calendarDetails, token) => {
-    try {
-        const response = await fetch('http://localhost:8000/api/calendars/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-        },
-        body: JSON.stringify(calendarDetails),
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-        return data;
-        } else {
-        console.error('Error from server:', data);
-        throw new Error('Error adding calendar');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-};
-
-export {addCalendar, addEvent, fetchCalendars, fetchEvents, calendarForm, eventForm, colorsForEvent}
+export {calendarForm, eventForm, colorsForEvent}

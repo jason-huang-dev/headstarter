@@ -22,6 +22,7 @@ const Form = ({ fields, formFields, children }) => {
   const handleFormInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const fieldValue = type === 'checkbox' ? checked : value;
+    console.log(name, " : ", value)
     setFormDetails(prevDetails => ({
       ...prevDetails,
       [name]: fieldValue
@@ -82,7 +83,7 @@ const Form = ({ fields, formFields, children }) => {
   return (
     <div className="p-4">
       {filteredFields.map((field) => {
-        const { type, name, label, placeholder, options, required, className, labelAfter, onKeyDown, onChange, validate } = field;
+        const { type, name, label, placeholder, options, required, className, labelAfter, onKeyDown, onChange, validate, option_key, option_label } = field;
 
         return (
           <div key={name} className={`mb-4 ${className || ''}`}>
@@ -96,9 +97,14 @@ const Form = ({ fields, formFields, children }) => {
                 required={required}
               >
                 <option value="" disabled>{placeholder}</option>
-                {typeof option === 'function' 
-                  ? option({ formDetails, setFormDetails }) 
-                  : option}
+                {typeof options === 'function' 
+                  ? options({ formDetails, setFormDetails }) 
+                  : (options.map((option) => (
+                      <option key={option[option_key]} value={option[option_key]}>
+                        {option[option_label]}
+                      </option>
+                    ))
+                  )}
               </select>
             ) : type === "checkbox" ? (
               <input
