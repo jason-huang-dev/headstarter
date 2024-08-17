@@ -1,3 +1,6 @@
+'use client'
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 /**
  * Renders a dynamic form based on the provided field configuration.
  * 
