@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { sideBarAccordians, calendarForm, eventForm } from "../constants"; 
-import { Accordion, AccordionItem, RightBar, Form } from '../components/reusable';
+import { sideBarAccordians, calendarForm, eventForm, fetchCalendars, fetchEvents, addEvent, addCalendar } from "../constants"; 
+import { Accordion, AccordionItem, Button, RightBar, Form} from '../components/reusable';
 import { SideBar, CalendarOverview, /*RightBar*/ } from '../components/dashboard';
+import { X } from 'lucide-react';
 
 
 /**
@@ -19,12 +20,12 @@ import { SideBar, CalendarOverview, /*RightBar*/ } from '../components/dashboard
 
 const Dashboards = () => {
   const location = useLocation();
-  const user = location.state?.user; 
-  const [activeIndices, setActiveIndices] = useState([]); 
+  const user = location.state?.user;
+  const [activeIndices, setActiveIndices] = useState([]);
   const [activeItems, setActiveItems] = useState([]);
-  const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
-  const [rightBarContent, setRightBarContent] = useState(''); 
-  const [events, setEvents] = useState([]); 
+  const [isRightBarOpen, setIsRightBarOpen] = useState(false);
+  const [rightBarContent, setRightBarContent] = useState('');
+  const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState(events);
   const [calendars, setCalendars] = useState([]); // New state for calendars
 
@@ -56,133 +57,64 @@ const Dashboards = () => {
     });
   };
 
-  const addCalendar = (setIsOpen) => {
-    setRightBarContent('calendar'); 
-    setIsRightBarOpen(true); 
+  const addCalendarHandler = (setIsOpen) => {
+    setRightBarContent('calendar');
+    setIsRightBarOpen(true);
     setIsOpen(false);
   };
-  
-  const addEvent = (setIsOpen) => {
-    setRightBarContent('event'); 
-    setIsRightBarOpen(true); 
-    setIsOpen(false); 
-    console.log(events)
+
+  const addEventHandler = (setIsOpen) => {
+    setRightBarContent('event');
+    setIsRightBarOpen(true);
+    setIsOpen(false);
+    console.log(events);
   };
 
   const handleAddEvent = async (eventDetails) => {
-    const dataToSend = {
-      ...eventDetails, // Spread existing event details
-    };    
-    console.log('Adding Event:', dataToSend)
-
     try {
-      const response = await fetch('http://localhost:8000/api/events/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${user.token}`,
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      const data = await response.json();
-      console.log('Response from Add Event:', data)
-      
-      if (response.ok) {
-        setEvents([...events, data]); // Update events state
-      } else {
-        console.error('Error from server:', data);
-      }
+      const data = await addEvent(eventDetails, user.token);
+      setEvents([...events, data]);
+      setIsRightBarOpen(false);
+      alert("Event has been successfully added!");
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   const handleAddCalendar = async (calendarDetails) => {
-    console.log('Adding Calendar:', calendarDetails)
-
     try {
-      const response = await fetch('http://localhost:8000/api/calendars/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${user.token}`,
-        },
-        body: JSON.stringify(calendarDetails),
-      });
-
-      const data = await response.json();
-      console.log('Response from Add Calendar:', data)
-      
-      if (response.ok) {
-        setCalendars([...calendars, data]); // Update calendars state
-      } else {
-        console.error('Error from server:', data);
-      }
+      const data = await addCalendar(calendarDetails, user.token);
+      setCalendars([...calendars, data]);
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   useEffect(() => {
-    // Define the async function inside useEffect
-    const fetchCalendars = async () => {
-      console.log('Fetching calendars...');
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/calendars/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${user.token}`,
-          },
-        });
-  
-        const data = await response.json();
-        console.log('Response from Get Calendars:', data);
-  
-        if (response.ok) {
-          setCalendars(data); // Update calendars state
-        } else {
-          console.error('Error from server:', data);
-        }
+        console.log(user.token)
+        const fetchedCalendars = await fetchCalendars(user.token);
+        setCalendars(fetchedCalendars);
+        console.log(fetchedCalendars)
+
+
+        const fetchedEvents = await fetchEvents(user.token);
+        setEvents(fetchedEvents);
+        setFilteredEvents(fetchedEvents);
+        console.log(fetchedEvents)
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    const fetchEvents = async () => {
-      console.log('Fetching events...');
-      try {
-        const response = await fetch('http://localhost:8000/api/events/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${user.token}`,
-          },
-        });
-  
-        const data = await response.json();
-        console.log('Response from Get Events:', data);
-  
-        if (response.ok) {
-          setEvents(data); // Update calendars state
-          setFilteredEvents(data) // Update calendars state
-        } else {
-          console.error('Error from server:', data);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    
-    fetchCalendars(); // Call the async function to get all calendars
-    fetchEvents(); // Call the async function to get all events 
+    fetchData();
   }, [user.token]);
 
   return (
     <div className="flex h-screen font-sora">
       {/* SideBar Component */}
-      <SideBar user={user} addCalendar={addCalendar} addEvent={addEvent} isRightBarOpen={isRightBarOpen}>
+      <SideBar user={user} addCalendar={ addCalendarHandler} addEvent={addEventHandler} isRightBarOpen={isRightBarOpen}>
         {({ isOpen, setIsOpen }) => (
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col flex-grow">
@@ -235,8 +167,9 @@ const Dashboards = () => {
          calendars={calendars}
        />
       )} */}
-
-      {isRightBarOpen && (
+      
+      {/* Content for adding a new calendar */}
+      {isRightBarOpen && rightBarContent === 'calendar' && (
         <RightBar 
          isRightBarOpen={isRightBarOpen} 
          setIsRightBarOpen={setIsRightBarOpen} 
@@ -251,7 +184,72 @@ const Dashboards = () => {
             }}
             fields={calendarForm}
           >
-          
+            {({ formDetails, setFormDetails }) => (
+              <div className="mb-2">
+                {/* Display each email with a delete button */}
+                {formDetails.email_list.map((email, index) => (
+                  <div
+                    key={index}
+                    className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
+                  >
+                    {email}
+                    <button 
+                      onClick={() => setFormDetails({
+                        ...formDetails,
+                        email_list: formDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
+                      })}
+                      className="ml-2 text-gray-600 hover:text-gray-900"
+                    >
+                      <X size={14} /> {/* Small X icon for deleting the email */}
+                    </button>
+                  </div>
+                ))}
+                <Button onClick={handleAddCalendar}>Add Calendar</Button>
+              </div>
+            )}
+          </Form>
+        </RightBar>
+      )}
+
+      {isRightBarOpen && rightBarContent === 'event' && (
+        <RightBar 
+         isRightBarOpen={isRightBarOpen} 
+         setIsRightBarOpen={setIsRightBarOpen} 
+         rightBarTitle="Add Calendar"
+        >
+          <Form
+            formFields={{
+              cal_id: calendars[0].cal_id || None,
+              title: '',
+              start: '',
+              end: '',
+              color: '#15803d', // Default color selection
+            }}
+            fields={eventForm}
+          >
+            {({ formDetails, setFormDetails }) => (
+              <div className="mb-2">
+                {/* Display each email with a delete button */}
+                {formDetails.email_list.map((email, index) => (
+                  <div
+                    key={index}
+                    className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
+                  >
+                    {email}
+                    <button 
+                      onClick={() => setFormDetails({
+                        ...formDetails,
+                        email_list: formDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
+                      })}
+                      className="ml-2 text-gray-600 hover:text-gray-900"
+                    >
+                      <X size={14} /> {/* Small X icon for deleting the email */}
+                    </button>
+                  </div>
+                ))}
+                <Button onClick={handleAddCalendar}>Add Calendar</Button>
+              </div>
+            )}
           </Form>
         </RightBar>
       )}
