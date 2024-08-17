@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { sideBarAccordians } from "../constants/index"; 
-import { Accordion, AccordionItem } from '../components/reusable';
-import { SideBar, CalendarOverview, RightBar } from '../components/dashboard';
+import { sideBarAccordians, calendarForm, eventForm } from "../constants"; 
+import { Accordion, AccordionItem, RightBar, Form } from '../components/reusable';
+import { SideBar, CalendarOverview, /*RightBar*/ } from '../components/dashboard';
+
 
 /**
  * Dashboards component that renders the dashboard with a SideBar.
@@ -224,7 +225,7 @@ const Dashboards = () => {
       </div>
 
       {/* Right Sidebar Component */}
-      {isRightBarOpen && (
+      {/* {isRightBarOpen && (
         <RightBar 
          isRightBarOpen={isRightBarOpen} 
          setIsRightBarOpen={setIsRightBarOpen} 
@@ -233,6 +234,26 @@ const Dashboards = () => {
          addCalendar={handleAddCalendar} // Pass the function to RightBar
          calendars={calendars}
        />
+      )} */}
+
+      {isRightBarOpen && (
+        <RightBar 
+         isRightBarOpen={isRightBarOpen} 
+         setIsRightBarOpen={setIsRightBarOpen} 
+         rightBarTitle="Add Calendar"
+        >
+          <Form
+            formFields={{
+              title: '',
+              addPeople: false,
+              emails: '',
+              email_list: [] // Maintain a list of emails
+            }}
+            fields={calendarForm}
+          >
+          
+          </Form>
+        </RightBar>
       )}
     </div>
   ); 

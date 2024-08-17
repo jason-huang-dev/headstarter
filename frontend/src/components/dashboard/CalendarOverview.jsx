@@ -13,6 +13,12 @@ const localizer = momentLocalizer(moment);
  * @returns A div containing the Calendar component
  */
 const CalendarOverview = ({ events }) => {
+  // Event handler for when an event is selected
+  const handleEventSelect = (event) => {
+    console.log("Selected event:", event);
+    // You can also add more logic here, such as opening a modal or navigating to a different page
+  };
+
   return (
     <div className="h-full pt-5">
       <Calendar
@@ -24,6 +30,7 @@ const CalendarOverview = ({ events }) => {
         defaultView={Views.MONTH}
         components={{ toolbar: CustomToolbar }}
         style={{ height: '100%' }}
+        onSelectEvent={handleEventSelect}
       />
     </div>
   );

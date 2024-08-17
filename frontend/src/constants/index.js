@@ -123,5 +123,64 @@ const colorsForEvent = [
   { color: "#FF98E2", label: "6" }, // pink 
 ]
 
+const calendarForm = [
+  {
+    label: 'Calendar Name',
+    type: 'text',
+    name: 'title',
+    validate: (value) => value.trim() !== '' || 'Calendar Name is required.',
+    required: true
+  },
+  {
+    label: 'Add People?',
+    labelAfter: true,
+    name: 'addPeople',
+    type: 'checkbox',
+    className:"flex items-center",
+    onChange: (e, formDetails, setFormDetails) => {
+      // Custom behavior when the checkbox changes
+      const { checked } = e.target;
+      console.log('Add People checkbox changed:', checked);
+      // Example: Toggle the visibility of the email field based on this checkbox
+      if (!checked) {
+        setFormDetails({ ...formDetails, emails: '' });
+      }
+    },
+    checked: (formDetails) => formDetails['addPeople'] || false,  
 
-export { benefits, actionData, services, navigation, sideBarAccordians, colorsForEvent }; 
+  },
+  {
+    name: 'emails',
+    type: 'email',
+    ifPrev: true,
+    placeholder: 'Enter emails and press Enter',
+    validate: (value) => {
+      // Custom validation for emails
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(value) || 'Invalid email format';
+    },
+    onKeyDown: (e, formDetails, setFormDetails) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevents the form from submitting on Enter key press
+        if (formDetails.emails.trim() && isValidEmail(formDetails.emails.trim())) { // Check for non-empty and valid email
+          setFormDetails({
+            ...formDetails,
+            email_list: [...formDetails.email_list, formDetails.emails.trim()], // Add email to the list
+            emails: '' // Clear the input field
+          });
+        } else {
+          alert("Please enter a valid email address."); // Show an alert if the email is invalid
+        }
+      }
+    }
+  },
+];
+
+const eventForm = [
+  { label: 'Event Title', name: 'title', type: 'text' },
+  { label: 'Start Date & Time', name: 'start', type: 'datetime-local' },
+  { label: 'End Date & Time', name: 'end', type: 'datetime-local' },
+  { label: 'Select Event Color', name: 'color', type: 'select', options: colorsForEvent },
+];
+
+export { benefits, actionData, services, navigation, sideBarAccordians, colorsForEvent, calendarForm, eventForm }; 
