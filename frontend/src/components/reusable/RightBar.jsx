@@ -13,14 +13,15 @@ import { X } from "lucide-react";
  * @param {boolean} props.isRightBarOpen - Indicates if the right sidebar is open.
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @param {string} props.rightBarTitle - The title of the RightBar.
+ * @param {string} props.className - Extra stylings for the aside element
  * @param {React.ReactNode} props.children - The content to display inside the RightBar.
  * @returns {JSX.Element} The RightBar component.
  */
-export const RightBar = ({isRightBarOpen, setIsRightBarOpen, rightBarTitle, children}) => {
+export const RightBar = ({isRightBarOpen, setIsRightBarOpen, rightBarTitle, children, className}) => {
 
   return (
     <aside
-      className={`fixed right-0 top-0 h-screen bg-white border-l shadow-sm transition-transform duration-300 ease-in-out w-80`}
+      className={`${className} bg-white border-l shadow-sm transition-transform duration-300 ease-in-out`}
       style={{ transform: isRightBarOpen ? 'translateX(0)' : 'translateX(100%)' }}
     >
       <nav className="h-full flex flex-col overflow-x-hidden">

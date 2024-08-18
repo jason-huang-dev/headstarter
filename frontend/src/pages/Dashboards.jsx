@@ -119,7 +119,7 @@ const Dashboards = () => {
 
       {/* Main calendar view component */}
       <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        <CalendarOverview events={filteredEvents} />  {/* Pass events to CalendarOverview */}
+        <CalendarOverview events={filteredEvents} calendars={calendars}/>  {/* Pass events to CalendarOverview */}
       </div>
       
       {/* Content for adding a new calendar */}
@@ -128,7 +128,8 @@ const Dashboards = () => {
          isRightBarOpen={isRightBarOpen} 
          setIsRightBarOpen={setIsRightBarOpen} 
          rightBarTitle="Add Calendar"
-        >
+         className="fixed right-0 top-0 h-screen w-80"
+         >
           <Form
             formFields={{
               title: '',
@@ -171,6 +172,7 @@ const Dashboards = () => {
         isRightBarOpen={isRightBarOpen} 
         setIsRightBarOpen={setIsRightBarOpen} 
         rightBarTitle="Add Event"
+        className="fixed right-0 top-0 h-screen w-80"
       >
         <Form
           formFields={{
