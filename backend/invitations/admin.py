@@ -22,5 +22,5 @@ class CalendarInviteAdmin(admin.ModelAdmin):
     ::field tuple ordering : Specifies the default ordering of the records in the Django admin list view.
     """
     list_display = ('calendar', 'email', 'invited_by', 'accepted', 'declined', 'created_at')
-    search_fields = ('email', 'calendar__name', 'invited_by__username')
+    search_fields = ('email', 'calendar__title', 'invited_by__username')
     ordering = ('-created_at',)

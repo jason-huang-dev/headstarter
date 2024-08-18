@@ -3,8 +3,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Calendar
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from .serializers import CalendarSerializer
+from invitations.models import CalendarInvite
+from invitations.serializers import CalendarInviteSerializer
 from django.shortcuts import get_object_or_404
+from django.utils.crypto import get_random_string
+from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -44,24 +49,57 @@ def get_calendars(request):
 
 def create_calendar(request):
     """
-    Create a new calendar for the authenticated user.
+    Create a new calendar for the authenticated user and invite specified users to it.
 
     ::param str title : The title of the calendar
     ::param str/optional description : An optional description of the calendar
-    ::return Response : A JSON response with the created calendar's details
+    ::param list emails : A list of email addresses to invite to the calendar
+    ::return Response : A JSON response with the created calendar's details and invitations
     ::raises ValidationError : Raised if the provided data is invalid
     """
-    logger.debug('Request data: %s', request.data)
     try:
         title = request.data.get('title', 'My Calendar')
         description = request.data.get('description', '')
+        emails = request.data.get('email_list', [])  # Get the list of emails
+
+        # Create the calendar
         calendar = Calendar.objects.create(user=request.user, title=title, description=description)
-        serializer = CalendarSerializer(calendar)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # Process each email
+        invitations = []
+        for email in emails:
+            if email:
+                    # # Retrieve the user by email
+                    # user = settings.AUTH_USER_MODEL.objects.get_or_create(email=email)
+                    
+                    # Check if the user is already invited
+                    if CalendarInvite.objects.filter(calendar=calendar, email=email).exists():
+                        continue  # Skip if already invited
+                    
+                    # Create an invitation for the user
+                    invite = CalendarInvite.objects.create(
+                        calendar=calendar,
+                        email=email,
+                        invited_by=request.user,
+                        token=get_random_string(32)  # Generate a unique token
+                    )
+                    invitations.append(invite)
+        
+        # Serialize and return the calendar data and invitations
+        calendar_serializer = CalendarSerializer(calendar)
+        invite_serializer = CalendarInviteSerializer(invitations, many=True)
+
+        return Response({
+            'calendar': calendar_serializer.data, 
+            'invitations': invite_serializer.data,
+            }, status=status.HTTP_201_CREATED)
+    
+    except ValidationError as e:
+        logger.exception("Validation error")
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         logger.exception("Error creating calendar")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
