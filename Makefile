@@ -4,6 +4,7 @@ OS := $(shell uname -s)
 COMMIT_MSG ?= no message update
 BRANCH_NAME ?= main
 PARAMS ?= "--ff-only"
+DATA_SCHEMA ?= "" 
 DOCKER_COMPOSE= docker compose
 DJANGO_MANAGE= $(DOCKER_COMPOSE) exec backend python manage.py
 .DEFAULT_GOAL := update
@@ -49,7 +50,7 @@ migrate:
 
 .PHONY: makemigrations
 makemigrations:
-	$(DJANGO_MANAGE) makemigrations
+	$(DJANGO_MANAGE) makemigrations $(DATA_SCHEMA)
 
 .PHONY: showmigrations
 showmigrations:

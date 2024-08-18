@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'calendars.apps.CalendarConfig',
     'events.apps.EventsConfig',
-    'friends.apps.FriendshipsConfig',
+    'invitations.apps.InvitationsConfig',
 ]
 
 MIDDLEWARE = [
