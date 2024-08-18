@@ -23,4 +23,4 @@ class CalendarInviteAdmin(admin.ModelAdmin):
     """
     list_display = ('calendar', 'email', 'invited_by', 'accepted', 'declined', 'created_at')
     search_fields = ('email', 'calendar__title', 'invited_by__username')
-    ordering = ('-created_at',)
+    ordering = ('created_at',)

@@ -27,7 +27,7 @@ from django.conf.urls.static import static
 
 from calendars.views import calendar_view, calendar_detailed_view
 from events.views import event_view, event_detailed_view
-from invitations.views import accept_invitation, create_invitation, decline_invitation
+from invitations.views import create_invitation, respond_invitation, get_invites_by_email
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,9 +48,9 @@ urlpatterns = [
     path('api/calendars/<int:calendar_id>/', calendar_detailed_view, name='calendar_detailed_view'),  # Handles PUT, DELETE, GET for individual calendars
         
     ## Friends Paths
-    path('api/invitation/create/', create_invitation, name='create_invitation'),
-    path('api/invitation/accept/', accept_invitation, name='accept_invitation'),
-    path('api/invitation/decline/', decline_invitation, name='decline_invitation'),
+    path('api/invitations/create/', create_invitation, name='create_invitation'),
+    path('api/invitations/accept/', respond_invitation, name='accept_decline_invitation'),
+    path('api/invitations/', get_invites_by_email, name='get_invites_by_email'),
 ]
 
 # Serve media files in development

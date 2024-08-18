@@ -7,6 +7,9 @@ const userDataHandler = () => {
     const [calendars, setCalendars] = useState([]);
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
+    const [invitations, setInvitations] = useState([]);
+    const [shared_calendars, setSharedCalendars] = useState([]);
+
 
     useEffect(() => {
         // Define the async function inside useEffect
@@ -58,9 +61,34 @@ const userDataHandler = () => {
             console.error('Error:', error);
           }
         };
-        
+
+        const fetchInvitations = async () => {
+          console.log('Fetching invitations...');
+          try {
+            const response = await fetch('http://localhost:8000/api/invitations/', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${user.token}`,
+              },
+            });
+      
+            const data = await response.json();
+            console.log('Response from Get Invitations:', data);
+      
+            if (response.ok) {
+              setInvitations(data); // Update invitations state
+            } else {
+              console.error('Error from server:', data);
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+
         fetchCalendars(); // Call the async function to get all calendars
         fetchEvents(); // Call the async function to get all events 
+        fetchInvitations(); // Call the async function to get all invitations
     }, [user.token]);
     
     const addEvent = async (eventDetails) => {
@@ -110,7 +138,8 @@ const userDataHandler = () => {
         console.log('Response from Add Calendar:', data)
         
         if (response.ok) {
-          setCalendars([...calendars, data]); // Update calendars state
+          // setCalendars([...calendars, data]); // Update calendars state
+          setCalendars([...calendars, data.calendar]);
         } else {
           console.error('Error from server:', data);
         }
@@ -119,7 +148,7 @@ const userDataHandler = () => {
       }
     };
 
-    return { calendars, events, filteredEvents, setCalendars, setEvents, setFilteredEvents, addEvent, addCalendar};
+    return { calendars, shared_calendars,invitations,events, filteredEvents, setCalendars, setEvents, setFilteredEvents, addEvent, addCalendar};
 };
 
 export default userDataHandler;

@@ -1,4 +1,4 @@
-import {CalendarCheck, BellPlus, ListChecks, UserRoundPlus, Calendar as CalendarIcon} from 'lucide-react';
+import {CalendarCheck, BellPlus, ListChecks, UserRoundPlus, Calendar as CalendarIcon, Inbox} from 'lucide-react';
 // import png for Features
 import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates} from "../assets/png";
 import {calendarForm, eventForm, colorsForEvent} from './dashboards';
@@ -100,16 +100,38 @@ const navigation = [
   },
 ];
 
-const sideBarAccordians = [
+/**
+ * Generates sidebar accordion items based on provided data.
+ *
+ * @param {Array} calendars - Array of calendar objects.
+ * @param {Array} shared_calendars - Array of shared calendar objects.
+ * @param {Array} invitations - Array of invitation objects.
+ * @returns {Array} - The sidebar accordion items.
+ */
+const sideBarAccordians = (calendars, shared_calendars, invitations) => [
   {
-    title: "Calendar",
+    title: "Calendars",
     iconUrl: CalendarIcon, // Icon component
-    iconType: 'component'
+    iconType: 'component',
+    contents: calendars,
+    content_key: "cal_id",
+    content_title: "title"
   },
   {
-    title: "Shared Calendar",
+    title: "Shared Calendars",
     iconUrl: CalendarUser, // Icon component
-    iconType: 'component'
+    iconType: 'component',
+    contents: shared_calendars,
+    content_key: "cal_id",
+    content_title: "title"
+  },
+  {
+    title: "Invitations",
+    iconUrl: Inbox, // Icon component
+    iconType: 'component',
+    contents: invitations,
+    content_key: "inv_id",
+    content_title: "email",
   }
 ];
 

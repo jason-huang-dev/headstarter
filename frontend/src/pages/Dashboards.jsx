@@ -25,7 +25,7 @@ const Dashboards = () => {
   const [activeItems, setActiveItems] = useState([]);
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
-  const {calendars, events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
+  const {calendars, shared_calendars,invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
 
   const handleTitleClick = (index) => {
     console.log(`Title clicked: ${index}`);
@@ -77,6 +77,8 @@ const Dashboards = () => {
     setIsRightBarOpen(false);
   }
 
+  const accordions = sideBarAccordians(calendars, shared_calendars, invitations);
+
   return (
     <div className="flex h-screen font-sora">
       {/* SideBar Component */}
@@ -84,7 +86,7 @@ const Dashboards = () => {
         {({ isOpen, setIsOpen }) => (
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col flex-grow">
-              {sideBarAccordians.map((item, index) => (
+              {accordions.map((item, index) => (
                 <Accordion
                     key={index}
                     title={item.title}
@@ -99,14 +101,13 @@ const Dashboards = () => {
                       }
                     }}
                   >
-                  {calendars.map((calendar, calIndex) => (
+                  {item.contents.map((content, contentIndex) => (
                     <AccordionItem
-                      key={calendar.cal_id}
-                      title={calendar.title}
-                      IconComponent={calendar.icon} 
+                      key={content[item.content_key]}
+                      title={content[item.content_title]}
                       displayTitle={isOpen}
-                      isActive={isOpen && activeItems.includes(calIndex)}
-                      onTitleClick={() => handleItemClick(calIndex)}
+                      isActive={isOpen && activeItems.includes(contentIndex)}
+                      onTitleClick={() => handleItemClick(contentIndex)}
                       // link={`/dashboards/${calendar.cal_id}`} 
                     />
                   ))}

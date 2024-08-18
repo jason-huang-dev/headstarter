@@ -19,4 +19,6 @@ class CalendarInviteSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CalendarInvite
-        fields = ('id', 'calendar', 'email', 'invited_by', 'token', 'accepted', 'declined', 'created_at')
+        fields = ('calendar', 'email', 'invited_by', 'token', 'accepted', 'declined', 'created_at')
+        read_only_fields = ['calendar', 'invited_by'] # I added this
+

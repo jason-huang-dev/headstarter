@@ -1,12 +1,3 @@
-"""
-File: models.py
-Author: Jason
-Documentation updated by: Jason
-Date: 2024-08-09
-
-This model represents a calendar owned by a user and includes fields for the user who owns it and the title of the calendar.
-"""
-
 from django.db import models
 from django.conf import settings
 
