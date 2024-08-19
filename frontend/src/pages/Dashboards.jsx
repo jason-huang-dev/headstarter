@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../constants"; 
 import { Accordion, AccordionItem, RightBar, Form, Button } from '../components/reusable';
-import { SideBar, CalendarOverview, userDataHandler} from '../components/dashboard';
-import { X } from 'lucide-react';
+import { SideBar, CalendarOverview, userDataHandler, InboxOverview} from '../components/dashboard';
+import { X , Inbox} from 'lucide-react';
 
 
 /**
@@ -25,6 +25,7 @@ const Dashboards = () => {
   const [activeItems, setActiveItems] = useState([]);
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
+  const [isOpenInbox, setIsOpenInbox] = useState(false)
   const {calendars, shared_calendars,invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
 
   const handleTitleClick = (index) => {
@@ -103,7 +104,7 @@ const Dashboards = () => {
                   >
                   {item.contents.map((content, contentIndex) => (
                     <AccordionItem
-                      key={content[item.content_key]}
+                      key={contentIndex}
                       title={content[item.content_title]}
                       displayTitle={isOpen}
                       isActive={isOpen && activeItems.includes(contentIndex)}
@@ -113,16 +114,36 @@ const Dashboards = () => {
                   ))}
                 </Accordion>
               ))}
+                <div className="border-t border-gray-300 my-2"></div> {/*Horizontal Line*/}
+                <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-gray-100 ${isOpenInbox ? 'bg-gray-100' : ''}`}>
+                <div 
+                    className={`accordion-title flex items-center w-full justify-center`} 
+                    onClick={() => {setIsOpenInbox(!isOpenInbox)}}
+                    >
+                    <div className={`flex items-center justify-center w-full`}>
+                      <div className="flex items-center justify-center leading-4">
+                        <Inbox style={{ width: '32px', height: '32px' }}/>
+                      </div>
+                      {(isOpen && <span className="ml-2 text-sm">
+                        Invitations
+                      </span>)}
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
         )} 
       </SideBar>
 
       {/* Main calendar view component */}
-      <div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        <CalendarOverview events={filteredEvents} calendars={calendars}/>  {/* Pass events to CalendarOverview */}
-      </div>
+      {!isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
+        <CalendarOverview events={filteredEvents} calendars={calendars}/>  {/* Pass events and calendars to CalendarOverview */}
+      </div>)}
       
+      {isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
+        <InboxOverview invitations={invitations}/>  {/* Pass invitations to InboxOverview */}
+      </div>)}
+
       {/* Content for adding a new calendar */}
       {isRightBarOpen && rightBarContent === 'calendar' && (
         <RightBar 
