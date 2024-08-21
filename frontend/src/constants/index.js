@@ -125,14 +125,14 @@ const sideBarAccordians = (calendars, shared_calendars, invitations) => [
     content_key: "cal_id",
     content_title: "title"
   },
-  {
-    title: "Invitations",
-    iconUrl: Inbox, // Icon component
-    iconType: 'component',
-    contents: invitations,
-    content_key: "inv_id",
-    content_title: "email",
-  }
+  // {
+  //   title: "Invitations",
+  //   iconUrl: Inbox, // Icon component
+  //   iconType: 'component',
+  //   contents: invitations,
+  //   content_key: "inv_id",
+  //   content_title: "email",
+  // }
 ];
 
 export { benefits, actionData, services, navigation, sideBarAccordians, calendarForm, eventForm, colorsForEvent }; 

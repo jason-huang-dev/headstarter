@@ -37,4 +37,4 @@ class Event(models.Model):
 
         ::return str: The event title followed by the calendar title.
         """
-        return f"{self.title} - {self.calendar.title}"
+        return f"{self.title}"

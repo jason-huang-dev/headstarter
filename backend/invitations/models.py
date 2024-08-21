@@ -23,9 +23,9 @@ class CalendarInvite(models.Model):
     ::field BooleanField declined : Tracks whether the invitation has been declined.
     ::field DateTimeField created_at : The timestamp of when the invitation was created.
     """
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='invitations')
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     email = models.EmailField()
-    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_invitations')
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     token = models.CharField(max_length=50, unique=True, default=get_random_string)
     accepted = models.BooleanField(default=False)
     declined = models.BooleanField(default=False)  # New field to track declined invitations
@@ -37,7 +37,7 @@ class CalendarInvite(models.Model):
         
         ;:return str: A string representation in the format "Invitation to <email> for <calendar>".
         """
-        return f"Invitation to {self.email} for {self.calendar.name}"
+        return f"Invitation to {self.email} for {self.calendar.title}"
 
     def save(self, *args, **kwargs):
         """
