@@ -64,6 +64,9 @@ showmigrations:
 createsuperuser:
 	$(DJANGO_MANAGE) createsuperuser
 
+.PHONY: check_tables
+check_tables:
+	docker-compose exec db psql -U myuser -d mydatabase -c "\dt"
 # General git hub commands
 .PHONY:update_from_branch
 update_from_branch:

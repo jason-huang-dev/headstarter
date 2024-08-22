@@ -6,18 +6,21 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from './CustomToolbar';
 import { RightBar, Form, Button } from "../reusable";
 import { eventForm, colorsForEvent } from "../../constants";
+import userDataHandler from "./userDataHandler";
 
 // Initialize the moment localizer
 const localizer = momentLocalizer(moment);
 
 /**
  * Returns a calendar view component
- * @param {Array[Object]} events
+ * @param {boolean} isRightBarOpen - if the dashboard's right bar is open
+ * @param {Function} setIsRightBarOpen - funtion to set the dashboard's right bar's open status
+ * @param {String} rightBarContent - String stating what the rightbar should display
+ * @param {Function} setRightBarContent - function to set the rightbar content string
  * @returns A div containing the Calendar component
  */
-const CalendarOverview = ({ events, calendars }) => {
-  const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
-  const [rightBarContent, setRightBarContent] = useState(''); 
+const CalendarOverview = ({isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent }) => {
+  const {calendars, events} = userDataHandler()
   const [eventDetails, setEventDetails] = useState({}); 
   
   const updateEventHandler = () => {
@@ -90,6 +93,10 @@ const CalendarOverview = ({ events, calendars }) => {
                 </div>
               </div>
               <Button>Update Event</Button>
+              <Button 
+                className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+
+              >Delete</Button>
             </div>
           )}
         </Form>

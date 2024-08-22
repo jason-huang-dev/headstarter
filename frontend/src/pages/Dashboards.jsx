@@ -115,7 +115,7 @@ const Dashboards = () => {
                 </Accordion>
               ))}
                 <div className="border-t border-gray-300 my-2"></div> {/*Horizontal Line*/}
-                <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-gray-100 ${isOpenInbox ? 'bg-gray-100' : ''}`}>
+                <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-green-200 ${isOpenInbox ? 'bg-green-300' : ''}`}>
                 <div 
                     className={`accordion-title flex items-center w-full justify-center`} 
                     onClick={() => {setIsOpenInbox(!isOpenInbox)}}
@@ -137,7 +137,13 @@ const Dashboards = () => {
 
       {/* Main calendar view component */}
       {!isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        <CalendarOverview events={filteredEvents} calendars={calendars}/>  {/* Pass events and calendars to CalendarOverview */}
+        {/* Pass rightbar handlers to CalendarOverview */}
+        <CalendarOverview 
+          isRightBarOpen={isRightBarOpen} 
+          setIsRightBarOpen={setIsRightBarOpen} 
+          rightBarContent={rightBarContent} 
+          setRightBarContent={setRightBarContent} 
+          />  
       </div>)}
       
       {isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
