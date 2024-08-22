@@ -26,7 +26,7 @@ const Dashboards = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
-  const {calendars, shared_calendars,invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
+  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
 
   const handleTitleClick = (index) => {
     console.log(`Title clicked: ${index}`);

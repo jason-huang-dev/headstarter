@@ -20,16 +20,17 @@ const localizer = momentLocalizer(moment);
  * @returns A div containing the Calendar component
  */
 const CalendarOverview = ({isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent }) => {
-  const {calendars, events} = userDataHandler()
+  const {calendars, events, updateEvent, deleteEvent} = userDataHandler()
   const [eventDetails, setEventDetails] = useState({}); 
   
-  const updateEventHandler = () => {
+  const editEventHandler = () => {
     setRightBarContent('update_event'); 
     setIsRightBarOpen(true); 
   };
 
-  const submitUpdateEvent = (eventDetails) =>{
+  const handleEventUpdate = (eventDetails) =>{
     updateEvent(eventDetails);
+    console.log("Event updated: ", eventDetails)
     setIsRightBarOpen(false);
   }
 
@@ -37,8 +38,14 @@ const CalendarOverview = ({isRightBarOpen, setIsRightBarOpen, rightBarContent, s
   const handleEventSelect = (event) => {
     console.log("Selected event:", event);
     setEventDetails(event);
-    updateEventHandler()
+    editEventHandler()
   };
+
+  const handleEventDelete = (eventDetails) => {
+    deleteEvent(eventDetails)
+    console.log("Event deleted: ", eventDetails)
+    setIsRightBarOpen(false);
+  }
 
   return (
     <div className={`h-full pt-5 ${isRightBarOpen ? 'pr-80' : ''}`}>
@@ -92,10 +99,12 @@ const CalendarOverview = ({isRightBarOpen, setIsRightBarOpen, rightBarContent, s
                   ))}
                 </div>
               </div>
-              <Button>Update Event</Button>
+              <Button
+                onClick={() => handleEventUpdate(formDetails)}
+              >Update Event</Button>
               <Button 
                 className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-
+                onClick={() => handleEventDelete(formDetails)}
               >Delete</Button>
             </div>
           )}
