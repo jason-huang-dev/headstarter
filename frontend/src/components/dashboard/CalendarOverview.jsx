@@ -20,7 +20,7 @@ const localizer = momentLocalizer(moment);
  * @param {Function} setRightBarContent - function to set the rightbar content string
  * @returns A div containing the Calendar component
  */
-const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent }) => {
+const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent, popupIsOpen }) => {
   const {calendars, updateEvent, deleteEvent} = userDataHandler()
   const [eventDetails, setEventDetails] = useState({}); 
   
@@ -49,7 +49,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
   }
 
   return (
-    <div className={`h-full pt-5 ${isRightBarOpen ? 'pr-80' : ''}`}>
+    <div className={`h-full pt-5 ${popupIsOpen ? 'pr-100' : isRightBarOpen ? 'pr-80' : ''}`}>
       <Calendar
         localizer={localizer}
         events={events} // Events passed as a prop

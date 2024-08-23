@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../constants"; 
-import { Accordion, AccordionItem, RightBar, Form, Button } from '../components/reusable';
+import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, userDataHandler, InboxOverview} from '../components/dashboard';
 import { X , Inbox} from 'lucide-react';
 
@@ -26,6 +26,7 @@ const Dashboards = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
+  const [popupIsOpen, setPopupIsOpen] = useState(false);
   const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar, fetchSharedCalendars, acceptInvitation, updateInvitationStatus} = userDataHandler();
   const [calendarFormFields, setCalendarFormFields] = useState({
     title: '',
@@ -40,9 +41,25 @@ const Dashboards = () => {
     end: '',
     color: '#15803d', // Default color selection
   })
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     fetchSharedCalendars();
+    // Function to handle screen resizing
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setScreenWidth(width);
+      setPopupIsOpen(width < 1050); // Set popupIsOpen based on the screen width
+    };
+
+    // Attach event listener for resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial check when the component mounts
+    handleResize();
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleTitleClick = (index) => {
@@ -186,7 +203,7 @@ const Dashboards = () => {
       </SideBar>
 
       {/* Main calendar view component */}
-      {!isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
+      {!isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-100' : ''}`}>
         {/* Pass filteredEvents and rightbar handlers to CalendarOverview */}
         <CalendarOverview 
           events={filteredEvents}
@@ -194,106 +211,201 @@ const Dashboards = () => {
           setIsRightBarOpen={setIsRightBarOpen} 
           rightBarContent={rightBarContent} 
           setRightBarContent={setRightBarContent} 
+          popupIsOpen={popupIsOpen} 
           />  
       </div>)}
       
-      {isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
+      {isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-100' : ''}`}>
         <InboxOverview invitations={invitations}/>  {/* Pass invitations to InboxOverview */}
       </div>)}
 
       {/* Content for adding a new calendar */}
+      {/* if screen width is less than 1050 px, breaking point, Pop up opens */}
       {isRightBarOpen && (rightBarContent === 'add_calendar' || rightBarContent === 'edit_calendar') && (
+        screenWidth > 1050 ? (
+          <RightBar 
+            isRightBarOpen={isRightBarOpen} 
+            setIsRightBarOpen={setIsRightBarOpen} 
+            rightBarTitle={rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
+            className="fixed right-0 top-0 h-screen w-80"
+          >
+            <Form
+              formFields={calendarFormFields}
+              fields={calendarForm}
+            >
+              {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  {/* Display each email with a delete button */}
+                  {formDetails.email_list.map((email, index) => (
+                    <div
+                      key={index}
+                      className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
+                    >
+                      {email}
+                      <button 
+                        onClick={() => setFormDetails({
+                          ...formDetails,
+                          email_list: formDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
+                        })}
+                        className="ml-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <X size={14} /> {/* Small X icon for deleting the email */}
+                      </button>
+                    </div>
+                  ))}
+                  <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
+                    {rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
+                  </Button>
+                  {rightBarContent === 'edit_calendar' && (
+                    <Button 
+                      className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                      onClick={() => handleCalendarDelete(formDetails)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
+              )}
+            </Form>
+          </RightBar>
+        ) : (
+          <Popup 
+            isOpen={isRightBarOpen} 
+            onClose={() => setIsRightBarOpen(false)} 
+            title={rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
+          >
+            <Form
+              formFields={calendarFormFields}
+              fields={calendarForm}
+            >
+              {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  {/* Display each email with a delete button */}
+                  {formDetails.email_list.map((email, index) => (
+                    <div
+                      key={index}
+                      className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
+                    >
+                      {email}
+                      <button 
+                        onClick={() => setFormDetails({
+                          ...formDetails,
+                          email_list: formDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
+                        })}
+                        className="ml-2 text-gray-600 hover:text-gray-900"
+                      >
+                        <X size={14} /> {/* Small X icon for deleting the email */}
+                      </button>
+                    </div>
+                  ))}
+                  <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
+                    {rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
+                  </Button>
+                  {rightBarContent === 'edit_calendar' && (
+                    <Button 
+                      className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                      onClick={() => handleCalendarDelete(formDetails)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
+              )}
+            </Form>
+          </Popup>
+        )
+      )}
+
+
+    {/* Content for adding a new event */}
+    {isRightBarOpen && rightBarContent === 'event' && (
+      screenWidth > 1050 ? (
         <RightBar 
-         isRightBarOpen={isRightBarOpen} 
-         setIsRightBarOpen={setIsRightBarOpen} 
-         rightBarTitle={rightBarContent === 'add_calendar' ? "Add Calendar": "Edit Calendar"}
-         className="fixed right-0 top-0 h-screen w-80"
-         >
+          isRightBarOpen={isRightBarOpen} 
+          setIsRightBarOpen={setIsRightBarOpen} 
+          rightBarTitle="Add Event"
+          className="fixed right-0 top-0 h-screen w-80"
+        >
           <Form
-            formFields={calendarFormFields}
-            fields={calendarForm}
+            formFields={eventFormFields}
+            fields={eventForm(calendars)}
           >
             {({ formDetails, setFormDetails }) => (
               <div className="mb-2">
-                {/* Display each email with a delete button */}
-                {formDetails.email_list.map((email, index) => (
-                  <div
-                    key={index}
-                    className="text-sm px-2 py-1 rounded-lg bg-slate-200 text-gray-800 inline-flex items-center mr-2 mb-2"
-                  >
-                    {email}
-                    <button 
-                      onClick={() => setFormDetails({
-                        ...formDetails,
-                        email_list: formDetails.email_list.filter((_, i) => i !== index) // Remove email by filtering out the one at the specified index
-                      })}
-                      className="ml-2 text-gray-600 hover:text-gray-900"
-                    >
-                      <X size={14} /> {/* Small X icon for deleting the email */}
-                    </button>
+                {/* Color Selection */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
+                  <div className="flex items-center space-x-2 mt-2">
+                    {colorsForEvent.map((option, index) => (
+                      <label key={index} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="color"
+                          value={option.color}
+                          checked={formDetails.color === option.color}
+                          onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
+                          className="hidden"
+                        />
+                        <span
+                          className="w-6 h-6 rounded-full cursor-pointer"
+                          style={{
+                            backgroundColor: option.color,
+                            border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
+                          }}
+                        ></span>
+                      </label>
+                    ))}
                   </div>
-                ))}
-                <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
-                  {rightBarContent === 'add_calendar' ? "Add Calendar": "Edit Calendar"}
-                </Button>
-                {rightBarContent === 'edit_calendar' &&
-                <Button 
-                  className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                  onClick={() => handleCalendarDelete(formDetails)}
-                >
-                  Delete
-                </Button>}
+                </div>
+                <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
               </div>
             )}
           </Form>
         </RightBar>
-      )}
-      
-      {/* Content for adding a new event */}
-      {isRightBarOpen && rightBarContent === 'event' && (
-      <RightBar 
-        isRightBarOpen={isRightBarOpen} 
-        setIsRightBarOpen={setIsRightBarOpen} 
-        rightBarTitle="Add Event"
-        className="fixed right-0 top-0 h-screen w-80"
-      >
-        <Form
-          formFields={eventFormFields}
-          fields={eventForm(calendars)}
+      ) : (
+        <Popup 
+          isOpen={isRightBarOpen} 
+          onClose={() => setIsRightBarOpen(false)} 
+          title="Add Event"
         >
-          {({ formDetails, setFormDetails }) => (
-            <div className="mb-2">
-              {/* Color Selection */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
-                <div className="flex items-center space-x-2 mt-2">
-                  {colorsForEvent.map((option, index) => (
-                    <label key={index} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="color"
-                        value={option.color}
-                        checked={formDetails.color === option.color}
-                        onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
-                        className="hidden"
-                      />
-                      <span
-                        className="w-6 h-6 rounded-full cursor-pointer"
-                        style={{
-                          backgroundColor: option.color,
-                          border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
-                        }}
-                      ></span>
-                    </label>
-                  ))}
+          <Form
+            formFields={eventFormFields}
+            fields={eventForm(calendars)}
+          >
+            {({ formDetails, setFormDetails }) => (
+              <div className="mb-2">
+                {/* Color Selection */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
+                  <div className="flex items-center space-x-2 mt-2">
+                    {colorsForEvent.map((option, index) => (
+                      <label key={index} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="color"
+                          value={option.color}
+                          checked={formDetails.color === option.color}
+                          onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
+                          className="hidden"
+                        />
+                        <span
+                          className="w-6 h-6 rounded-full cursor-pointer"
+                          style={{
+                            backgroundColor: option.color,
+                            border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
+                          }}
+                        ></span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
+                <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
               </div>
-              <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
-            </div>
-          )}
-        </Form>
-      </RightBar>
-      )}
+            )}
+          </Form>
+        </Popup>
+      )
+    )}
     </div>
   ); 
 };

@@ -7,5 +7,6 @@ import AccordionItem from "./AccordionItem";
 import ProfileMenu from "./ProfileMenu";
 import { RightBar } from "./RightBar";
 import Form from "./Form";
+import {Popup} from "./Popup";
 
-export {Button, Notification, TagLine, ProfileIcon, Accordion, AccordionItem, ProfileMenu, RightBar, Form}
+export {Button, Notification, Popup, TagLine, ProfileIcon, Accordion, AccordionItem, ProfileMenu, RightBar, Form}
