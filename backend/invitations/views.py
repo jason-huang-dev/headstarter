@@ -14,6 +14,7 @@ from rest_framework import status
 from .models import CalendarInvite
 from calendars.models import Calendar
 from .serializers import CalendarInviteSerializer
+from users.models import CustomUser
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 
@@ -54,15 +55,15 @@ def create_invitation(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def respond_invitation(request, token):
+def respond_invitation(request):
     """
     Respond to a calendar invitation (accept or decline).
 
-    ::param str token : The token associated with the invitation.
     ::param str action : The action to take ('accept' or 'decline').
     ::return Response : A JSON response indicating the success or failure of the operation.
     """
     action = request.data.get('action')  # 'accept' or 'decline'
+    token = request.data.get('token')
 
     if action not in ['accept', 'decline']:
         return Response({'error': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
@@ -75,6 +76,11 @@ def respond_invitation(request, token):
 
         if action == 'accept':
             invite.accepted = True
+            shared_user = get_object_or_404(CustomUser, email=invite.email)
+            if shared_user:
+                invite.calendar.shared_users.add(shared_user)
+            else:
+                return Response({'error': 'Shared user not found'}, status=status.HTTP_404_NOT_FOUND)
         elif action == 'decline':
             invite.declined = True
 

@@ -13,14 +13,15 @@ const localizer = momentLocalizer(moment);
 
 /**
  * Returns a calendar view component
+ * @param {Array[Objects]} events - the events to be displayed/rendered
  * @param {boolean} isRightBarOpen - if the dashboard's right bar is open
  * @param {Function} setIsRightBarOpen - funtion to set the dashboard's right bar's open status
  * @param {String} rightBarContent - String stating what the rightbar should display
  * @param {Function} setRightBarContent - function to set the rightbar content string
  * @returns A div containing the Calendar component
  */
-const CalendarOverview = ({isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent }) => {
-  const {calendars, events, updateEvent, deleteEvent} = userDataHandler()
+const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent }) => {
+  const {calendars, updateEvent, deleteEvent} = userDataHandler()
   const [eventDetails, setEventDetails] = useState({}); 
   
   const editEventHandler = () => {

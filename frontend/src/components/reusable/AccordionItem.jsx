@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Eye } from 'lucide-react';
+import { Eye, Edit2 } from 'lucide-react';
 
 /**
  * AccordionItem component that represents an individual item within an accordion list.
@@ -19,11 +19,13 @@ import { Eye } from 'lucide-react';
  * @param {boolean} props.isActive - The initial active state of the accordion item.
  * @param {Function} props.onTitleClick - Function to be called when the title is clicked.
  * @param {string} props.link - The URL to link to when the title is clicked.
+ * @param {boolean} props.editableContent - states if the content is editable
+ * @param {Function} props.onEditClick - function to handel what happens on edit
  * @param {React.ReactNode} props.children - The children components to be displayed when the accordion item is open.
  * @returns {JSX.Element} The rendered AccordionItem component.
  */
 
-const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleClick, link }) => {
+const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleClick, link, editableContent, onEditClick }) => {
     const [isOpen, setIsOpen] = useState(isActive);
 
     /**
@@ -37,6 +39,7 @@ const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleCl
     return (
     <div className="accordion-item">
         <div className="flex justify-between cursor-pointer ml-5 p-3" onClick={handleToggle}>
+            {isActive && <Eye color="#7ADB78" className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
             <div className="flex items-center text-gray-400 hover:text-black transition-colors">
                 {IconComponent && <IconComponent className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
                 {displayTitle && link ? (
@@ -49,7 +52,11 @@ const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleCl
                     </span>
                 )}
             </div>
-            {isActive && <Eye color="#7ADB78" className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
+            {editableContent && 
+                <div>
+                    <Edit2 className="text-blue-500 hover:text-black `w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`" onClick={onEditClick}></Edit2>
+                </div>
+            }
         </div>
     </div>
     );

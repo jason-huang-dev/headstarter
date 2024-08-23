@@ -90,7 +90,7 @@ const userDataHandler = () => {
 
   {/* Beginning of User Data Fetching */}
   // Reusable function to fetch data from the API and set the corresponding state
-  const fetchData = async (url, setState) => {
+  const fetchData = async (url, setState, setState2 = null) => {
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -105,6 +105,7 @@ const userDataHandler = () => {
 
       if (response.ok) {
         setState(data);
+        if (setState2) setState2(data);
       } else {
         console.error('Error from server:', data);
       }
@@ -116,7 +117,7 @@ const userDataHandler = () => {
   useEffect(() => {
     if (user && user.token) {
       fetchData('http://localhost:8000/api/calendars/', setCalendars);
-      fetchData('http://localhost:8000/api/events/', setEvents);
+      fetchData('http://localhost:8000/api/events/', setEvents, setFilteredEvents);
       fetchData('http://localhost:8000/api/invitations/', setInvitations);
     }
   }, [user?.token]);
@@ -183,6 +184,8 @@ const userDataHandler = () => {
   }, [user.token]);
 
   // Delete an existing event
+  {/* TODO after deletion you can still see and interact with the 
+    deleted event in UI although it is gone from backend database */}
   const deleteEvent = useCallback(async (updatedDetails) => {
     console.log(`Deleting Event ${updatedDetails.id}`);
 
@@ -223,9 +226,9 @@ const userDataHandler = () => {
 
       const data = await response.json();
       console.log('Response from Add Calendar:', data);
-
+      {/* TODO decide if the backend response should also return an array of invitation objects along with calendar */}
       if (response.ok) {
-        setCalendars(prevCalendars => [...prevCalendars, data]);
+        setCalendars(prevCalendars => [...prevCalendars, data.calendar]);
       } else {
         console.error('Error from server:', data);
       }
@@ -294,7 +297,10 @@ const userDataHandler = () => {
           'Content-Type': 'application/json',
           'Authorization': `Token ${user.token}`,
         },
-        body: JSON.stringify({ action: action }),
+        body: JSON.stringify({ 
+          action: action, 
+          token: invite_token
+        }),
       });
 
       if (response.ok) {

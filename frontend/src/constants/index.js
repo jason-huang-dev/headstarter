@@ -115,7 +115,8 @@ const sideBarAccordians = (calendars, shared_calendars, invitations) => [
     iconType: 'component',
     contents: calendars,
     content_key: "cal_id",
-    content_title: "title"
+    content_title: "title",
+    editable_content: true
   },
   {
     title: "Shared Calendars",
@@ -123,7 +124,8 @@ const sideBarAccordians = (calendars, shared_calendars, invitations) => [
     iconType: 'component',
     contents: shared_calendars,
     content_key: "cal_id",
-    content_title: "title"
+    content_title: "title",
+    editable_content: false
   },
   // {
   //   title: "Invitations",

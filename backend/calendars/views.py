@@ -88,12 +88,13 @@ def create_calendar(request):
         # Serialize and return the calendar data and invitations
         calendar_serializer = CalendarSerializer(calendar)
         invite_serializer = CalendarInviteSerializer(invitations, many=True)
-
+        
+        ##TODO decide on if this response should return both calendar and invitations or just calendar
         return Response({
             'calendar': calendar_serializer.data, 
             'invitations': invite_serializer.data,
             }, status=status.HTTP_201_CREATED)
-    
+        
     except ValidationError as e:
         logger.exception("Validation error")
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

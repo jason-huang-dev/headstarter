@@ -26,7 +26,20 @@ const Dashboards = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
-  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent} = userDataHandler();
+  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar} = userDataHandler();
+  const [calendarFormFields, setCalendarFormFields] = useState({
+    title: '',
+    addPeople: false,
+    emails: '',
+    email_list: [] // Maintain a list of emails
+  })
+  const [eventFormFields, setEventFormFields] = useState({
+    cal_id: calendars[0]?.cal_id || 'None',
+    title: '',
+    start: '',
+    end: '',
+    color: '#15803d', // Default color selection
+  })
 
   const handleTitleClick = (index) => {
     console.log(`Title clicked: ${index}`);
@@ -56,8 +69,26 @@ const Dashboards = () => {
     });
   };
 
+  const handleEditClick = (index) => {
+    const calendar = calendars[index];
+    console.log("Edit clicked: ", calendar);
+  
+    // Extract email addresses from shared_users, but only people that are registered
+    const emailList = calendar.shared_users ? calendar.shared_users.map(user => user.email) : [];
+  
+    setCalendarFormFields({
+      title: calendar.title,
+      addPeople: emailList.length > 0, // true if there are shared users
+      emails: '',
+      email_list: emailList // Set the extracted email list
+    });
+  
+    setRightBarContent('edit_calendar');
+    setIsRightBarOpen(true);
+  }
+
   const addCalendarHandler = (setIsOpen) => {
-    setRightBarContent('calendar'); 
+    setRightBarContent('add_calendar'); 
     setIsRightBarOpen(true); 
     setIsOpen(false);
   };
@@ -73,8 +104,21 @@ const Dashboards = () => {
     setIsRightBarOpen(false);
   }
 
+  const submitEditCalendar = (calendarDetails) =>{
+    console.log("Calendar Update: ", calendarDetails)
+    updateCalendar(calendarDetails)
+    setIsRightBarOpen(false);
+  }
+
+  const handleCalendarDelete = (calendarDetails) =>{
+    console.log("Delete Calendar: ", calendarDetails)
+    deleteCalendar(calendarDetails)
+    setIsRightBarOpen(false);
+  }
+
   const submitAddEvent = (eventDetails) =>{
     addEvent(eventDetails);
+    console.log("Events after addition: ", events)
     setIsRightBarOpen(false);
   }
 
@@ -109,6 +153,8 @@ const Dashboards = () => {
                       displayTitle={isOpen}
                       isActive={isOpen && activeItems.includes(contentIndex)}
                       onTitleClick={() => handleItemClick(contentIndex)}
+                      onEditClick={() => handleEditClick(contentIndex)}
+                      editableContent={item.editable_content}
                       // link={`/dashboards/${calendar.cal_id}`} 
                     />
                   ))}
@@ -137,8 +183,9 @@ const Dashboards = () => {
 
       {/* Main calendar view component */}
       {!isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-80' : ''}`}>
-        {/* Pass rightbar handlers to CalendarOverview */}
+        {/* Pass filteredEvents and rightbar handlers to CalendarOverview */}
         <CalendarOverview 
+          events={filteredEvents}
           isRightBarOpen={isRightBarOpen} 
           setIsRightBarOpen={setIsRightBarOpen} 
           rightBarContent={rightBarContent} 
@@ -151,20 +198,15 @@ const Dashboards = () => {
       </div>)}
 
       {/* Content for adding a new calendar */}
-      {isRightBarOpen && rightBarContent === 'calendar' && (
+      {isRightBarOpen && (rightBarContent === 'add_calendar' || rightBarContent === 'edit_calendar') && (
         <RightBar 
          isRightBarOpen={isRightBarOpen} 
          setIsRightBarOpen={setIsRightBarOpen} 
-         rightBarTitle="Add Calendar"
+         rightBarTitle={rightBarContent === 'add_calendar' ? "Add Calendar": "Edit Calendar"}
          className="fixed right-0 top-0 h-screen w-80"
          >
           <Form
-            formFields={{
-              title: '',
-              addPeople: false,
-              emails: '',
-              email_list: [] // Maintain a list of emails
-            }}
+            formFields={calendarFormFields}
             fields={calendarForm}
           >
             {({ formDetails, setFormDetails }) => (
@@ -187,7 +229,16 @@ const Dashboards = () => {
                     </button>
                   </div>
                 ))}
-                <Button onClick={() => submitAddCalendar(formDetails)}>Add Calendar</Button>
+                <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
+                  {rightBarContent === 'add_calendar' ? "Add Calendar": "Edit Calendar"}
+                </Button>
+                {rightBarContent === 'edit_calendar' &&
+                <Button 
+                  className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                  onClick={() => handleCalendarDelete(formDetails)}
+                >
+                  Delete
+                </Button>}
               </div>
             )}
           </Form>
@@ -203,13 +254,7 @@ const Dashboards = () => {
         className="fixed right-0 top-0 h-screen w-80"
       >
         <Form
-          formFields={{
-            cal_id: calendars[0]?.cal_id || 'None',
-            title: '',
-            start: '',
-            end: '',
-            color: '#15803d', // Default color selection
-          }}
+          formFields={eventFormFields}
           fields={eventForm(calendars)}
         >
           {({ formDetails, setFormDetails }) => (
