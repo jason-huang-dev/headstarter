@@ -26,7 +26,7 @@ const Dashboards = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false); 
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
-  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar} = userDataHandler();
+  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar, fetchSharedCalendars, acceptInvitation, updateInvitationStatus} = userDataHandler();
   const [calendarFormFields, setCalendarFormFields] = useState({
     title: '',
     addPeople: false,
@@ -40,6 +40,10 @@ const Dashboards = () => {
     end: '',
     color: '#15803d', // Default color selection
   })
+
+  useEffect(() => {
+    fetchSharedCalendars();
+  }, []);
 
   const handleTitleClick = (index) => {
     console.log(`Title clicked: ${index}`);

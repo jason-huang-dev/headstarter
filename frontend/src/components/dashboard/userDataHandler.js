@@ -119,6 +119,7 @@ const userDataHandler = () => {
       fetchData('http://localhost:8000/api/calendars/', setCalendars);
       fetchData('http://localhost:8000/api/events/', setEvents, setFilteredEvents);
       fetchData('http://localhost:8000/api/invitations/', setInvitations);
+      fetchSharedCalendars();
     }
   }, [user?.token]);
 
@@ -317,6 +318,29 @@ const userDataHandler = () => {
     }
   }, [user.token]);
 
+  const fetchSharedCalendars = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/calendars/shared/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+      });
+  
+      const data = await response.json();
+      console.log('Response from Shared Calendars:', data);
+  
+      if (response.ok) {
+        setSharedCalendars(data);
+      } else {
+        console.error('Error from server:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching shared calendars:', error);
+    }
+  }, [user.token]);
+
   return {
     calendars,
     shared_calendars,
@@ -332,7 +356,8 @@ const userDataHandler = () => {
     deleteEvent,
     updateCalendar,
     deleteCalendar,
-    acceptInvitation
+    acceptInvitation,
+    fetchSharedCalendars
   };
 };
 

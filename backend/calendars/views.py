@@ -188,3 +188,20 @@ def delete_calendar(request, cal_id):
     except Exception as e:
         logger.exception("Error deleting calendar")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_shared_calendars(request):
+    """
+    Retrieve all shared calendars for the authenticated user.
+
+    ::param HTTPRequest request : The HTTP request object
+    ::return Response : A JSON response containing all the shared calendars for the user
+    """
+    try:
+        shared_calendars = Calendar.objects.filter(shared_users=request.user)
+        serializer = CalendarSerializer(shared_calendars, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception("Error retrieving shared calendars")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

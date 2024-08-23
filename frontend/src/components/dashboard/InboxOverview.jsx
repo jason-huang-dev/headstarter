@@ -9,8 +9,19 @@ import userDataHandler from './userDataHandler'; // Import userDataHandler
  * @returns A div containing the Inbox component
  */
 const InboxOverview = ({ invitations }) => {
-  const { acceptInvitation, setInvitations } = userDataHandler(); // Get acceptInvitation and setInvitations from userDataHandler
+  const { acceptInvitation, fetchSharedCalendars } = userDataHandler(); // Get acceptInvitation and fetchSharedCalendars from userDataHandler
   const [updatedInvitations, setUpdatedInvitations] = useState(invitations);
+
+  useEffect(() => {
+    setUpdatedInvitations(invitations);
+  }, [invitations]);
+
+  const handleInvitationResponse = async (token, action) => {
+    await acceptInvitation(token, action);
+    await fetchSharedCalendars(); // Refresh the list of shared calendars
+    // Update local state to remove the responded invitation
+    // setUpdatedInvitations(prev => prev.filter(inv => inv.token !== token));
+  };
 
   return (
     <div className="h-full pt-5">
@@ -28,10 +39,10 @@ const InboxOverview = ({ invitations }) => {
                   <span className="ml-2 text-sm">{invitation.title}</span>
                 </div>
                 <div className="flex space-x-2">
-                  <Button onClick={() => acceptInvitation(invitation.token, 'accept')} className="bg-green-500 text-white">
+                  <Button onClick={() => handleInvitationResponse(invitation.token, 'accept')} className="bg-green-500 text-white">
                     Accept
                   </Button>
-                  <Button onClick={() => acceptInvitation(invitation.token, 'decline')} className="bg-red-500 text-white">
+                  <Button onClick={() => handleInvitationResponse(invitation.token, 'decline')} className="bg-red-500 text-white">
                     Decline
                   </Button>
                 </div>
