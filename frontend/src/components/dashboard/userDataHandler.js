@@ -285,6 +285,32 @@ const userDataHandler = () => {
     }
   }, [user.token]);
 
+  // Add the acceptInvitation function
+  const acceptInvitation = useCallback(async (invite_token, action) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/invitations/accept/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+        body: JSON.stringify({ action: action }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Invitation accepted:', data);
+        // Update invitations state to reflect the change
+        setInvitations(prevInvitations => prevInvitations.filter(invite => invite.token !== invite_token));
+      } else {
+        const error = await response.json();
+        console.error('Error accepting invitation:', error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }, [user.token]);
+
   return {
     calendars,
     shared_calendars,
@@ -300,6 +326,7 @@ const userDataHandler = () => {
     deleteEvent,
     updateCalendar,
     deleteCalendar,
+    acceptInvitation
   };
 };
 

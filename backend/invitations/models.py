@@ -11,6 +11,9 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from calendars.models import Calendar  # Adjust this import to match your project structure
 
+
+def generate_token():
+    return get_random_string(32)
 class CalendarInvite(models.Model):
     """
     This model handles the invitation process for sharing calendars with other users via email.
@@ -26,9 +29,9 @@ class CalendarInvite(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     email = models.EmailField()
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    token = models.CharField(max_length=50, unique=True, default=get_random_string)
+    token = models.CharField(max_length=50, unique=True, default=generate_token)
     accepted = models.BooleanField(default=False)
-    declined = models.BooleanField(default=False)  # New field to track declined invitations
+    declined = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

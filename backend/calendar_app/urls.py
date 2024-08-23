@@ -47,7 +47,7 @@ urlpatterns = [
     path('api/calendars/', calendar_view, name='calendar_view'), # Handles GET and POST for all calendars
     path('api/calendars/<int:calendar_id>/', calendar_detailed_view, name='calendar_detailed_view'),  # Handles PUT, DELETE, GET for individual calendars
         
-    ## Friends Paths
+    ## Invitations Paths
     path('api/invitations/create/', create_invitation, name='create_invitation'),
     path('api/invitations/accept/', respond_invitation, name='accept_decline_invitation'),
     path('api/invitations/', get_invites_by_email, name='get_invites_by_email'),
