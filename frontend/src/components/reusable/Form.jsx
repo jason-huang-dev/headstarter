@@ -33,7 +33,7 @@ const Form = ({ fields, formFields, children }) => {
   // State management for form data and validation errors.
   const [formDetails, setFormDetails] = useState(formFields);
   const [errors, setErrors] = useState({});
-
+  console.log(formDetails)
   /**
    * Handles changes to form inputs and validates fields.
    * @param {Event} e - Input change event.

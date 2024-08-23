@@ -155,11 +155,11 @@ const userDataHandler = () => {
   }, [user.token]);
 
   // Update an existing event
-  const updateEvent = useCallback(async (eventId, updatedDetails) => {
-    console.log(`Updating Event ${eventId}:`, updatedDetails);
+  const updateEvent = useCallback(async (updatedDetails) => {
+    console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/events/${eventId}/`, {
+      const response = await fetch(`http://localhost:8000/api/events/${updatedDetails.id}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -172,8 +172,8 @@ const userDataHandler = () => {
       console.log('Response from Update Event:', data);
 
       if (response.ok) {
-        setEvents(prevEvents => prevEvents.map(event => event.id === eventId ? data : event));
-        setFilteredEvents(prevEvents => prevEvents.map(event => event.id === eventId ? data : event));
+        setEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
+        setFilteredEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
       } else {
         console.error('Error from server:', data);
       }
@@ -183,11 +183,11 @@ const userDataHandler = () => {
   }, [user.token]);
 
   // Delete an existing event
-  const deleteEvent = useCallback(async (eventId) => {
-    console.log(`Deleting Event ${eventId}`);
+  const deleteEvent = useCallback(async (updatedDetails) => {
+    console.log(`Deleting Event ${updatedDetails.id}`);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/events/${eventId}/`, {
+      const response = await fetch(`http://localhost:8000/api/events/${updatedDetails.id}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -196,8 +196,8 @@ const userDataHandler = () => {
       });
 
       if (response.ok) {
-        setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
-        setFilteredEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
+        setEvents(prevEvents => prevEvents.filter(event => event.id !== updatedDetails.id));
+        setFilteredEvents(prevEvents => prevEvents.filter(event => event.id !== updatedDetails.id));
       } else {
         const data = await response.json();
         console.error('Error from server:', data);
