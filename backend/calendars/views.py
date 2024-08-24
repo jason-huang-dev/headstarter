@@ -172,14 +172,21 @@ def update_calendar(request, cal_id):
 
 def delete_calendar(request, cal_id):
     """
-    Delete an existing calendar for the authenticated user.
+    Delete an existing calendar for the authenticated user, but prevent deletion if it's the only calendar.
 
     ::param HTTPRequest request : The HTTP request object
     ::param int cal_id : The ID of the calendar to delete
     ::return Response : A JSON response indicating success or an error message
     """
     try:
+        # Get the calendar to be deleted
         calendar = get_object_or_404(Calendar, pk=cal_id, user=request.user)
+
+        # Check if it's the only calendar
+        if Calendar.objects.filter(user=request.user).count() == 1:
+            return Response({'error': 'Cannot delete the last calendar'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Proceed with deletion
         calendar.delete()
         return Response({'success': 'Calendar deleted'}, status=status.HTTP_200_OK)
 
