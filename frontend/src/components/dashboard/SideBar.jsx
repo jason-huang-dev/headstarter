@@ -12,6 +12,7 @@ const SidebarContext = React.createContext();
  *
  * @component
  * @param {Object} props - The component props.
+ * @param {Object} user - The user's profile to be displayed
  * @param {boolean} props.isRightBarOpen - Indicates if the right sidebar is open.
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @returns {JSX.Element} The Drawer component.

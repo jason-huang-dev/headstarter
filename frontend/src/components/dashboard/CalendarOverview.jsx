@@ -6,7 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from './CustomToolbar';
 import { RightBar, Form, Button } from "../reusable";
 import { eventForm, colorsForEvent } from "../../constants";
-import userDataHandler from "./userDataHandler";
+import { useUserContext } from "../../contexts/userDataHandler";
 
 // Initialize the moment localizer
 const localizer = momentLocalizer(moment);
@@ -21,7 +21,7 @@ const localizer = momentLocalizer(moment);
  * @returns A div containing the Calendar component
  */
 const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarContent, setRightBarContent, popupIsOpen }) => {
-  const {calendars, updateEvent, deleteEvent} = userDataHandler()
+  const {calendars, updateEvent, deleteEvent} = useUserContext()
   const [eventDetails, setEventDetails] = useState({}); 
   
   const editEventHandler = () => {

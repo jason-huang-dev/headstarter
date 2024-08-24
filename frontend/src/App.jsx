@@ -1,6 +1,7 @@
 import { SignIn, Body, Team, WhenToMeet, Dashboards} from './pages';
 import { useRoutes, BrowserRouter as Router } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { UserProvider } from './contexts/userDataHandler';
 import './App.css'
 
 /**
@@ -58,7 +59,9 @@ function App() {
 export default function AppWithRouter() {
   return (
     <Router>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </Router>
   );
 }

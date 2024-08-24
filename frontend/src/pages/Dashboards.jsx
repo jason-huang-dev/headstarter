@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../constants"; 
 import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
-import { SideBar, CalendarOverview, userDataHandler, InboxOverview} from '../components/dashboard';
+import { SideBar, CalendarOverview, InboxOverview} from '../components/dashboard';
+import { useUserContext } from '../contexts/userDataHandler';
 import { X , Inbox} from 'lucide-react';
 
 
@@ -27,7 +28,8 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar, fetchSharedCalendars, acceptInvitation, updateInvitationStatus} = userDataHandler();
+  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar, acceptInvitation, updateInvitationStatus} = useUserContext();
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [calendarFormFields, setCalendarFormFields] = useState({
     title: '',
     addPeople: false,
@@ -41,10 +43,8 @@ const Dashboards = () => {
     end: '',
     color: '#15803d', // Default color selection
   })
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    fetchSharedCalendars();
     // Function to handle screen resizing
     const handleResize = () => {
       const width = window.innerWidth;
@@ -134,6 +134,7 @@ const Dashboards = () => {
   const handleCalendarDelete = (calendarDetails) =>{
     console.log("Delete Calendar: ", calendarDetails)
     deleteCalendar(calendarDetails)
+
     setIsRightBarOpen(false);
   }
 
@@ -216,7 +217,7 @@ const Dashboards = () => {
       </div>)}
       
       {isOpenInbox && (<div className={`flex-grow h-full ${isRightBarOpen ? 'pr-100' : ''}`}>
-        <InboxOverview invitations={invitations}/>  {/* Pass invitations to InboxOverview */}
+        <InboxOverview/>
       </div>)}
 
       {/* Content for adding a new calendar */}

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const userDataHandler = () => {
+const UserContext = createContext();
+
+const UserProvider = ({ children }) => {
   const location = useLocation();
 
   /**
@@ -119,7 +121,7 @@ const userDataHandler = () => {
       fetchData('http://localhost:8000/api/calendars/', setCalendars);
       fetchData('http://localhost:8000/api/events/', setEvents, setFilteredEvents);
       fetchData('http://localhost:8000/api/invitations/', setInvitations);
-      fetchSharedCalendars();
+      fetchData('http://localhost:8000/api/calendars/shared/', setSharedCalendars);
     }
   }, [user?.token]);
 
@@ -127,8 +129,8 @@ const userDataHandler = () => {
   // Adds a new event 
   const addEvent = useCallback(async (eventDetails) => {
     if (!eventDetails.title.trim()) {
-        alert("Event title is required!"); // Show an alert if the event title is missing
-        return;
+      alert("Event title is required!");
+      return;
     }
     console.log('Adding Event:', eventDetails);
 
@@ -154,7 +156,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
@@ -182,7 +184,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   // Delete an existing event
   {/* TODO after deletion you can still see and interact with the 
@@ -200,8 +202,17 @@ const userDataHandler = () => {
       });
 
       if (response.ok) {
-        setEvents(prevEvents => prevEvents.filter(event => event.id !== updatedDetails.id));
-        setFilteredEvents(prevEvents => prevEvents.filter(event => event.id !== updatedDetails.id));
+        setEvents(prevEvents => {
+          const updatedEvents = prevEvents.filter(event => event.id !== updatedDetails.id);
+          console.log('Updated Events:', updatedEvents);
+          return updatedEvents;
+        });
+
+        setFilteredEvents(prevEvents => {
+          const updatedFilteredEvents = prevEvents.filter(event => event.id !== updatedDetails.id);
+          console.log('Updated Filtered Events:', updatedFilteredEvents);
+          return updatedFilteredEvents;
+        });
       } else {
         const data = await response.json();
         console.error('Error from server:', data);
@@ -209,7 +220,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   {/* Beginning of Calendar CRUD Requests */}
   const addCalendar = useCallback(async (calendarDetails) => {
@@ -236,7 +247,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   // Update an existing calendar
   const updateCalendar = useCallback(async (calendarId, updatedDetails) => {
@@ -263,7 +274,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   // Delete an existing calendar
   const deleteCalendar = useCallback(async (calendarId) => {
@@ -287,7 +298,7 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   // Add the acceptInvitation function
   const acceptInvitation = useCallback(async (invite_token, action) => {
@@ -316,49 +327,33 @@ const userDataHandler = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user.token]);
+  }, [user?.token]);
 
-  const fetchSharedCalendars = useCallback(async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/calendars/shared/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${user.token}`,
-        },
-      });
-  
-      const data = await response.json();
-      console.log('Response from Shared Calendars:', data);
-  
-      if (response.ok) {
-        setSharedCalendars(data);
-      } else {
-        console.error('Error from server:', data);
-      }
-    } catch (error) {
-      console.error('Error fetching shared calendars:', error);
-    }
-  }, [user.token]);
-
-  return {
-    calendars,
-    shared_calendars,
-    invitations,
-    events,
-    filteredEvents,
-    setCalendars,
-    setEvents,
-    setFilteredEvents,
-    addEvent,
-    addCalendar,
-    updateEvent,
-    deleteEvent,
-    updateCalendar,
-    deleteCalendar,
-    acceptInvitation,
-    fetchSharedCalendars
-  };
+  return (
+    <UserContext.Provider
+      value={{
+        calendars,
+        shared_calendars,
+        invitations,
+        events,
+        filteredEvents,
+        setCalendars,
+        setEvents,
+        setFilteredEvents,
+        addEvent,
+        addCalendar,
+        updateEvent,
+        deleteEvent,
+        updateCalendar,
+        deleteCalendar,
+        acceptInvitation,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export default userDataHandler;
+const useUserContext = () => useContext(UserContext);
+
+export { UserProvider, useUserContext };
