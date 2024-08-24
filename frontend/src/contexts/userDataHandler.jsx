@@ -50,14 +50,6 @@ const UserProvider = ({ children }) => {
    */
   const [events, setEvents] = useState([]);
 
-  /**
-   * FilteredEvent object representing an event that matches certain filtering criteria.
-   * 
-   * @typedef {Event} FilteredEvent
-   * 
-   * @type {FilteredEvent[]}
-   */
-  const [filteredEvents, setFilteredEvents] = useState([]);
 
   /**
    * Invitation object representing a calendar invitation sent to a user.
@@ -119,7 +111,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (user && user.token) {
       fetchData('http://localhost:8000/api/calendars/', setCalendars);
-      fetchData('http://localhost:8000/api/events/', setEvents, setFilteredEvents);
+      fetchData('http://localhost:8000/api/events/', setEvents);
       fetchData('http://localhost:8000/api/invitations/', setInvitations);
       fetchData('http://localhost:8000/api/calendars/shared/', setSharedCalendars);
     }
@@ -149,7 +141,6 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         setEvents(prevEvents => [...prevEvents, data]);
-        setFilteredEvents(prevEvents => [...prevEvents, data]);
       } else {
         console.error('Error from server:', data);
       }
@@ -250,11 +241,11 @@ const UserProvider = ({ children }) => {
   }, [user?.token]);
 
   // Update an existing calendar
-  const updateCalendar = useCallback(async (calendarId, updatedDetails) => {
-    console.log(`Updating Calendar ${calendarId}:`, updatedDetails);
+  const updateCalendar = useCallback(async (cal_id, updatedDetails) => {
+    console.log(`Updating Calendar ${cal_id}:`, updatedDetails);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/calendars/${calendarId}/`, {
+      const response = await fetch(`http://localhost:8000/api/calendars/${cal_id}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -267,7 +258,7 @@ const UserProvider = ({ children }) => {
       console.log('Response from Update Calendar:', data);
 
       if (response.ok) {
-        setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === calendarId ? data : calendar));
+        setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === cal_id ? data : calendar));
       } else {
         console.error('Error from server:', data);
       }
@@ -277,11 +268,11 @@ const UserProvider = ({ children }) => {
   }, [user?.token]);
 
   // Delete an existing calendar
-  const deleteCalendar = useCallback(async (calendarId) => {
-    console.log(`Deleting Calendar ${calendarId}`);
+  const deleteCalendar = useCallback(async (calendarDetails) => {
+    console.log("Deleting Calendar: ",  calendarDetails);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/calendars/${calendarId}/`, {
+      const response = await fetch(`http://localhost:8000/api/calendars/${calendarDetails.cal_id}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -290,7 +281,7 @@ const UserProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        setCalendars(prevCalendars => prevCalendars.filter(calendar => calendar.cal_id !== calendarId));
+        setCalendars(prevCalendars => prevCalendars.filter(calendar => calendar.cal_id !== calendarDetails.cal_id));
       } else {
         const data = await response.json();
         console.error('Error from server:', data);
@@ -336,10 +327,8 @@ const UserProvider = ({ children }) => {
         shared_calendars,
         invitations,
         events,
-        filteredEvents,
         setCalendars,
         setEvents,
-        setFilteredEvents,
         addEvent,
         addCalendar,
         updateEvent,

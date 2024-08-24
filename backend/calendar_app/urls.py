@@ -45,7 +45,7 @@ urlpatterns = [
 
     ## Calendar Paths
     path('api/calendars/', calendar_view, name='calendar_view'), # Handles GET and POST for all calendars
-    path('api/calendars/<int:calendar_id>/', calendar_detailed_view, name='calendar_detailed_view'),  # Handles PUT, DELETE, GET for individual calendars
+    path('api/calendars/<int:cal_id>/', calendar_detailed_view, name='calendar_detailed_view'),  # Handles PUT, DELETE, GET for individual calendars
     path('api/calendars/shared/', get_shared_calendars, name='get_shared_calendars'),
 
     ## Invitations Paths

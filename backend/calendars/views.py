@@ -120,7 +120,7 @@ def calendar_detailed_view(request, cal_id=None):
         return Response({'error': 'cal_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
-        return 
+        return get_calendar(request, cal_id)
     elif request.method == 'PUT':
         return update_calendar(request, cal_id)
     elif request.method == 'DELETE':
@@ -135,7 +135,7 @@ def get_calendar(request, cal_id):
     ::raises ValidationError : Raised if the provided data is invalid
     """
     try:
-        calendars = get_object_or_404(Calendar, pk=cal_id, user=request.user)
+        calendars = get_object_or_404(Calendar, cal_id=cal_id)
         serializer = CalendarSerializer(calendars, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:

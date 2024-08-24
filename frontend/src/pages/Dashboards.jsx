@@ -28,8 +28,9 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, invitations ,events, filteredEvents, setFilteredEvents, addCalendar, addEvent, updateCalendar, deleteCalendar, acceptInvitation, updateInvitationStatus} = useUserContext();
+  const {calendars, shared_calendars, invitations ,events, addCalendar, addEvent, updateCalendar, deleteCalendar, acceptInvitation, updateInvitationStatus} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
     title: '',
     addPeople: false,
@@ -98,6 +99,7 @@ const Dashboards = () => {
     const emailList = calendar.shared_users ? calendar.shared_users.map(user => user.email) : [];
   
     setCalendarFormFields({
+      cal_id: calendar.cal_id,
       title: calendar.title,
       addPeople: emailList.length > 0, // true if there are shared users
       emails: '',
@@ -110,6 +112,12 @@ const Dashboards = () => {
 
   const addCalendarHandler = (setIsOpen) => {
     setRightBarContent('add_calendar'); 
+    setCalendarFormFields({
+      title: "",
+      addPeople: false, // true if there are shared users
+      emails: '',
+      email_list: [] // Set the extracted email list
+    });
     setIsRightBarOpen(true); 
     setIsOpen(false);
   };
@@ -127,7 +135,7 @@ const Dashboards = () => {
 
   const submitEditCalendar = (calendarDetails) =>{
     console.log("Calendar Update: ", calendarDetails)
-    updateCalendar(calendarDetails)
+    updateCalendar(calendarDetails.cal_id,calendarDetails)
     setIsRightBarOpen(false);
   }
 
