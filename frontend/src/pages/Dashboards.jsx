@@ -189,7 +189,7 @@ const Dashboards = () => {
                     isActive={isOpen && activeItems.includes(content[item.content_key])}
                     onTitleClick={() => handleItemClick(content[item.content_key])}
                     onEditClick={() => handleEditClick(content[item.content_key])}
-                    editableContent={true}
+                    editableContent={item.editable_content}
                     // link={`/dashboards/${calendar.cal_id}`} 
                   />
                 ))}

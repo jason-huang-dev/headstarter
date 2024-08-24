@@ -284,6 +284,9 @@ const UserProvider = ({ children }) => {
         setCalendars(prevCalendars => prevCalendars.filter(calendar => calendar.cal_id !== calendarDetails.cal_id));
       } else {
         const data = await response.json();
+        if (data.error === "Cannot delete the last calendar"){
+          alert("You must have at least 1 personal calendar");
+        }
         console.error('Error from server:', data);
       }
     } catch (error) {

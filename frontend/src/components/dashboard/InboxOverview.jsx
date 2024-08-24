@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../reusable'; // Adjust import path as necessary
-import { Inbox } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { useUserContext } from '../../contexts/userDataHandler';
 /**
  * Returns an inbox view component
@@ -28,7 +28,7 @@ const InboxOverview = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="flex items-center justify-center leading-4">
-                    <Inbox style={{ width: '32px', height: '32px' }} />
+                    <Mail style={{ width: '32px', height: '32px' }} />
                   </div>
                   <span className="ml-2 text-sm">{invitation.title}</span>
                 </div>
