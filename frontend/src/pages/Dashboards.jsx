@@ -4,7 +4,8 @@ import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../c
 import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, InboxOverview} from '../components/dashboard';
 import { useUserContext } from '../contexts/userDataHandler';
-import { X , Inbox} from 'lucide-react';
+import { X , Inbox, Calendar as CalendarIcon} from 'lucide-react';
+import {CalendarUser} from "../assets/svg";
 
 
 /**
@@ -28,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, invitations ,events, addCalendar, addEvent, updateCalendar, deleteCalendar, acceptInvitation, updateInvitationStatus} = useUserContext();
+  const {calendars, shared_calendars,events, addCalendar, addEvent, updateCalendar, deleteCalendar} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -38,7 +39,7 @@ const Dashboards = () => {
     email_list: [] // Maintain a list of emails
   })
   const [eventFormFields, setEventFormFields] = useState({
-    cal_id: calendars[0]?.cal_id || 'None',
+    cal_id: 'None',
     title: '',
     start: '',
     end: '',
@@ -72,18 +73,18 @@ const Dashboards = () => {
     );
   };
 
-  const handleItemClick = (index) => {
-    console.log(`Item clicked: ${index}`);
+  const handleItemClick = (cal_id) => {
+    console.log(`Calendar clicked with ID: ${cal_id}`);
     
     setActiveItems((prevIndices) => {
       // Toggle the active item
-      const updatedIndices = prevIndices.includes(index)
-        ? prevIndices.filter((i) => i !== index)
-        : [...prevIndices, index];
+      const updatedIndices = prevIndices.includes(cal_id)
+        ? prevIndices.filter((i) => i !== cal_id)
+        : [...prevIndices, cal_id];
       
       // Filter events based on the updated active items
       const newFilteredEvents = events.filter(event =>
-        updatedIndices.some(idx => event.cal_id === calendars[idx].cal_id)
+        updatedIndices.includes(event.cal_id)
       );
       
       setFilteredEvents(newFilteredEvents);
@@ -91,8 +92,8 @@ const Dashboards = () => {
     });
   };
 
-  const handleEditClick = (index) => {
-    const calendar = calendars[index];
+  const handleEditClick = (cal_id) => {
+    const calendar = calendars.find(cal => cal.cal_id === cal_id)
     console.log("Edit clicked: ", calendar);
   
     // Extract email addresses from shared_users, but only people that are registered
@@ -124,6 +125,10 @@ const Dashboards = () => {
   
   const addEventHandler = (setIsOpen) => {
     setRightBarContent('event'); 
+    setEventFormFields({
+      ...eventFormFields, 
+      cal_id: calendars.length > 0 ? calendars[0].cal_id : 'None'
+    })
     setIsRightBarOpen(true); 
     setIsOpen(false); 
   };
@@ -152,7 +157,7 @@ const Dashboards = () => {
     setIsRightBarOpen(false);
   }
 
-  const accordions = sideBarAccordians(calendars, shared_calendars, invitations);
+  const accordians = sideBarAccordians(calendars, shared_calendars)
 
   return (
     <div className="flex h-screen font-sora">
@@ -161,54 +166,54 @@ const Dashboards = () => {
         {({ isOpen, setIsOpen }) => (
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col flex-grow">
-              {accordions.map((item, index) => (
+              {accordians.map((item, index) => (
                 <Accordion
-                    key={index}
-                    title={item.title}
-                    displayTitle={isOpen} 
-                    icon={item.iconUrl}
-                    iconType={item.iconType}
-                    isActive={isOpen && activeIndices.includes(index)} 
-                    onTitleClick={() => {
-                      if (window.innerWidth >= 1160 || !isRightBarOpen) {
-                        if (!isOpen) setIsOpen(true); // open the sidebar if it's closed
-                        handleTitleClick(index); // handle the accordion logic
-                      }
-                    }}
-                  >
-                  {item.contents.map((content, contentIndex) => (
-                    <AccordionItem
-                      key={contentIndex}
-                      title={content[item.content_title]}
-                      displayTitle={isOpen}
-                      isActive={isOpen && activeItems.includes(contentIndex)}
-                      onTitleClick={() => handleItemClick(contentIndex)}
-                      onEditClick={() => handleEditClick(contentIndex)}
-                      editableContent={item.editable_content}
-                      // link={`/dashboards/${calendar.cal_id}`} 
-                    />
-                  ))}
+                  key={index}
+                  title={item.title}
+                  displayTitle={isOpen} 
+                  icon={item.iconUrl}
+                  iconType={item.iconType}
+                  isActive={isOpen && activeIndices.includes(index)} 
+                  onTitleClick={() => {
+                    if (window.innerWidth >= 1160 || !isRightBarOpen) {
+                      if (!isOpen) setIsOpen(true); // open the sidebar if it's closed
+                      handleTitleClick(index); // handle the accordion logic
+                    }
+                  }}
+                >
+                {item.contents.map((content) => (
+                  <AccordionItem
+                    key={content[item.content_key]}
+                    title={content[item.content_title]}
+                    displayTitle={isOpen}
+                    isActive={isOpen && activeItems.includes(content[item.content_key])}
+                    onTitleClick={() => handleItemClick(content[item.content_key])}
+                    onEditClick={() => handleEditClick(content[item.content_key])}
+                    editableContent={true}
+                    // link={`/dashboards/${calendar.cal_id}`} 
+                  />
+                ))}
                 </Accordion>
               ))}
-                <div className="border-t border-gray-300 my-2"></div> {/*Horizontal Line*/}
-                <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-green-200 ${isOpenInbox ? 'bg-green-300' : ''}`}>
-                <div 
-                    className={`accordion-title flex items-center w-full justify-center`} 
-                    onClick={() => {setIsOpenInbox(!isOpenInbox)}}
-                    >
-                    <div className={`flex items-center justify-center w-full`}>
-                      <div className="flex items-center justify-center leading-4">
-                        <Inbox style={{ width: '32px', height: '32px' }}/>
-                      </div>
-                      {(isOpen && <span className="ml-2 text-sm">
-                        Invitations
-                      </span>)}
+              <div className="border-t border-gray-300 my-2"></div> {/*Horizontal Line*/}
+              <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-green-200 ${isOpenInbox ? 'bg-green-300' : ''}`}>
+              <div 
+                  className={`accordion-title flex items-center w-full justify-center`} 
+                  onClick={() => {setIsOpenInbox(!isOpenInbox)}}
+                  >
+                  <div className={`flex items-center justify-center w-full`}>
+                    <div className="flex items-center justify-center leading-4">
+                      <Inbox style={{ width: '32px', height: '32px' }}/>
                     </div>
-                </div>
+                    {(isOpen && <span className="ml-2 text-sm">
+                      Invitations
+                    </span>)}
+                  </div>
               </div>
             </div>
           </div>
-        )} 
+        </div>
+      )} 
       </SideBar>
 
       {/* Main calendar view component */}

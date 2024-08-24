@@ -105,10 +105,9 @@ const navigation = [
  *
  * @param {Array} calendars - Array of calendar objects.
  * @param {Array} shared_calendars - Array of shared calendar objects.
- * @param {Array} invitations - Array of invitation objects.
  * @returns {Array} - The sidebar accordion items.
  */
-const sideBarAccordians = (calendars, shared_calendars, invitations) => [
+const sideBarAccordians = (calendars, shared_calendars) => [
   {
     title: "Calendars",
     iconUrl: CalendarIcon, // Icon component
@@ -126,15 +125,7 @@ const sideBarAccordians = (calendars, shared_calendars, invitations) => [
     content_key: "cal_id",
     content_title: "title",
     editable_content: false
-  },
-  // {
-  //   title: "Invitations",
-  //   iconUrl: Inbox, // Icon component
-  //   iconType: 'component',
-  //   contents: invitations,
-  //   content_key: "inv_id",
-  //   content_title: "email",
-  // }
+  }
 ];
 
 export { benefits, actionData, services, navigation, sideBarAccordians, calendarForm, eventForm, colorsForEvent }; 
