@@ -69,6 +69,7 @@ check_tables:
 	docker-compose exec db psql -U myuser -d mydatabase -c "\dt"
 .PHONY: flush_db
 flush_db:
+	docker-compose exec db psql -U myuser -d mydatabase -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 	$(DJANGO_MANAGE) flush
 # General git hub commands
 .PHONY:update_from_branch
