@@ -101,7 +101,9 @@ const UserProvider = ({ children }) => {
         setState(data);
         if (setState2) setState2(data);
       } else {
-        console.error('Error from server:', data);
+        if (data.message === "No invitations found"){
+          setInvitations([])
+        }
       }
     } catch (error) {
       console.error('Error:', error);
@@ -168,7 +170,6 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         setEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
-        setFilteredEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
       } else {
         console.error('Error from server:', data);
       }
@@ -199,11 +200,6 @@ const UserProvider = ({ children }) => {
           return updatedEvents;
         });
 
-        setFilteredEvents(prevEvents => {
-          const updatedFilteredEvents = prevEvents.filter(event => event.id !== updatedDetails.id);
-          console.log('Updated Filtered Events:', updatedFilteredEvents);
-          return updatedFilteredEvents;
-        });
       } else {
         const data = await response.json();
         console.error('Error from server:', data);

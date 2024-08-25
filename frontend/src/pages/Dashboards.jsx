@@ -29,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars,events, addCalendar, addEvent, updateCalendar, deleteCalendar} = useUserContext();
+  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -47,6 +47,9 @@ const Dashboards = () => {
   })
 
   useEffect(() => {
+    // Set filtered events to all events pertaining to user
+    setFilteredEvents(events)
+
     // Function to handle screen resizing
     const handleResize = () => {
       const width = window.innerWidth;
@@ -62,7 +65,7 @@ const Dashboards = () => {
 
     // Cleanup function to remove the event listener
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [events]);
 
   const handleTitleClick = (index) => {
     console.log(`Title clicked: ${index}`);
@@ -153,6 +156,11 @@ const Dashboards = () => {
 
   const submitAddEvent = (eventDetails) =>{
     addEvent(eventDetails);
+    // Filter events based on the updated active items
+    const newFilteredEvents = events.filter(event =>
+      updatedIndices.includes(event.cal_id)
+    );
+    setFilteredEvents(newFilteredEvents)
     console.log("Events after addition: ", events)
     setIsRightBarOpen(false);
   }
