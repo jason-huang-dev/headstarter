@@ -1,3 +1,7 @@
+from datetime import datetime
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -67,6 +71,7 @@ def create_calendar(request):
 
         # Process each email
         invitations = []
+        email_messages = []
         for email in emails:
             if email:
                     # # Retrieve the user by email
@@ -83,6 +88,29 @@ def create_calendar(request):
                         invited_by=request.user,
                         token=get_random_string(32)  # Generate a unique token
                     )
+                    
+                    # Prepare email content
+                    subject = f"You've been invited to the calendar: {calendar.title}"
+                    context = {
+                        'calendar_name': calendar.title,
+                        'invited_by': request.user.username,
+                        'current_year': datetime.now().year
+                    }
+                    html_message = render_to_string('emails/invitation_email.html', context)
+
+                    # Create the EmailMessage object
+                    email_message = EmailMessage(
+                        subject=subject,
+                        body=html_message,
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        to=[email]
+                    )
+                    email_message.content_subtype = "html"  # Set the email content to HTML
+
+                    # Send the email
+                    email_messages.append({
+                        "sucess": email_message.send()
+                    })
                     invitations.append(invite)
         
         # Serialize and return the calendar data and invitations
@@ -93,6 +121,7 @@ def create_calendar(request):
         return Response({
             'calendar': calendar_serializer.data, 
             'invitations': invite_serializer.data,
+            'email_meassages':  email_messages
             }, status=status.HTTP_201_CREATED)
         
     except ValidationError as e:
