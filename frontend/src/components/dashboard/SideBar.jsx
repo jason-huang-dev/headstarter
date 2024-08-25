@@ -124,7 +124,9 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen 
                   bottom of the sidebar. Pfp centers when closed */}
         <div className="border-t flex p-3 items-center">
           <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
-            <ProfileIcon user={user} size={35} username={isOpen}></ProfileIcon>
+            <button onClick={toggleSidebar} >
+              <ProfileIcon user={user} size={35} username={isOpen} ></ProfileIcon>
+            </button>
           </div>
           {isOpen && <ProfileMenu onSignOut={handleSignOut}/>}
         </div>

@@ -32,7 +32,7 @@ const InboxOverview = () => {
                   </div>
                   <span className="ml-2 text-sm">{invitation.invited_by.username + " invited you to join the " + invitation.calendar.title + " calendar"}</span>
                 </div>
-                {!invitation.accpeted || !invitation.declined && 
+                { !invitation.accepted && !invitation.declined && 
                   (<div className="flex space-x-2">
                     <Button onClick={() => handleInvitationResponse(invitation.token, 'accept')} className="bg-green-500 text-white">
                       Accept
