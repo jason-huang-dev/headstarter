@@ -13,6 +13,7 @@ const calendarForm = [
       label: 'Calendar Name',
       type: 'text',
       name: 'title',
+      maxLength: 15, // Add maxLength here
       validate: (value) => value.trim() !== '' || 'Calendar Name is required.',
       required: true,
     },

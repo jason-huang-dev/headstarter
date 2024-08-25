@@ -33,32 +33,30 @@ import React, { useState } from 'react';
 const Form = ({ fields, formFields, children }) => {
   const [formDetails, setFormDetails] = useState(formFields);
   const [errors, setErrors] = useState({});
+  const [charCount, setCharCount] = useState({});
+
   const handleFormInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     let fieldValue = type === 'checkbox' ? checked : value;
-  
-    if (name === 'title') { // Use 'title' if this is your field name
-      if (value.length > 15) {
-        fieldValue = value.slice(0, 15); 
-      }
-  
-      // Update character count
+
+    // Update character count if maxLength is defined
+    const field = fields.find(f => f.name === name);
+    if (field && field.maxLength) {
       setCharCount(prevCount => ({
         ...prevCount,
-        [name]: 15 - fieldValue.length
+        [name]: field.maxLength - value.length
       }));
     }
-  
+
     // Update form details
     setFormDetails(prevDetails => ({
       ...prevDetails,
       [name]: fieldValue
     }));
-  
+
     // Validate the field
     validateField(name, fieldValue);
   };
-  
 
   const validateField = (name, value) => {
     const field = fields.find(f => f.name === name);
@@ -109,71 +107,76 @@ const Form = ({ fields, formFields, children }) => {
   };
 
   return (
-  <div className="p-4">
-    {filteredFields.map((field) => {
-      const {
-        type, name, label, placeholder, options, required,
-        className, labelAfter, onKeyDown, onChange, validate,
-        option_key, option_label
-      } = field;
+    <div className="p-4">
+      {filteredFields.map((field) => {
+        const {
+          type, name, label, placeholder, options, required,
+          className, labelAfter, onKeyDown, onChange, validate,
+          option_key, option_label, maxLength
+        } = field;
 
-      return (
-        <div key={name} className={`mb-4 ${className || ''}`}>
-          {label && !labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
-          {type === "select" ? (
-            <select
-              name={name}
-              value={formDetails[name] || ""}
-              onChange={(e) => handleChange(e, onChange, validate)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required={required}
-            >
-              <option value="" disabled>{placeholder}</option>
-              {typeof options === 'function' 
-                ? options({ formDetails, setFormDetails }) 
-                : options.map((option) => (
-                    <option key={option[option_key]} value={option[option_key]}>
-                      {option[option_label]}
-                    </option>
-                  ))
-              }
-            </select>
-          ) : type === "checkbox" ? (
+        return (
+          <div key={name} className={`mb-4 ${className || ''}`}>
+            {label && !labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+            {type === "select" ? (
+              <select
+                name={name}
+                value={formDetails[name] || ""}
+                onChange={(e) => handleChange(e, onChange, validate)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                required={required}
+              >
+                <option value="" disabled>{placeholder}</option>
+                {typeof options === 'function' 
+                  ? options({ formDetails, setFormDetails }) 
+                  : options.map((option) => (
+                      <option key={option[option_key]} value={option[option_key]}>
+                        {option[option_label]}
+                      </option>
+                    ))
+                }
+              </select>
+            ) : type === "checkbox" ? (
+              <input
+                type={type}
+                name={name}
+                checked={formDetails[name] || false}
+                onChange={(e) => handleChange(e, onChange, validate)}
+                required={required}
+                className="mr-2"
+              />
+            ) : (
             <input
               type={type}
               name={name}
-              checked={formDetails[name] || false}
+              value={formDetails[name] || ""}
               onChange={(e) => handleChange(e, onChange, validate)}
-              required={required}
-              className="mr-2"
+              placeholder={placeholder}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              onKeyDown={(e) => {
+                if (onKeyDown) {
+                  onKeyDown(e, formDetails, setFormDetails, validate);
+                }
+              }}
+              maxLength={maxLength}
             />
-          ) : (
-          <input
-            type={type}
-            name={name}
-            value={formDetails[name] || ""}
-            onChange={(e) => handleChange(e, onChange, validate)}
-            placeholder={placeholder}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            onKeyDown={(e) => {
-              if (onKeyDown) {
-                onKeyDown(e, formDetails, setFormDetails, validate);
-              }
-            }}
-            maxLength={name === 'calendarName' ? 15 : undefined} // Enforce maxLength in the input element
-          />
-          )}
-          {label && labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
-          {errors[name] && (
-            <p className="text-red-500 text-sm mt-1">{errors[name]}</p>
-          )}
-        </div>
-      );
-    })}
-    {typeof children === 'function' 
-      ? children({ formDetails, setFormDetails }) 
-      : children}
-  </div>
+            )}
+            {label && labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+            {maxLength && (
+              <p className="text-gray-500 text-sm mt-1">
+                {charCount[name] !== undefined ? `${charCount[name]} characters left` : `${maxLength} characters allowed`}
+              </p>
+            )}
+            {errors[name] && (
+              <p className="text-red-500 text-sm mt-1">{errors[name]}</p>
+            )}
+          </div>
+        );
+      })}
+      {typeof children === 'function' 
+        ? children({ formDetails, setFormDetails }) 
+        : children}
+    </div>
   );
 };
 
