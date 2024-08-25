@@ -14,7 +14,7 @@ const calendarForm = [
       type: 'text',
       name: 'title',
       validate: (value) => value.trim() !== '' || 'Calendar Name is required.',
-      required: true
+      required: true,
     },
     {
       label: 'Add People?',

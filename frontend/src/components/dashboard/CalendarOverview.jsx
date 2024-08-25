@@ -78,7 +78,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
         eventPropGetter={eventPropGetter}
       />
 
-      {popupIsOpen ? (
+      {popupIsOpen  && rightBarContent === 'update_event' ? (
         <Popup 
           isOpen={isRightBarOpen} 
           onClose={() => setIsRightBarOpen(false)} 

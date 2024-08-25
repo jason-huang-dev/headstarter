@@ -29,30 +29,37 @@ import React, { useState } from 'react';
  * @param {Object} props.formFields - Initial values for the form fields, where keys match the `name` properties in the `fields` array.
  * @param {ReactNode|Function} [props.children] - Optional child components or a render function, which can be used to extend the form functionality.
  */
+
 const Form = ({ fields, formFields, children }) => {
-  // State management for form data and validation errors.
   const [formDetails, setFormDetails] = useState(formFields);
   const [errors, setErrors] = useState({});
-  console.log("Current Form Details: ", formDetails)
-  /**
-   * Handles changes to form inputs and validates fields.
-   * @param {Event} e - Input change event.
-   */
   const handleFormInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
+    let fieldValue = type === 'checkbox' ? checked : value;
+  
+    if (name === 'title') { // Use 'title' if this is your field name
+      if (value.length > 15) {
+        fieldValue = value.slice(0, 15); 
+      }
+  
+      // Update character count
+      setCharCount(prevCount => ({
+        ...prevCount,
+        [name]: 15 - fieldValue.length
+      }));
+    }
+  
+    // Update form details
     setFormDetails(prevDetails => ({
       ...prevDetails,
       [name]: fieldValue
     }));
+  
+    // Validate the field
     validateField(name, fieldValue);
   };
+  
 
-  /**
-   * Validates a specific field.
-   * @param {String} name - Field name.
-   * @param {Object} value - Field value.
-   */
   const validateField = (name, value) => {
     const field = fields.find(f => f.name === name);
     if (field && field.validate) {
@@ -64,10 +71,6 @@ const Form = ({ fields, formFields, children }) => {
     }
   };
 
-  /**
-   * Validates all fields and returns whether the form is valid.
-   * @return {boolean} - True if valid, false otherwise.
-   */
   const validateForm = () => {
     const newErrors = {};
     fields.forEach((field) => {
@@ -82,9 +85,6 @@ const Form = ({ fields, formFields, children }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  /**
-   * Handles form submission after validation.
-   */
   const handleSubmit = () => {
     if (validateForm()) {
       console.log("Form Submitted:", formDetails);
@@ -93,10 +93,6 @@ const Form = ({ fields, formFields, children }) => {
     }
   };
 
-  /**
-   * Filters fields for conditional rendering.
-   * @return {Array<Object>} - Filtered fields to render.
-   */
   const filteredFields = fields.filter((field, index) => {
     if (field.ifPrev) {
       return index === 0 || formDetails[fields[index - 1].name];
@@ -104,12 +100,6 @@ const Form = ({ fields, formFields, children }) => {
     return true;
   });
 
-  /**
-   * Handles changes and triggers custom logic if provided.
-   * @param {Event} e - Input change event.
-   * @param {Function} onChange - Custom change handler.
-   * @param {Function} validate - Custom validation function.
-   */
   const handleChange = (e, onChange, validate) => {
     if (onChange) {
       onChange(e, formDetails, setFormDetails, validate);
@@ -119,71 +109,71 @@ const Form = ({ fields, formFields, children }) => {
   };
 
   return (
-    <div className="p-4">
-      {filteredFields.map((field) => {
-        const {
-          type, name, label, placeholder, options, required,
-          className, labelAfter, onKeyDown, onChange, validate,
-          option_key, option_label
-        } = field;
+  <div className="p-4">
+    {filteredFields.map((field) => {
+      const {
+        type, name, label, placeholder, options, required,
+        className, labelAfter, onKeyDown, onChange, validate,
+        option_key, option_label
+      } = field;
 
-        return (
-          <div key={name} className={`mb-4 ${className || ''}`}>
-            {label && !labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
-            {type === "select" ? (
-              <select
-                name={name}
-                value={formDetails[name] || ""}
-                onChange={(e) => handleChange(e, onChange, validate)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                required={required}
-              >
-                <option value="" disabled>{placeholder}</option>
-                {typeof options === 'function' 
-                  ? options({ formDetails, setFormDetails }) 
-                  : options.map((option) => (
-                      <option key={option[option_key]} value={option[option_key]}>
-                        {option[option_label]}
-                      </option>
-                    ))
-                }
-              </select>
-            ) : type === "checkbox" ? (
-              <input
-                type={type}
-                name={name}
-                checked={formDetails[name] || false}
-                onChange={(e) => handleChange(e, onChange, validate)}
-                required={required}
-                className="mr-2"
-              />
-            ) : (
-              <input
-                type={type}
-                name={name}
-                value={formDetails[name] || ""}
-                onChange={(e) => handleChange(e, onChange, validate)}
-                placeholder={placeholder}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                onKeyDown={(e) => {
-                  if (onKeyDown) {
-                    onKeyDown(e, formDetails, setFormDetails, validate);
-                  }
-                }}
-                required={required}
-              />
-            )}
-            {label && labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
-            {errors[name] && (
-              <p className="text-red-500 text-sm mt-1">{errors[name]}</p>
-            )}
-          </div>
-        );
-      })}
-      {typeof children === 'function' 
-        ? children({ formDetails, setFormDetails }) 
-        : children}
-    </div>
+      return (
+        <div key={name} className={`mb-4 ${className || ''}`}>
+          {label && !labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+          {type === "select" ? (
+            <select
+              name={name}
+              value={formDetails[name] || ""}
+              onChange={(e) => handleChange(e, onChange, validate)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required={required}
+            >
+              <option value="" disabled>{placeholder}</option>
+              {typeof options === 'function' 
+                ? options({ formDetails, setFormDetails }) 
+                : options.map((option) => (
+                    <option key={option[option_key]} value={option[option_key]}>
+                      {option[option_label]}
+                    </option>
+                  ))
+              }
+            </select>
+          ) : type === "checkbox" ? (
+            <input
+              type={type}
+              name={name}
+              checked={formDetails[name] || false}
+              onChange={(e) => handleChange(e, onChange, validate)}
+              required={required}
+              className="mr-2"
+            />
+          ) : (
+          <input
+            type={type}
+            name={name}
+            value={formDetails[name] || ""}
+            onChange={(e) => handleChange(e, onChange, validate)}
+            placeholder={placeholder}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            onKeyDown={(e) => {
+              if (onKeyDown) {
+                onKeyDown(e, formDetails, setFormDetails, validate);
+              }
+            }}
+            maxLength={name === 'calendarName' ? 15 : undefined} // Enforce maxLength in the input element
+          />
+          )}
+          {label && labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
+          {errors[name] && (
+            <p className="text-red-500 text-sm mt-1">{errors[name]}</p>
+          )}
+        </div>
+      );
+    })}
+    {typeof children === 'function' 
+      ? children({ formDetails, setFormDetails }) 
+      : children}
+  </div>
   );
 };
 

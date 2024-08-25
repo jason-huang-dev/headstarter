@@ -37,28 +37,30 @@ const AccordionItem = ({ title, IconComponent, displayTitle, isActive, onTitleCl
     };
 
     return (
-    <div className="accordion-item">
-        <div className="flex justify-between cursor-pointer ml-5 p-3" onClick={handleToggle}>
-            {isActive && <Eye color="#7ADB78" className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
-            <div className="flex items-center text-gray-400 hover:text-black transition-colors">
-                {IconComponent && <IconComponent className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
-                {displayTitle && link ? (
-                    <Link to={link} className="text-sm ml-1 hover:font-semibold hover:text-black transition-colors">
-                        {title}
-                    </Link>
-                ) : (
-                    <span className="text-sm ml-1">
-                        {title}
-                    </span>
-                )}
-            </div>
-            {editableContent && 
-                <div>
-                    <Edit2 className="text-blue-500 hover:text-black `w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`" onClick={onEditClick}></Edit2>
+        <div className="accordion-item">
+            <div className="flex justify-between cursor-pointer p-3" onClick={handleToggle}>
+                <div className="flex items-center">
+                    {isActive && <Eye color="#7ADB78" className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
+                    <div className="flex items-center text-gray-400 hover:text-black transition-colors">
+                        {IconComponent && <IconComponent className={`w-6 h-6 ${!displayTitle ? 'mr-0' : 'mr-1'}`} />}
+                        {displayTitle && link ? (
+                            <Link to={link} className="text-sm ml-1 hover:font-semibold hover:text-black transition-colors">
+                                {title}
+                            </Link>
+                        ) : (
+                            <span className="text-sm ml-1">
+                                {title}
+                            </span>
+                        )}
+                    </div>
                 </div>
-            }
+                {editableContent && 
+                    <div>
+                        <Edit2 className="text-blue-500 hover:text-black w-5 h-5" onClick={onEditClick}></Edit2>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
     );
 };
 

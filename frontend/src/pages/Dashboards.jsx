@@ -236,7 +236,7 @@ const Dashboards = () => {
       {/* Content for adding a new calendar */}
       {/* if screen width is less than 1050 px, breaking point, Pop up opens */}
       {isRightBarOpen && (rightBarContent === 'add_calendar' || rightBarContent === 'edit_calendar') && (
-        screenWidth > 1050 ? (
+        screenWidth > 1150 ? (
           <RightBar 
             isRightBarOpen={isRightBarOpen} 
             setIsRightBarOpen={setIsRightBarOpen} 
@@ -333,7 +333,7 @@ const Dashboards = () => {
 
     {/* Content for adding a new event */}
     {isRightBarOpen && rightBarContent === 'event' && (
-      screenWidth > 1050 ? (
+      screenWidth > 1150 ? (
         <RightBar 
           isRightBarOpen={isRightBarOpen} 
           setIsRightBarOpen={setIsRightBarOpen} 
