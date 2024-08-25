@@ -211,3 +211,29 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default profile picture
 DEFAULT_PROFILE_PIC = os.path.join(MEDIA_ROOT, 'image/default_profile.jpg')
+
+# Setup for sending emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
+EMAIL_PORT = 587  # Or the port number your SMTP server uses
+EMAIL_USE_TLS = True  # Use TLS (True for most servers, False if you use SSL)
+EMAIL_USE_SSL = False  # Use SSL (True if EMAIL_USE_TLS is False)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Your email address
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Your email account password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default from email address
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Path to your project-level templates directory
+        'APP_DIRS': True,  # Automatically discover templates in app directories
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]

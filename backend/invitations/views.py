@@ -7,9 +7,12 @@ Date: 2024-08-18
 This module contains Django views for managing calendar invitations.
 """
 
+from datetime import timezone
+from django.template.loader import render_to_string
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.core.mail import EmailMessage
 from rest_framework import status
 from .models import CalendarInvite
 from calendars.models import Calendar
@@ -17,6 +20,7 @@ from .serializers import CalendarInviteSerializer
 from users.models import CustomUser
 from users.serializers import CustomUserDetailsSerializer
 from calendars.serializers import CalendarSerializer
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 
@@ -48,6 +52,27 @@ def create_invitation(request):
             invited_by=request.user,
             token=get_random_string(32)  # Generate a unique token
         )
+        
+        # Prepare email content
+        subject = f"You've been invited to the calendar: {calendar.name}"
+        context = {
+            'calendar_name': calendar.name,
+            'invited_by': request.user.username,
+            'current_year': timezone.now().year
+        }
+        html_message = render_to_string('emails/invitation_email.html', context)
+
+        # Create the EmailMessage object
+        email_message = EmailMessage(
+            subject=subject,
+            body=html_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[email]
+        )
+        email_message.content_subtype = "html"  # Set the email content to HTML
+
+        # Send the email
+        email_message.send()
 
         serializer = CalendarInviteSerializer(invite)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

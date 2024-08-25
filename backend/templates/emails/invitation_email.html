@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>You're Invited to {{ calendar_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #15803d;
+            text-align: center;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 20px 5px;
+            background-color: #15803d;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .button.decline {
+            background-color: #e53e3e;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>You're Invited!</h1>
+        <p>Hi there,</p>
+        <p>You have been invited to join the calendar: <strong>{{ calendar_name }}</strong>.</p>
+        <p>This invitation was sent by <strong>{{ invited_by }}</strong>.</p>
+        <p>To accept or decline this invitation, please click on one of the buttons below:</p>
+        <div style="text-align: center;">
+            <a href="https://timemesh.netlify.app" class="button">Go To TimeMesh</a>
+        </div>
+        <p>If you have any questions, feel free to reach out to us.</p>
+        <p>Best regards,<br>TimeMesh Team</p>
+    </div>
+    <div class="footer">
+        <p>&copy; {{ current_year }} TimeMesh. All rights reserved.</p>
+    </div>
+</body>
+</html>
