@@ -9,7 +9,7 @@ import { useUserContext } from '../../contexts/userDataHandler';
  */
 const InboxOverview = () => {
   const { invitations, acceptInvitation} = useUserContext(); // Get acceptInvitation and fetchSharedCalendars from userDataHandler
-
+  console.log(invitations)
   const handleInvitationResponse = async (token, action) => {
     acceptInvitation(token, action);
     //await fetchSharedCalendars(); // Refresh the list of shared calendars
@@ -30,16 +30,25 @@ const InboxOverview = () => {
                   <div className="flex items-center justify-center leading-4">
                     <Mail style={{ width: '32px', height: '32px' }} />
                   </div>
-                  <span className="ml-2 text-sm">{invitation.title}</span>
+                  <span className="ml-2 text-sm">{invitation.invited_by.username + " invited you to join the " + invitation.calendar.title + " calendar"}</span>
                 </div>
-                <div className="flex space-x-2">
-                  <Button onClick={() => handleInvitationResponse(invitation.token, 'accept')} className="bg-green-500 text-white">
-                    Accept
-                  </Button>
-                  <Button onClick={() => handleInvitationResponse(invitation.token, 'decline')} className="bg-red-500 text-white">
-                    Decline
-                  </Button>
-                </div>
+                {!invitation.accpeted || !invitation.declined && 
+                  (<div className="flex space-x-2">
+                    <Button onClick={() => handleInvitationResponse(invitation.token, 'accept')} className="bg-green-500 text-white">
+                      Accept
+                    </Button>
+                    <Button onClick={() => handleInvitationResponse(invitation.token, 'decline')} className="bg-red-500 text-white">
+                      Decline
+                    </Button>
+                  </div>
+                )}
+                {(invitation.accepted || invitation.declined) &&
+                  (<div className="flex space-x-2">
+                    <span className={`ml-2 text-sm ${invitation.accepted ? "text-green-700" : "text-red-700"}`}>
+                      {invitation.accepted ? "Accepted" : "Declined"}
+                    </span>
+                  </div>
+                )}
               </div>
             </li>
           ))}
