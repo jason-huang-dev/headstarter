@@ -254,7 +254,7 @@ const UserProvider = ({ children }) => {
       console.log('Response from Update Calendar:', data);
 
       if (response.ok) {
-        setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === cal_id ? data : calendar));
+        setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === cal_id ? data.calendar : calendar));
       } else {
         console.error('Error from server:', data);
       }

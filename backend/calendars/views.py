@@ -55,11 +55,8 @@ def create_calendar(request):
     """
     Create a new calendar for the authenticated user and invite specified users to it.
 
-    ::param str title : The title of the calendar
-    ::param str/optional description : An optional description of the calendar
-    ::param list emails : A list of email addresses to invite to the calendar
-    ::return Response : A JSON response with the created calendar's details and invitations
-    ::raises ValidationError : Raised if the provided data is invalid
+    :param HTTPRequest request: The HTTP request object
+    :return Response: A JSON response with the created calendar's details and invitations
     """
     try:
         title = request.data.get('title', 'My Calendar')
@@ -69,61 +66,19 @@ def create_calendar(request):
         # Create the calendar
         calendar = Calendar.objects.create(user=request.user, title=title, description=description)
 
-        # Process each email
-        invitations = []
-        email_messages = []
-        for email in emails:
-            if email:
-                    # # Retrieve the user by email
-                    # user = settings.AUTH_USER_MODEL.objects.get_or_create(email=email)
-                    
-                    # Check if the user is already invited
-                    if CalendarInvite.objects.filter(calendar=calendar, email=email).exists():
-                        continue  # Skip if already invited
-                    
-                    # Create an invitation for the user
-                    invite = CalendarInvite.objects.create(
-                        calendar=calendar,
-                        email=email,
-                        invited_by=request.user,
-                        token=get_random_string(32)  # Generate a unique token
-                    )
-                    
-                    # Prepare email content
-                    subject = f"You've been invited to the calendar: {calendar.title}"
-                    context = {
-                        'calendar_name': calendar.title,
-                        'invited_by': request.user.username,
-                        'current_year': datetime.now().year
-                    }
-                    html_message = render_to_string('emails/invitation_email.html', context)
+        # Process email invitations using the extracted function
+        invitations, email_statuses = process_email_invitations(calendar, emails, request.user)
 
-                    # Create the EmailMessage object
-                    email_message = EmailMessage(
-                        subject=subject,
-                        body=html_message,
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        to=[email]
-                    )
-                    email_message.content_subtype = "html"  # Set the email content to HTML
-
-                    # Send the email
-                    email_messages.append({
-                        "sucess": email_message.send()
-                    })
-                    invitations.append(invite)
-        
         # Serialize and return the calendar data and invitations
         calendar_serializer = CalendarSerializer(calendar)
         invite_serializer = CalendarInviteSerializer(invitations, many=True)
-        
-        ##TODO decide on if this response should return both calendar and invitations or just calendar
+
         return Response({
-            'calendar': calendar_serializer.data, 
+            'calendar': calendar_serializer.data,
             'invitations': invite_serializer.data,
-            'email_meassages':  email_messages
-            }, status=status.HTTP_201_CREATED)
-        
+            'email_statuses': email_statuses
+        }, status=status.HTTP_201_CREATED)
+    
     except ValidationError as e:
         logger.exception("Validation error")
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -173,28 +128,43 @@ def get_calendar(request, cal_id):
 
 def update_calendar(request, cal_id):
     """
-    Update an existing calendar for the authenticated user.
+    Update an existing calendar for the authenticated user and send invitation emails.
 
-    ::param HTTPRequest request : The HTTP request object
-    ::param int cal_id : The ID of the calendar to update
-    ::return Response : A JSON response with the updated calendar details or an error message
+    :param HTTPRequest request: The HTTP request object
+    :param int cal_id: The ID of the calendar to update
+    :return Response: A JSON response with the updated calendar details or an error message
     """
     logger.debug('Request data: %s', request.data)
     try:
         title = request.data.get('title')
         description = request.data.get('description', '')
+        emails = request.data.get('email_list', [])  # Get the list of emails for invitations
+        
+        # Fetch the calendar or return a 404 response
         calendar = get_object_or_404(Calendar, pk=cal_id, user=request.user)
 
+        # Update the calendar fields if provided
         if title:
             calendar.title = title
         if description is not None:
             calendar.description = description
         
+        # Save the updated calendar
         calendar.save()
+
+        # Process email invitations using the extracted function
+        invitations, email_statuses = process_email_invitations(calendar, emails, request.user)
+        
+        # Serialize and return the updated calendar data and invitations
         serializer = CalendarSerializer(calendar)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Calendar.DoesNotExist:
-        return Response({'error': 'Calendar not found'}, status=status.HTTP_404_NOT_FOUND)
+        invite_serializer = CalendarInviteSerializer(invitations, many=True)
+        
+        return Response({
+            'calendar': serializer.data, 
+            'invitations': invite_serializer.data,
+            'email_statuses': email_statuses
+        }, status=status.HTTP_200_OK)
+    
     except Exception as e:
         logger.exception("Error updating calendar")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -241,3 +211,57 @@ def get_shared_calendars(request):
     except Exception as e:
         logger.exception("Error retrieving shared calendars")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def process_email_invitations(calendar, emails, user):
+    """
+    Process email invitations for a calendar.
+
+    :param Calendar calendar: The calendar for which invitations are sent
+    :param list emails: A list of email addresses to invite
+    :param User user: The user who is sending the invitations
+    :return tuple: A tuple containing the list of CalendarInvite objects and the email statuses
+    """
+    invitations = []
+    email_statuses = []
+    
+    for email in emails:
+        if email:
+            # Check if the email is already invited
+            if CalendarInvite.objects.filter(calendar=calendar, email=email).exists():
+                continue  # Skip if already invited
+
+            # Create an invitation
+            invite = CalendarInvite.objects.create(
+                calendar=calendar,
+                email=email,
+                invited_by=user,
+                token=get_random_string(32)  # Generate a unique token
+            )
+            
+            # Prepare and send email
+            subject = f"You've been invited to the calendar: {calendar.title}"
+            context = {
+                'calendar_name': calendar.title,
+                'invited_by': user.username,
+                'current_year': datetime.now().year
+            }
+            html_message = render_to_string('emails/invitation_email.html', context)
+            email_message = EmailMessage(
+                subject=subject,
+                body=html_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[email]
+            )
+            email_message.content_subtype = "html"  # Set email content to HTML
+            
+            # Send the email and track the status
+            try:
+                email_success = email_message.send()
+                email_statuses.append({'email': email, 'success': email_success})
+            except Exception as email_error:
+                logger.exception(f"Failed to send email to {email}")
+                email_statuses.append({'email': email, 'success': False, 'error': str(email_error)})
+
+            invitations.append(invite)
+    
+    return invitations, email_statuses

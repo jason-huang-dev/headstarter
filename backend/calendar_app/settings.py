@@ -220,7 +220,7 @@ EMAIL_USE_TLS = True  # Use TLS (True for most servers, False if you use SSL)
 EMAIL_USE_SSL = False  # Use SSL (True if EMAIL_USE_TLS is False)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Your email address
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Your email account password
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default from email address
+DEFAULT_FROM_EMAIL = 'TimeMesh <'+EMAIL_HOST_USER+'>'  # Default from email address
 
 TEMPLATES = [
     {
