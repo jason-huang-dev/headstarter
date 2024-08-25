@@ -29,14 +29,22 @@ def event_view(request):
 
 def get_events(request):
     """
-    Retrieve all events for the user.
+    Retrieve all events for the authenticated user, including events from their own calendars
+    and calendars shared with them.
 
     ::param HTTPRequest request : The HTTP request object
     ::return Response : A JSON response containing all the events related to the user
-    ::raises ValidationError : Raised if the provided data is invalid
     """
     try:
-        events = Event.objects.filter(user=request.user)
+        # Get the calendars owned by the user and shared with the user
+        owned_calendars = Calendar.objects.filter(user=request.user)
+        shared_calendars = Calendar.objects.filter(shared_users=request.user)
+        all_calendars = owned_calendars | shared_calendars
+
+        # Retrieve all events associated with these calendars
+        events = Event.objects.filter(cal_id__in=all_calendars)
+
+        # Serialize and return the events
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
