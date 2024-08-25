@@ -15,6 +15,8 @@ from .models import CalendarInvite
 from calendars.models import Calendar
 from .serializers import CalendarInviteSerializer
 from users.models import CustomUser
+from users.serializers import CustomUserDetailsSerializer
+from calendars.serializers import CalendarSerializer
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 
@@ -107,6 +109,23 @@ def get_invites_by_email(request):
         return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     invitations = CalendarInvite.objects.filter(email=email)
-    serializer = CalendarInviteSerializer(invitations, many=True)
+    
+    # If no invitations are found
+    if not invitations.exists():
+        return Response({'message': 'No invitations found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Create a structured response
+    invitation_data = []
+    for invite in invitations:
+        invitation_data.append({
+            'inv_id': invite.id,
+            'calendar': CalendarSerializer(invite.calendar).data,
+            'email': invite.email,
+            'invited_by': CustomUserDetailsSerializer(invite.invited_by).data,
+            'token': invite.token,
+            'accepted': invite.accepted,
+            'declined': invite.declined,
+            'created_at': invite.created_at.isoformat(),
+        })
 
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(invitation_data, status=status.HTTP_200_OK)

@@ -21,4 +21,4 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     """
     class Meta(UserDetailsSerializer.Meta):
         model = get_user_model()
-        fields = ('id', 'email', 'is_staff', 'is_active', 'date_joined')
+        fields = ('username', 'id', 'email', 'is_staff', 'is_active', 'date_joined')
