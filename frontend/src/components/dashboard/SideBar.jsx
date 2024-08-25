@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ProfileIcon, ProfileMenu } from "../reusable";
+import { ProfileIcon } from "../reusable";
 import { iconsite } from "../../assets/png";
 import { ChevronFirst, ChevronLast, CalendarPlus, Plus } from "lucide-react";
 import { googleLogout } from "@react-oauth/google";
@@ -122,13 +122,12 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen 
 
         {/* SideBar's profile icon and name overview at the 
                   bottom of the sidebar. Pfp centers when closed */}
-        <div className="border-t flex p-3 items-center">
+       <div className="border-t flex p-3 items-center">
           <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
-            <button onClick={toggleSidebar} >
-              <ProfileIcon user={user} size={35} username={isOpen} ></ProfileIcon>
+            <button onClick={toggleSidebar}>
+              <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isSidebarOpen={isOpen} />
             </button>
           </div>
-          {isOpen && <ProfileMenu onSignOut={handleSignOut}/>}
         </div>
       </nav>
     </aside>
