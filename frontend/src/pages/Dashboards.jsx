@@ -51,7 +51,7 @@ const Dashboards = () => {
     const handleResize = () => {
       const width = window.innerWidth;
       setScreenWidth(width);
-      setPopupIsOpen(width < 1050); // Set popupIsOpen based on the screen width
+      setPopupIsOpen(width < 1150); // Set popupIsOpen based on the screen width
     };
 
     // Attach event listener for resize
