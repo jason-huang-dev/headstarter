@@ -2,12 +2,9 @@ name: Build TimeMesh
 # template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
 
 on:
-  workflow_dispatch:
-  workflow_call:
   push:
     branches:
       - main
-      - landing-page
     # don't rebuild image if someone only edited unrelated files
     paths-ignore:
       - 'README.md'
@@ -27,7 +24,7 @@ jobs:
 
     name: Docker Build TimeMesh
 
-    uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@landing-page
+    uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@main
 
     permissions:
       contents: read
