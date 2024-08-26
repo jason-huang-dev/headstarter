@@ -4,6 +4,7 @@ import { ProfileIcon } from "../reusable";
 import { iconsite } from "../../assets/png";
 import { ChevronFirst, ChevronLast, CalendarPlus, Plus } from "lucide-react";
 import { googleLogout } from "@react-oauth/google";
+import { Inbox } from 'lucide-react';
 
 const SidebarContext = React.createContext();
 
@@ -17,7 +18,7 @@ const SidebarContext = React.createContext();
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @returns {JSX.Element} The Drawer component.
  */
-export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen }) => {
+export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -59,78 +60,110 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen 
     }
   };
 
-  return (
-    <aside
-      className={`h-screen transition-width duration-300 ease-in-out ${
-        isOpen ? "w-64" : "w-20"
-      }`}
-    >
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm overflow-x-hidden">
-        {/* Sidebar's top section with the site logo and toggle button */}
-        <div className="p-4 pb-2 flex justify-between items-center">
-          <div className="flex justify-between items-center">
-            <img
-              src={iconsite}
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isOpen ? "w-[40px]" : "w-0"
-              }`}
-              alt="Logo"
-            />
-            {isOpen && <h2 className="mx-2 text-lg font-sora font-bold">TimeMesh</h2>}
-          </div>
-          <button
-            onClick={toggleSidebar} // Use the toggle function
-            className={`p-2 rounded-lg bg-gray-100 hover:bg-gray-200 ${
-              !isOpen ? "mr-1" : ""
+return (
+  <aside
+    className={`h-screen transition-width duration-300 ease-in-out ${
+      isOpen ? "w-64" : "w-20"
+    }`}
+  >
+    <nav className="h-full flex flex-col bg-white border-r shadow-sm overflow-x-hidden">
+      {/* Sidebar's top section with the site logo and toggle button */}
+      <div className="p-4 pb-2 flex justify-between items-center">
+        <div className="flex justify-between items-center">
+          <img
+            src={iconsite}
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              isOpen ? "w-[40px]" : "w-0"
             }`}
+            alt="Logo"
+          />
+          {isOpen && <h2 className="mx-2 text-lg font-sora font-bold">TimeMesh</h2>}
+        </div>
+        <button
+          onClick={toggleSidebar} // Use the toggle function
+          className={`p-2 rounded-lg bg-gray-100 hover:bg-gray-200 ${
+            !isOpen ? "mr-1" : ""
+          }`}
+        >
+          {isOpen ? <ChevronFirst size={32} /> : <ChevronLast size={32} />}
+        </button>
+      </div>
+
+      {/* Invitations Button */}
+      <div 
+        className={`py-2 rounded-lg mx-4 mt-5 flex items-center 
+          ${isOpen ? "justify-between px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" 
+                  : "justify-center transition-colors group hover:bg-gray-100 bg-white"}`}
+      >
+        <button
+          onClick={() => {
+            setIsOpenInbox(!isOpenInbox);
+            setIsRightBarOpen(false); // Close the right bar
+          }}
+          className="flex items-center w-full"
+        >
+          <div className={`flex items-center justify-center ${!isOpen ? "mx-auto" : ""}`}>
+            <Inbox style={{ width: '32px', height: '32px' }} />
+          </div>
+          {isOpen && (
+            <span className="ml-3 text-sm">
+              Invitations
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Buttons Add Calendar and Add Event */}
+      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-4`}>
+        <div className="flex flex-col items-center mx-3 my-1">
+          <button
+            onClick={() => {
+              addCalendar(setIsOpen);
+              setIsRightBarOpen(false); // Close the right bar
+              setIsOpenInbox(false); // Close the Inbox if it's open
+            }}
+            className={`py-2 rounded-lg 
+            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
           >
-            {isOpen ? <ChevronFirst size={32} /> : <ChevronLast size={32} />}
+            <CalendarPlus style={{ width: "30px", height: "30px" }} />
+          </button>
+          {isOpen && <span className="mt-2 text-sm">Add Calendar</span>}
+        </div>
+
+        <div className="flex flex-col items-center mx-3 my-1">
+          <button
+            onClick={() => {
+              addEvent(setIsOpen);
+              setIsRightBarOpen(false); // Close the right bar
+              setIsOpenInbox(false); // Close the Inbox if it's open
+            }}
+            className={`py-2 rounded-lg 
+            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
+          >
+            <Plus style={{ width: "30px", height: "30px" }} />
+          </button>
+          {isOpen && <span className="mt-2 text-sm">Add Event</span>}
+        </div>
+      </div>
+  
+      <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
+        <ul className="overflow-y-auto flex-1 px-3 py-5">
+          {children({ isOpen, setIsOpen })}
+        </ul>
+      </SidebarContext.Provider>
+  
+      {/* SideBar's profile icon and name overview at the 
+                bottom of the sidebar. Pfp centers when closed */}
+      <div className="border-t flex p-3 items-center">
+        <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
+          <button onClick={toggleSidebar}>
+            <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isSidebarOpen={isOpen} />
           </button>
         </div>
-
-        {/* Buttons Add Calendar and Add Event */}
-        <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-4`}>
-          <div className="flex flex-col items-center mx-3 my-1">
-            <button
-              onClick={() => addCalendar(setIsOpen)}
-              className={`py-2 rounded-lg ${
-                isOpen ? "px-4 bg-gray-100 hover:bg-gray-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"
-              }`}
-            >
-              <CalendarPlus style={{ width: "30px", height: "30px" }} />
-            </button>
-            {isOpen && <span className="mt-2 text-sm">Add Calendar</span>}
-          </div>
-          <div className="flex flex-col items-center mx-3 my-1">
-            <button
-              onClick={() => addEvent(setIsOpen)}
-              className={`py-2 rounded-lg ${
-                isOpen ? "px-3 bg-gray-100 hover:bg-gray-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"
-              }`}
-            >
-              <Plus style={{ width: "30px", height: "30px" }} />
-            </button>
-            {isOpen && <span className="mt-2 text-sm">Add Event</span>}
-          </div>
-        </div>
-
-        <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
-          <ul className="overflow-y-auto flex-1 px-3 py-5">
-            {children({ isOpen, setIsOpen })}
-          </ul>
-        </SidebarContext.Provider>
-
-        {/* SideBar's profile icon and name overview at the 
-                  bottom of the sidebar. Pfp centers when closed */}
-       <div className="border-t flex p-3 items-center">
-          <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
-            <button onClick={toggleSidebar}>
-              <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isSidebarOpen={isOpen} />
-            </button>
-          </div>
-        </div>
-      </nav>
-    </aside>
+      </div>
+    </nav>
+  </aside>
+  
   );
 };
 
@@ -140,5 +173,8 @@ SideBar.propTypes = {
     username: PropTypes.string.isRequired,
     picture: PropTypes.string.isRequired,
   }).isRequired,
-  isRightBarOpen: PropTypes.bool.isRequired, // Add prop type for isRightBarOpen
+  isRightBarOpen: PropTypes.bool.isRequired, // Prop for right bar state
+  setIsRightBarOpen: PropTypes.func.isRequired, // Prop for toggling right bar
+  isOpenInbox: PropTypes.bool.isRequired, // Prop for inbox state
+  setIsOpenInbox: PropTypes.func.isRequired, // Prop for toggling inbox state
 };

@@ -4,7 +4,7 @@ import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../c
 import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, InboxOverview} from '../components/dashboard';
 import { useUserContext } from '../contexts/userDataHandler';
-import { X , Inbox, Calendar as CalendarIcon} from 'lucide-react';
+import { X, Calendar as CalendarIcon} from 'lucide-react';
 import {CalendarUser} from "../assets/svg";
 
 
@@ -93,6 +93,7 @@ const Dashboards = () => {
       setFilteredEvents(newFilteredEvents);
       return updatedIndices;
     });
+    setIsOpenInbox(false);
   };
 
   const handleEditClick = (cal_id) => {
@@ -124,6 +125,7 @@ const Dashboards = () => {
     });
     setIsRightBarOpen(true); 
     setIsOpen(false);
+    setIsOpenInbox(false);
   };
   
   const addEventHandler = (setIsOpen) => {
@@ -134,6 +136,7 @@ const Dashboards = () => {
     })
     setIsRightBarOpen(true); 
     setIsOpen(false); 
+    setIsOpenInbox(false);
   };
 
   const submitAddCalendar = (calendarDetails) =>{
@@ -170,7 +173,14 @@ const Dashboards = () => {
   return (
     <div className="flex h-screen font-sora">
       {/* SideBar Component */}
-      <SideBar user={user} addCalendar={addCalendarHandler} addEvent={addEventHandler} isRightBarOpen={isRightBarOpen}>
+      <SideBar 
+        user={user} 
+        addCalendar={addCalendarHandler} 
+        addEvent={addEventHandler} 
+        isRightBarOpen={isRightBarOpen} 
+        setIsOpenInbox={setIsOpenInbox}
+        isOpenInbox={isOpenInbox}
+        setIsRightBarOpen={setIsRightBarOpen}>
         {({ isOpen, setIsOpen }) => (
           <div className="flex flex-col flex-grow">
             <div className="flex flex-col flex-grow">
@@ -203,22 +213,6 @@ const Dashboards = () => {
                 ))}
                 </Accordion>
               ))}
-              <div className="border-t border-gray-300 my-2"></div> {/*Horizontal Line*/}
-              <div className={`relative flex flex-col py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-green-200 ${isOpenInbox ? 'bg-green-300' : ''}`}>
-              <div 
-                  className={`accordion-title flex items-center w-full justify-center`} 
-                  onClick={() => {setIsOpenInbox(!isOpenInbox)}}
-                  >
-                  <div className={`flex items-center justify-center w-full`}>
-                    <div className="flex items-center justify-center leading-4">
-                      <Inbox style={{ width: '32px', height: '32px' }}/>
-                    </div>
-                    {(isOpen && <span className="ml-2 text-sm">
-                      Invitations
-                    </span>)}
-                  </div>
-              </div>
-            </div>
           </div>
         </div>
       )} 
