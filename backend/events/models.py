@@ -28,7 +28,7 @@ class Event(models.Model):
     description = models.TextField(null=True, blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    bg_color = models.CharField(max_length=7, default='#FFFFFF')
+    bg_color = models.CharField(max_length=7, default='#15803d')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):

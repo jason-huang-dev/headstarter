@@ -47,7 +47,7 @@ const InboxOverview = () => {
                 <div className="flex items-center justify-center leading-4 p-2">
                   <Mail style={{ width: '24px', height: '24px' }} />
                 </div>
-                <span className="ml-4 text-base text-gray-700">
+                <span className="ml-4 text-base text-gray-700 max-w-[30em]">
                   {`${invitation.invited_by.username} invited you to join the ${invitation.calendar.title} calendar`}
                 </span>
               </div>
@@ -77,7 +77,7 @@ const InboxOverview = () => {
             </div>
 
           {/* Display the date on top */}
-          <div className="text-gray-500 text-sm">
+          <div className="text-gray-500 mt-2 text-sm">
             {formatDate(invitation.created_at)}
           </div>
 
@@ -97,14 +97,8 @@ const InboxOverview = () => {
           Current
         </button>
         <button
-          onClick={() => setCurrentTab('sent')}
-          className={`btn px-6 py-2.5 text-sm border uppercase transition-colors
-            ${currentTab === 'sent' ? 'bg-gray-100 font-bold text-black' : 'text-gray-400 hover:bg-gray-100 hover:font-bold'}`}>
-          Sent
-        </button>
-        <button
           onClick={() => setCurrentTab('history')}
-          className={`btn px-6 py-2.5 text-sm border border-l-0 rounded-r-xl uppercase transition-colors
+          className={`btn px-6 py-2.5 text-sm border border-l rounded-r-xl uppercase transition-colors
             ${currentTab === 'history' ? 'bg-gray-100 font-bold text-black' : 'text-gray-400 hover:bg-gray-100 hover:font-bold'}`}>
           History
         </button>
