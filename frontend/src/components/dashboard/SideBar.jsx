@@ -119,8 +119,7 @@ return (
           <button
             onClick={() => {
               addCalendar(setIsOpen);
-              setIsRightBarOpen(false); // Close the right bar
-              setIsOpenInbox(false); // Close the Inbox if it's open
+              if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
@@ -134,8 +133,7 @@ return (
           <button
             onClick={() => {
               addEvent(setIsOpen);
-              setIsRightBarOpen(false); // Close the right bar
-              setIsOpenInbox(false); // Close the Inbox if it's open
+              if (isOpenInbox) setIsOpenInbox(false);  // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
