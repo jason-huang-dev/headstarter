@@ -17,16 +17,8 @@ import { LogOut } from 'lucide-react';
  * @param {boolean} props.isSidebarOpen - Boolean for checking if the sidebar is open.
  * @returns {JSX.Element} The rendered profile icon.
  */
-const ProfileIcon = ({ user, isSidebarOpen, onSignOut, size = 60, username = true, bgColor = "bg-color-color-4" }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const ProfileIcon = ({ user, isDropdownOpen, handleProfileIconClick, onSignOut, size = 60, username = true, bgColor = "bg-color-color-4" }) => {
 
-  const handleIconClick = () => {
-    if (!isSidebarOpen) {
-      setIsDropdownOpen(!isDropdownOpen);
-    } else if (isSidebarOpen && isDropdownOpen) {
-      setIsDropdownOpen(false);
-    }
-  };
 
   const handleSignOut = () => {
     onSignOut(); // Trigger the sign-out process
@@ -36,7 +28,7 @@ const ProfileIcon = ({ user, isSidebarOpen, onSignOut, size = 60, username = tru
     <div className="relative">
       <div
         className={classNames("flex items-center cursor-pointer", `${bgColor}`)}
-        onClick={handleIconClick}
+        onClick={handleProfileIconClick}
       >
         <div
           className="flex items-center justify-center rounded-full overflow-hidden leading-4"
@@ -83,7 +75,6 @@ ProfileIcon.propTypes = {
   size: PropTypes.number,
   username: PropTypes.bool,
   bgColor: PropTypes.string, // Ensure bgColor is a string
-  isSidebarOpen: PropTypes.bool.isRequired, // PropType for the isSidebarOpen boolean
 };
 
 export default ProfileIcon;

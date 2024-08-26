@@ -20,6 +20,19 @@ const SidebarContext = React.createContext();
  */
 export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleProfileIconClick = () => {
+    if (!isOpen) {
+      setIsDropdownOpen(!isDropdownOpen);
+      toggleSidebar();
+    } else if (isOpen && isDropdownOpen) {
+      setIsDropdownOpen(false);
+      toggleSidebar();
+    } else if (isOpen && !isDropdownOpen) {
+      setIsDropdownOpen(true);
+    }
+  };
 
   const toggleSidebar = () => {
     // Block opening if the screen width is less than 1160px and the right sidebar is open
@@ -80,7 +93,10 @@ return (
           {isOpen && <h2 className="mx-2 text-lg font-sora font-bold">TimeMesh</h2>}
         </div>
         <button
-          onClick={toggleSidebar} // Use the toggle function
+          onClick={() => {
+            toggleSidebar(); // Call the toggleSidebar function
+            if (isDropdownOpen) setIsDropdownOpen(false); // Close the dropdown if it's open
+          }} 
           className={`p-2 rounded-lg bg-gray-100 hover:bg-gray-200 ${
             !isOpen ? "mr-1" : ""
           }`}
@@ -154,9 +170,7 @@ return (
                 bottom of the sidebar. Pfp centers when closed */}
       <div className="border-t flex p-3 items-center">
         <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
-          <button onClick={toggleSidebar}>
-            <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isSidebarOpen={isOpen} />
-          </button>
+          <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isDropdownOpen={isDropdownOpen} handleProfileIconClick={handleProfileIconClick} />
         </div>
       </div>
     </nav>
