@@ -27,12 +27,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Set up Environment Variables
+      - name: Create .env file
         run: |
-          echo "VITE_GOOGLE_OAUTH_ID=${{ secrets.VITE_GOOGLE_OAUTH_ID }}" >> $GITHUB_ENV
-          echo "VITE_GOOGLE_OAUTH_SECRET=${{ secrets.VITE_GOOGLE_OAUTH_SECRET }}" >> $GITHUB_ENV
-          echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> $GITHUB_ENV
-          echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> $GITHUB_ENV
+          echo "VITE_GOOGLE_OAUTH_ID=${{ secrets.VITE_GOOGLE_OAUTH_ID }}" >> .env
+          echo "VITE_GOOGLE_OAUTH_SECRET=${{ secrets.VITE_GOOGLE_OAUTH_SECRET }}" >> .env
+          echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
+          echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
 
       - name: Build Docker images with Compose
         run: |
