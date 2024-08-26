@@ -1,68 +1,50 @@
 name: Build TimeMesh
-# template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
 
 on:
   workflow_call:  # This allows the workflow to be called from other workflows
   push:
     branches:
       - main
-    # don't rebuild image if someone only edited unrelated files
     paths-ignore:
       - 'README.md'
       - '.github/linters/**'
       - '.VSCodeCounter'
       - 'Makefile'
 
-
 jobs:
   docker-build-timemesh:
-
     name: Docker Build TimeMesh
-
     uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@main
-
     permissions:
       contents: read
-      packages: write # needed to push docker image to ghcr.io
-      pull-requests: write # needed to create and update comments in PRs
-    
+      packages: write  # Needed to push Docker image to GHCR
+      pull-requests: write  # Needed to create and update comments in PRs
     with:
-      
-      ### REQUIRED
-      ### ENABLE ONE OR BOTH REGISTRIES
-      ### tell docker where to push.
-      ### NOTE if Docker Hub is set to true, you must set secrets above and also add account/repo/tags below
+      # REQUIRED: Enable GHCR for pushing Docker images
       ghcr-enable: true
 
-      ### REQUIRED 
-      ### A list of the account/repo names for docker build. List should match what's enabled above
-      ### defaults to:
+      # REQUIRED: List of Docker image names to build
       image-names: |
         ghcr.io/jason-huang-dev/headstarter
-      
-      ### REQUIRED set rules for tagging images, based on special action syntax:
-      ### https://github.com/docker/metadata-action#tags-input
-      ### defaults to:
+
+      # REQUIRED: Tag rules for the Docker images
       tag-rules: |
         type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         type=raw,value=before,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         type=raw,value=after,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
         type=ref,event=pr
-      
-      ### path to where docker should copy files into image
-      ### defaults to root of repository (.)
+
+      # OPTIONAL: Path to the Docker context (default is root of repository)
       # context: .
-      
-      ### Dockerfile alternate name. Default is Dockerfile (relative to context path)
+
+      # OPTIONAL: Alternate Dockerfile name (default is Dockerfile)
       # file: Containerfile
 
-      ### build stage to target, defaults to empty, which builds to last stage in Dockerfile
+      # OPTIONAL: Build stage to target (default is last stage in Dockerfile)
       # target:
-      
-      ### platforms to build for, defaults to linux/amd64
-      ### other options: linux/amd64,linux/arm64,linux/arm/v7
-      platforms: linux/amd64,linux/arm64,linux/arm/v7
-      
-      ### Create a PR comment with image tags and labels
-      ### defaults to false
+
+      # OPTIONAL: Platforms to build for (default is linux/amd64)
+      platforms: linux/amd64
+
+      # OPTIONAL: Create a PR comment with image tags and labels (default is false)
       # comment-enable: false
