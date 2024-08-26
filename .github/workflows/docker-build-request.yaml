@@ -26,7 +26,7 @@ jobs:
 
     name: Docker Build TimeMesh
 
-    uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@main
+    uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@landing-page
 
     permissions:
       contents: read
