@@ -39,8 +39,26 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
   // Event handler for when an event is selected
   const handleEventSelect = (event) => {
     console.log("Selected event:", event);
-    setEventDetails(event);
-    editEventHandler()
+    
+    // Convert UTC to local time and format for datetime-local input
+    const formatDateForInput = (dateString) => {
+      const date = new Date(dateString);
+      return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+    };
+  
+    const localStart = formatDateForInput(event.start);
+    const localEnd = formatDateForInput(event.end);
+    
+    const formattedEvent = {
+      ...event,
+      start: localStart,
+      end: localEnd
+    };
+    
+    setEventDetails(formattedEvent);
+    editEventHandler();
   };
 
   const handleEventDelete = (eventDetails) => {
