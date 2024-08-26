@@ -103,6 +103,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
           title="Edit Event"
         >
           <Form
+            key={eventDetails.id || 'new'}
             formFields={eventDetails}
             fields={eventForm(calendars)}
           >
@@ -151,6 +152,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
             className="fixed right-0 top-0 h-screen w-80"
           >
             <Form
+              key={eventDetails.id || 'new'}
               formFields={eventDetails}
               fields={eventForm(calendars)}
             >
