@@ -24,7 +24,7 @@ jobs:
 
     name: Docker Build TimeMesh
 
-    uses: iam-weijie/headstarter/.github/workflows/docker-build-request.yaml@main
+    uses: jason-huang-dev/headstarter/.github/workflows/docker-build-request.yaml@main
 
     permissions:
       contents: read
@@ -43,7 +43,7 @@ jobs:
       ### A list of the account/repo names for docker build. List should match what's enabled above
       ### defaults to:
       image-names: |
-        ghcr.io/iam-weijie/headstarter
+        ghcr.io/jason-huang-dev/headstarter
       
       ### REQUIRED set rules for tagging images, based on special action syntax:
       ### https://github.com/docker/metadata-action#tags-input

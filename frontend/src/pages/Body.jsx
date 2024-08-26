@@ -18,6 +18,7 @@ import {Footer} from '../components';
  */
 function Body() {
   return (
+    
     <>
     <LandingNavigation/>
     <div className='mt-[5em] pt-[5rem] lg:pt-[6em]'>
