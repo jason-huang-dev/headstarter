@@ -161,7 +161,7 @@ const Dashboards = () => {
     addEvent(eventDetails);
     // Filter events based on the updated active items
     const newFilteredEvents = events.filter(event =>
-      updatedIndices.includes(event.cal_id)
+      activeItems.includes(event.cal_id)
     );
     setFilteredEvents(newFilteredEvents)
     console.log("Events after addition: ", events)

@@ -82,10 +82,6 @@ const UserProvider = ({ children }) => {
    */
   const [shared_calendars, setSharedCalendars] = useState([]);
 
-  const isEndTimeAfterStartTime = (start, end) => {
-    return new Date(end) > new Date(start);
-  };
-
   {/* Beginning of User Data Fetching */}
   // Reusable function to fetch data from the API and set the corresponding state
   const fetchData = async (url, setState, setState2 = null) => {
@@ -124,15 +120,20 @@ const UserProvider = ({ children }) => {
   }, [user?.token]);
 
   {/* Beginning of Event CRUD Requests */}
-  // Adds a new event 
-  const addEvent = useCallback(async (eventDetails) => {
-    if (!eventDetails.title.trim()) {
-      alert("Event title is required!");
+  // Check for valid end and start time
+  const isEndTimeAfterStartTime = (start, end) => {
+    return new Date(end) >= new Date(start);
+  };
+
+  // Function used to verify contents in event details form
+  const verifyEventDetails = (eventDetails) => {
+    if(!eventDetails.title.trim() || !eventDetails.start.trim() || !eventDetails.end.trim()){
+      alert("Please fill in all fields");
       return;
     }
-    
+
     if (!isEndTimeAfterStartTime(eventDetails.start, eventDetails.end)) {
-      alert("End time must be after start time");
+      alert("End time must be after Start time");
       return;
     }
 
@@ -141,17 +142,27 @@ const UserProvider = ({ children }) => {
       const date = new Date(dateString);
       return date.toISOString();
     };
+
+    const updatedStart = formatDateToUTC(eventDetails.start);
+    const updatedEnd = formatDateToUTC(eventDetails.end);
   
-    const utcStart = formatDateToUTC(eventDetails.start);
-    const utcEnd = formatDateToUTC(eventDetails.end);
-  
-    const eventWithUTC = {
+    eventDetails = {
       ...eventDetails,
-      start: utcStart,
-      end: utcEnd,
+      start: updatedStart,
+      end: updatedEnd,
     };
-  
-    console.log('Adding Event:', eventWithUTC);
+
+    return eventDetails
+  }
+
+  // Adds a new event 
+  const addEvent = useCallback(async (eventDetails) => {
+    eventDetails = verifyEventDetails(eventDetails)
+    if(!eventDetails){
+      return;
+    }
+
+    console.log('Adding Event:', eventDetails);
   
     try {
       const response = await fetch('http://localhost:8000/api/events/', {
@@ -160,7 +171,7 @@ const UserProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Token ${user.token}`,
         },
-        body: JSON.stringify(eventWithUTC),
+        body: JSON.stringify(eventDetails),
       });
   
       const data = await response.json();
@@ -180,27 +191,12 @@ const UserProvider = ({ children }) => {
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
     console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
-  
-    if (!isEndTimeAfterStartTime(updatedDetails.start, updatedDetails.end)) {
-      alert("End time must be after start time");
+    
+    updatedDetails = verifyEventDetails(updatedDetails)
+    if(!updatedDetails){
       return;
     }
 
-    // Convert local time to UTC
-    const formatDateToUTC = (dateString) => {
-      const date = new Date(dateString);
-      return date.toISOString();
-    };
-
-    const updatedStart = formatDateToUTC(updatedDetails.start);
-    const updatedEnd = formatDateToUTC(updatedDetails.end);
-  
-    updatedDetails = {
-      ...updatedDetails,
-      start: updatedStart,
-      end: updatedEnd,
-    };
-  
     try {
       const response = await fetch(`http://localhost:8000/api/events/${updatedDetails.id}/`, {
         method: 'PUT',
