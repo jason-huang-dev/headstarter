@@ -2,6 +2,7 @@ name: Build TimeMesh
 # template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
