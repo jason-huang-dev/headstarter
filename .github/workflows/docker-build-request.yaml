@@ -2,6 +2,7 @@ name: Build TimeMesh
 # template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
 
 on:
+  workflow_call:  # This allows the workflow to be called from other workflows
   push:
     branches:
       - main
@@ -11,13 +12,7 @@ on:
       - '.github/linters/**'
       - '.VSCodeCounter'
       - 'Makefile'
-  pull_request:
-    # don't rebuild image if someone only edited unrelated files
-    paths-ignore:
-      - 'README.md'
-      - '.github/linters/**'
-      - '.VSCodeCounter'
-      - 'Makefile'
+
 
 jobs:
   docker-build-timemesh:
