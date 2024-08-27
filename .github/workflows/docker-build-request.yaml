@@ -17,15 +17,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Install Docker Compose
+      - name: Login to ghcr
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+          echo "${{ secrets.MY_PAT }}" | docker login ghcr.io --username jason-huang-dev --password-stdin
 
       - name: Create .env file
         run: |
@@ -34,15 +33,36 @@ jobs:
           echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
           echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
 
-      - name: Build Docker images with Compose
+      - name: Build Docker Backend Image
+        run: |
+          docker build -t ghcr.io/jason-huang-dev/backend-image:latest ./backend
+          
+      - name: Push Docker Backend Image
+        run: |
+          docker push ghcr.io/jason-huang-dev/backend-image:latest
+
+      - name: Build Docker Frontend Image
+        run: |
+          docker build -t ghcr.io/jason-huang-dev/frontend-image:latest ./frontend
+          
+      - name: Push Docker Frontend Image
+        run: |
+          docker push ghcr.io/jason-huang-dev/frontend-image:latest
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build Docker Compose Images
         run: |
           docker-compose -f docker-compose.yml build
 
-      - name: Push Docker images
+      - name: Push Docker Compose Images
         run: |
           docker-compose -f docker-compose.yml push
 
-      - name: Deploy Docker images
+      - name: Deploy Docker Images
         run: |
           echo "Deploying Docker images"
           # Add your deployment commands here

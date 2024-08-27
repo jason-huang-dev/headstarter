@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: backend-service
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: calendar_app.settings
+      - key: DATABASE_URL
+        value: postgres://myuser:mypassword@postgres-db:5432/mydatabase
+      - key: VITE_GOOGLE_OAUTH_ID
+        value: ${VITE_GOOGLE_OAUTH_ID}
+      - key: VITE_GOOGLE_OAUTH_SECRET
+        value: ${VITE_GOOGLE_OAUTH_SECRET}
+      - key: EMAIL_HOST_USER
+        value: ${EMAIL_HOST_USER}
+      - key: EMAIL_HOST_PASSWORD
+        value: ${EMAIL_HOST_PASSWORD}
+    # Optional: Define a command to run
+    # dockerCommand: python manage.py runserver
+    # Optional: Use a private registry credential
+    # registryCredential:
+    #   fromRegistryCreds:
+    #     name: my-credentials
+
+  - type: web
+    name: frontend-service
+    runtime: docker
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: frontend
+    envVars:
+      - key: VITE_GOOGLE_OAUTH_ID
+        value: ${VITE_GOOGLE_OAUTH_ID}
+      - key: VITE_GOOGLE_OAUTH_SECRET
+        value: ${VITE_GOOGLE_OAUTH_SECRET}
+    # Optional: Define a command to run
+    # dockerCommand: npm run dev
+    # Optional: Use a private registry credential
+    # registryCredential:
+    #   fromRegistryCreds:
+    #     name: my-credentials
+
+  - type: pserv
+    name: postgres-db
+    runtime: docker
+    envVars:
+      - key: POSTGRES_DB
+        value: mydatabase
+      - key: POSTGRES_USER
+        value: myuser
+      - key: POSTGRES_PASSWORD
+        value: mypassword
