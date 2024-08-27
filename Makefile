@@ -28,6 +28,7 @@ down:
 .PHONY: clean_docker
 clean_docker:
 	$(DOCKER_COMPOSE) down --rmi all --volumes --remove-orphans
+	docker system prune -a
 
 # Django backend related commands
 .PHONY: venv
