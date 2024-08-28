@@ -64,7 +64,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'middleware.middleware.HostPatternMiddleware'
+    'calendar_app.middleware.middleware.HostPatternMiddleware'
     'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
