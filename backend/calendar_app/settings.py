@@ -61,11 +61,10 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
     'dynamic_host',
-    'middleware'
 ]
 
 MIDDLEWARE = [
-    'middleware.apps.HostPatternMiddleware'
+    'middleware.middleware.HostPatternMiddleware'
     'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
