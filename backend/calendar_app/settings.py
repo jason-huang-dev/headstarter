@@ -68,8 +68,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'calendar_app.middleware.HostPatternMiddleware'
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'calendar_app.middleware.HostPatternMiddleware'
     'django.contrib.messages.middleware.MessageMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
