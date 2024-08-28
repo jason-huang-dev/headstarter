@@ -1,6 +1,3 @@
-'use client'
-import { useState } from 'react'
-
 /**
  * Team page sill needs to be worked on
  * 

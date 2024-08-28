@@ -1,7 +1,3 @@
-'use client'
-import { useState } from 'react'
-
-
 /**
  * WhenToMeet page sill needs to be worked on
  * 
