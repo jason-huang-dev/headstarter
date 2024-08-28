@@ -31,16 +31,11 @@ SECRET_KEY = 'django-insecure-6lil76#p&uweo_li$2ms_e2&t-bj0-y8v(uxol-!2+=4=4^q#q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOST=['*']
-DYNAMIC_HOST_RESOLVER_FUNC = 'calendar_app.resolver.dynamic_host_resolver'
-DYNAMIC_HOST_DEFAULT_HOSTS = ['jason-huang-devs-projects.vercel.app']
-DYNAMIC_HOST_ALLOW_ALL = False
-DYNAMIC_HOST_ALLOW_SITES = False
+ALLOWED_HOSTS = ['.vercel.app', '.vercel.app/admin' 'localhost', '127.0.0.1']
 
 # Application definition
-
 CSRF_TRUSTED_ORIGINS = [
-    'https://'+ str(os.getenv('VITE_BACKEND_URL')),
+    "https://"+ os.getenv('VITE_BACKEND_URL'),
 ]
 
 INSTALLED_APPS = [
@@ -64,11 +59,9 @@ INSTALLED_APPS = [
     'calendars.apps.CalendarConfig',
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
-    'dynamic_host',
 ]
 
 MIDDLEWARE = [
-    'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -88,7 +81,7 @@ WSGI_APPLICATION = 'calendar_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('POSTGRES_DB_URL'))
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 # Password validation
