@@ -33,6 +33,9 @@ DEBUG = True
 
 ALLOWED_HOST=['*']
 DYNAMIC_HOST_RESOLVER_FUNC = 'calendar_app.resolver.dynamic_host_resolver'
+DYNAMIC_HOST_DEFAULT_HOSTS = ['jason-huang-devs-projects.vercel.app']
+DYNAMIC_HOST_ALLOW_ALL = False
+DYNAMIC_HOST_ALLOW_SITES = False
 
 # Application definition
 

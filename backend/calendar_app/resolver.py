@@ -1,24 +1,16 @@
-import fnmatch
-from django.core.cache import cache
+import re
 
-# List of wildcard patterns to match
-WILDCARD_PATTERNS = [
-    "timemesh-backend-*-jason-huang-devs-projects.vercel.app",
-    # Add more patterns if needed
-]
-
-def dynamic_host_resolver(host, request, **kwargs):
+def dynamic_host_resolver(host):
     """
-    Check if the given host matches any of the predefined wildcard patterns.
+    Resolver function for django-dynamic-host.
+    Returns True if the host is allowed, False otherwise.
     """
-    # Check in cache first
-    if cache.get(host):
-        return True
+    # Define your patterns here
+    allowed_patterns = [
+        r'^timemesh-backend-[a-z0-9]+-jason-huang-devs-projects\.vercel\.app$',
+        r'^localhost$',
+        r'^127\.0\.0\.1$',
+        # Add more patterns as needed
+    ]
 
-    # Check if host matches any pattern
-    for pattern in WILDCARD_PATTERNS:
-        if fnmatch.fnmatch(host, pattern):
-            cache.set(host, True, timeout=3600)  # Cache result for 1 hour
-            return True
-
-    return False
+    return any(re.match(pattern, host) for pattern in allowed_patterns)
