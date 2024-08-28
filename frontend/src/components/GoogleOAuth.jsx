@@ -20,7 +20,7 @@ const GoogleOAuth = () => {
     console.log('Login Success:', credentialResponse);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/google/', {
+      const response = await fetch(`http://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
