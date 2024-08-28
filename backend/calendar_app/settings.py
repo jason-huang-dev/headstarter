@@ -31,7 +31,8 @@ SECRET_KEY = 'django-insecure-6lil76#p&uweo_li$2ms_e2&t-bj0-y8v(uxol-!2+=4=4^q#q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('VITE_BACKEND_URL'), 'localhost', '127.0.0.1']
+ALLOWED_HOST=['*']
+DYNAMIC_HOST_RESOLVER_FUNC = 'calendar_app.resolver.dynamic_host_resolver'
 
 # Application definition
 
@@ -60,9 +61,11 @@ INSTALLED_APPS = [
     'calendars.apps.CalendarConfig',
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
+    'dynamic_host',
 ]
 
 MIDDLEWARE = [
+    'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -71,7 +74,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'calendar_app.middleware.HostPatternMiddleware'
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
