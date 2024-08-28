@@ -5,7 +5,7 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const location = useLocation();
-
+  const backend_url = import.meta.env.VITE_BACKEND_URL
   /**
    * User object containing details about the currently authenticated user.
    * 
@@ -112,10 +112,10 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (user && user.token) {
-      fetchData('http://localhost:8000/api/calendars/', setCalendars);
-      fetchData('http://localhost:8000/api/events/', setEvents);
-      fetchData('http://localhost:8000/api/invitations/', setInvitations);
-      fetchData('http://localhost:8000/api/calendars/shared/', setSharedCalendars);
+      fetchData(`http://${backend_url}/api/calendars/`, setCalendars);
+      fetchData(`http://${backend_url}/api/events/`, setEvents);
+      fetchData(`http://${backend_url}/api/invitations/`, setInvitations);
+      fetchData(`http://${backend_url}/api/calendars/shared/`, setSharedCalendars);
     }
   }, [user?.token]);
 
@@ -165,7 +165,7 @@ const UserProvider = ({ children }) => {
     console.log('Adding Event:', eventDetails);
   
     try {
-      const response = await fetch('http://localhost:8000/api/events/', {
+      const response = await fetch(`http://${backend_url}/api/events/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const UserProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/events/${updatedDetails.id}/`, {
+      const response = await fetch(`http://${backend_url}/api/events/${updatedDetails.id}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ const UserProvider = ({ children }) => {
     console.log(`Deleting Event ${updatedDetails.id}`);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/events/${updatedDetails.id}/`, {
+      const response = await fetch(`http://${backend_url}/api/events/${updatedDetails.id}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ const UserProvider = ({ children }) => {
     console.log('Adding Calendar:', calendarDetails);
 
     try {
-      const response = await fetch('http://localhost:8000/api/calendars/', {
+      const response = await fetch(`http://${backend_url}/api/calendars/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ const UserProvider = ({ children }) => {
     console.log(`Updating Calendar ${cal_id}:`, updatedDetails);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/calendars/${cal_id}/`, {
+      const response = await fetch(`http://${backend_url}/api/calendars/${cal_id}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -310,7 +310,7 @@ const UserProvider = ({ children }) => {
     console.log("Deleting Calendar: ",  calendarDetails);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/calendars/${calendarDetails.cal_id}/`, {
+      const response = await fetch(`http://${backend_url}/api/calendars/${calendarDetails.cal_id}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -335,7 +335,7 @@ const UserProvider = ({ children }) => {
   // Add the acceptInvitation function
   const acceptInvitation = useCallback(async (invite_token, action) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/invitations/accept/`, {
+      const response = await fetch(`http://${backend_url}/api/invitations/accept/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
