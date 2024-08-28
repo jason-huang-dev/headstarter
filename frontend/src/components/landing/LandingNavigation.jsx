@@ -1,5 +1,4 @@
 // Responsible topbar component
-'use client'
 import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import {iconsite} from "../../assets/png"; // logo of the website

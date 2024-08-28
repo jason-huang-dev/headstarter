@@ -1,4 +1,3 @@
-'use client'
 import React, {useState} from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
