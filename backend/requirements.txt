@@ -9,6 +9,7 @@ dj-rest-auth==6.0.0
 Django==5.1
 django-allauth==0.63.6
 django-cors-headers==4.4.0
+django-dynamic-host==0.0.2
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 google-auth==2.32.0
@@ -16,6 +17,7 @@ google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
 httplib2==0.22.0
 idna==3.7
+importlib_metadata==8.4.0
 oauthlib==3.2.2
 pillow==10.4.0
 psycopg2-binary==2.9.9
@@ -32,3 +34,4 @@ sqlparse==0.5.1
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
+zipp==3.20.1

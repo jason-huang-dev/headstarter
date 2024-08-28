@@ -64,9 +64,11 @@ INSTALLED_APPS = [
     'calendars.apps.CalendarConfig',
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
+    'dynamic_host',
 ]
 
 MIDDLEWARE = [
+    'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
