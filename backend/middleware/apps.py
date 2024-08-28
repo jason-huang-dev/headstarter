@@ -2,8 +2,9 @@
 
 import re
 from django.http import HttpResponseForbidden
+from django.apps import AppConfig
 
-class HostPatternMiddleware:
+class HostPatternMiddleware(AppConfig):
     def __init__(self, get_response):
         self.get_response = get_response
         self.allowed_patterns = [
