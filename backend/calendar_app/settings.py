@@ -60,12 +60,9 @@ INSTALLED_APPS = [
     'calendars.apps.CalendarConfig',
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
-    'dynamic_host',
 ]
 
 MIDDLEWARE = [
-    'calendar_app.middleware.middleware.HostPatternMiddleware'
-    'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -75,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'calendar_app.middleware.HostPatternMiddleware'
 ]
 
 ROOT_URLCONF = 'calendar_app.urls'
