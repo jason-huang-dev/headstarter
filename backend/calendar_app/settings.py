@@ -19,10 +19,6 @@ from pathlib import Path
 from datetime import timedelta
 import dj_database_url
 
-def get_current_host():
-    import socket
-    return socket.gethostname()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,7 +31,7 @@ SECRET_KEY = 'django-insecure-6lil76#p&uweo_li$2ms_e2&t-bj0-y8v(uxol-!2+=4=4^q#q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [get_current_host(), os.getenv('VITE_BACKEND_URL'), 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.getenv('VITE_BACKEND_URL'), 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -68,7 +64,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'calendar_app.middleware.HostPatternMiddleware'
+    'middleware.middleware.HostPatternMiddleware'
     'dynamic_host.middleware.AllowedHostMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
