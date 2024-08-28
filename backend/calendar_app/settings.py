@@ -40,7 +40,7 @@ ALLOWED_HOSTS = [get_current_host(), os.getenv('VITE_BACKEND_URL'), 'localhost',
 # Application definition
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://"+ os.getenv('VITE_BACKEND_URL'),
+    'https://'+ str(os.getenv('VITE_BACKEND_URL')),
 ]
 
 INSTALLED_APPS = [
@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'calendar_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.getenv('POSTGRES_DB_URL'))
 }
 
 # Password validation
