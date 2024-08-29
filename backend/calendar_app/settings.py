@@ -192,7 +192,9 @@ CORS_ALLOW_ALL_ORIGINS = True  # For development only. Use specific origins in p
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "https://timemesh-rr1s.onrender.com", "https://*.vercel.app", '"https://*.vercel.app/admin',
+    "https://timemesh-rr1s.onrender.com", 
+    "https://*.vercel.app", 
+    "https://*.vercel.app/admin",
 ]
 # Base dir of your project
 BASE_DIR = Path(__file__).resolve().parent.parent
