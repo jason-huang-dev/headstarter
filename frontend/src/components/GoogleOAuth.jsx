@@ -17,9 +17,6 @@ const GoogleOAuth = () => {
   const navigate = useNavigate();
 
   const handleLoginSuccess = async (credentialResponse) => {
-    console.log('Login Success: ', credentialResponse.credential);
-    console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google`);
-
     try {
       const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google`, {
         method: 'POST',
@@ -32,9 +29,13 @@ const GoogleOAuth = () => {
       });
 
       const data = await response.json();
-      console.log('Server Response:', data);
 
       if (response.ok) {
+        // Convert the base64 image to a data URL
+        if (data.picture) {
+          data.picture = `data:image/jpeg;base64,${data.picture}`;
+        }
+
         setUser(data);
         navigate('/dashboards', { state: { user: data } }); // Navigate to the dashboards page
       } else {
@@ -51,7 +52,7 @@ const GoogleOAuth = () => {
     console.error('Login Error:', error);
     setUser(null);
   };
-  
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_ID}>
       <div className="flex justify-center">
@@ -70,6 +71,5 @@ const GoogleOAuth = () => {
     </GoogleOAuthProvider>
   );
 };
-
 
 export default GoogleOAuth;

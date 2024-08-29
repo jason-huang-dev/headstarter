@@ -21,6 +21,7 @@ from rest_framework.authtoken.models import Token
 from calendars.models import Calendar
 import requests
 from django.core.files.base import ContentFile
+import base64
 from django.contrib.auth import logout
 
 
@@ -41,7 +42,7 @@ def google_auth(request):
      "token" : str - The OAuth2 token received from Google, sent in the request body.
     }
     ```
-    ::return Response : A JSON response containing the authentication token, user ID, email, username, and profile picture URL.
+    ::return Response : A JSON response containing the authentication token, user ID, email, username, and base64 encoded profile picture.
     ::raises ValueError : Raised if the token is invalid or cannot be verified.
     ::raises IntegrityError : Raised if there is an issue creating or updating the user in the database.
     ::raises Exception : Catches any other unexpected errors and logs them.
@@ -79,11 +80,12 @@ def google_auth(request):
             user.save()
 
         # Handle profile picture
+        base64_image = None
         if picture_url:
             response = requests.get(picture_url)
             if response.status_code == 200:
-                img_name = f"profile_{user.id}.jpg"
-                user.profile_picture.save(img_name, ContentFile(response.content), save=True)
+                # Convert image to base64
+                base64_image = base64.b64encode(response.content).decode('utf-8')
 
         # Create or update social account
         social_account, created = SocialAccount.objects.get_or_create(
@@ -100,7 +102,7 @@ def google_auth(request):
             'user_id': user.pk,
             'email': user.email,
             'username': user.username,
-            'picture': request.build_absolute_uri(user.profile_picture.url)
+            'picture': base64_image  # Return the base64 encoded image
         })
 
     except ValueError as e:
