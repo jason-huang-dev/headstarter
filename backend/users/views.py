@@ -120,3 +120,8 @@ def sign_out(request):
         logout(request)
         return Response({'message': 'Successfully signed out'}, status=status.HTTP_202_ACCEPTED)
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def test_connection(request):
+    return Response({'message': 'Connection successful'}, status=status.HTTP_200_OK)
