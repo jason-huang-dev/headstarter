@@ -37,7 +37,7 @@ const GoogleOAuth = () => {
         }),
       });
 
-      const data = await response.json();
+      let data = await response.json();
 
       if (response.ok) {
         // Combine the backend response with the picture URL
