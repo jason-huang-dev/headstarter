@@ -29,7 +29,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(_('username'), max_length=255)
-    profile_picture = models.ImageField(upload_to='profile_pics', default=settings.DEFAULT_PROFILE_PIC)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
