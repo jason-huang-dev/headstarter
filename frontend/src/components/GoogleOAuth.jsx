@@ -18,10 +18,10 @@ const GoogleOAuth = () => {
 
   const handleLoginSuccess = async (credentialResponse) => {
     console.log('Login Success: ', credentialResponse.credential);
-    console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google`);
+    console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`);
     
     try {
-      const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google`, {
+      const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
