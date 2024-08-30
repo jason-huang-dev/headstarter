@@ -1,73 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>You're Invited to {{ calendar_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Invitation to {{ calendar_name }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.8;
             margin: 0;
             padding: 0;
         }
-        a {
-            color: #ffffff;
-        }
         .container {
             max-width: 600px;
-            margin: 20px auto;
+            margin: 40px auto;
             background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
         }
         h1 {
             color: #15803d;
             text-align: center;
+            font-size: 32px;
+            margin: 20px 0;
+            font-weight: 700;
         }
         p {
-            margin: 10px 0;
+            margin: 15px 0;
+            font-size: 16px;
+            color: #4a5568;
+        }
+        .highlight {
+            font-weight: 700;
+            color: #15803d;
         }
         .button {
             display: inline-block;
-            padding: 10px 15px;
-            margin: 20px 5px;
+            padding: 14px 24px;
+            margin: 25px 10px;
             background-color: #15803d;
             color: #ffffff;
             text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
+            border-radius: 30px;
             font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 18px;
         }
-        .button.decline {
-            background-color: #e53e3e;
+        .button:hover {
+            background-color: #0c5a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(12, 90, 43, 0.2);
+        }
+        .note {
+            background-color: #e6fffa;
+            border-left: 4px solid #15803d;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
         }
         .footer {
-            margin-top: 20px;
+            margin-top: 40px;
             text-align: center;
-            font-size: 0.9em;
-            color: #777;
+            font-size: 14px;
+            color: #718096;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #15803d;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+            .button {
+                display: block;
+                margin: 20px auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>You're Invited!</h1>
-        <p>Hi from TimeMesh,</p>
-        <p>You have been invited to join the calendar: <strong>{{ calendar_name }}</strong>.</p>
-        <p>This invitation was sent by <strong>{{ invited_by }}</strong>.</p>
-        <p>To accept or decline this invitation, please click the button below:</p>
+        <p>Hello from TimeMesh,</p>
+        <p>We're thrilled to inform you that you've been invited to join the calendar: <span class="highlight">{{ calendar_name }}</span> on TimeMesh.</p>
+        <p>This exclusive invitation was personally extended to you by <span class="highlight">{{ invited_by }}</span>, and we'd be delighted to have you on board!</p>
+        <p>Ready to get started? Simply click the button below:</p>
         <div style="text-align: center;">
-            <a href="https://timemesh.vercel.app/signin" class="button">Go To TimeMesh</a>
+            <a href="https://timemesh.vercel.app/signin" class="button">Join TimeMesh</a>
         </div>
-        <p><strong>IMPORTANT:</strong> Please use the email address where you received this invitation when signing in.</p>
-        <p>If you have any questions, feel free to reach out to us.</p>
-        <p>Best regards,<br>TimeMesh Team</p>
+        <div class="note">
+            <strong>Pro Tip:</strong> Make sure to sign in with the email address where you received this invitation for a seamless setup process.
+        </div>
+        <p>If you have any questions or need assistance, our support team is always here to help. Don't hesitate to reach out!</p>
+        <p>We're looking forward to seeing you in TimeMesh soon!<br><br>Best regards,<br>The TimeMesh Team</p>
     </div>
     <div class="footer">
         <p>&copy; {{ current_year }} TimeMesh. All rights reserved.</p>
+        <p><a href="https://timemesh.vercel.app">Visit our website</a> </p>
     </div>
 </body>
 </html>
