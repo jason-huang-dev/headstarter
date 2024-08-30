@@ -267,7 +267,6 @@ const UserProvider = ({ children }) => {
 
       const data = await response.json();
       // console.log('Response from Add Calendar:', data);
-      {/* TODO decide if the backend response should also return an array of invitation objects along with calendar */}
       if (response.ok) {
         setCalendars(prevCalendars => [...prevCalendars, data.calendar]);
       } else {
