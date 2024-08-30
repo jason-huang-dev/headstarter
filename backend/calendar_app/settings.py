@@ -26,17 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6lil76#p&uweo_li$2ms_e2&t-bj0-y8v(uxol-!2+=4=4^q#q'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.vercel.app/admin', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['timemesh-backend.vercel.app', 'timemesh-backend.vercel.app/admin',]
 
 # Application definition
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://timemesh-rr1s.onrender.com", "https://*.vercel.app", "https://*.vercel.app/admin",
+    "https://timemesh-rr1s.onrender.com", "https://timemesh.vercel.app", "https://timemesh-backend.vercel.app/admin",
 ]
 
 INSTALLED_APPS = [
@@ -187,14 +187,14 @@ REST_AUTH = {
 ACCOUNT_UNIQUE_EMAIL = True
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # For development only. Use specific origins in production.
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "https://timemesh-rr1s.onrender.com", 
-    "https://*.vercel.app", 
-    "https://*.vercel.app/admin",
+    "https://timemesh.vercel.app", 
+    "https://timemesh-backend.vercel.app/admin",
 ]
 # Base dir of your project
 BASE_DIR = Path(__file__).resolve().parent.parent
