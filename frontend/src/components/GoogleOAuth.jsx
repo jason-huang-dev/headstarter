@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { jwt_decode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * GoogleOAuth component that handles Google OAuth authentication.
@@ -22,7 +22,7 @@ const GoogleOAuth = () => {
     console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`);
     
     // Decode the JWT to get user info, including the picture URL
-    const decoded = jwt_decode(credentialResponse.credential);
+    const decoded = jwtDecode(credentialResponse.credential);
     console.log("Decoded jwt token: ", decoded)
     const pictureUrl = decoded.picture;
     
