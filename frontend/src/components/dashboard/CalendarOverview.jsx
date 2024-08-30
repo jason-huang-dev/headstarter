@@ -31,13 +31,13 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
 
   const handleEventUpdate = (eventDetails) =>{
     updateEvent(eventDetails);
-    console.log("Event updated: ", eventDetails)
+    // console.log("Event updated: ", eventDetails)
     setIsRightBarOpen(false);
   }
 
   // Event handler for when an event is selected
   const handleEventSelect = (event) => {
-    console.log("Selected event:", event);
+    // console.log("Selected event:", event);
     
     // Convert UTC to local time and format for datetime-local input
     const formatDateForInput = (dateString) => {
@@ -62,7 +62,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
 
   const handleEventDelete = (eventDetails) => {
     deleteEvent(eventDetails)
-    console.log("Event deleted: ", eventDetails)
+    // console.log("Event deleted: ", eventDetails)
     setIsRightBarOpen(false);
   }
   

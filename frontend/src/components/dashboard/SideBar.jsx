@@ -60,7 +60,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen,
 
       if (response.ok) {
         // Sign out was successful
-        console.log("Successfully signed out");
+        // console.log("Successfully signed out");
         window.location.href = '/'; // Redirect to the root (home) page
       } else {
         console.error("Failed to sign out from the backend");

@@ -84,9 +84,9 @@ const Form = ({ fields, formFields, children }) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log("Form Submitted:", formDetails);
+      // console.log("Form Submitted:", formDetails);
     } else {
-      console.log("Validation Errors:", errors);
+      // console.log("Validation Errors:", errors);
     }
   };
 

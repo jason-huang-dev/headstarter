@@ -18,12 +18,12 @@ const GoogleOAuth = () => {
   const navigate = useNavigate();
 
   const handleLoginSuccess = async (credentialResponse) => {
-    console.log('Login Success: ', credentialResponse.credential);
-    console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`);
+    // console.log('Login Success: ', credentialResponse.credential);
+    // console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`);
     
     // Decode the JWT to get user info, including the picture URL
     const decoded = jwtDecode(credentialResponse.credential);
-    console.log("Decoded jwt token: ", decoded)
+    // console.log("Decoded jwt token: ", decoded)
     const pictureUrl = decoded.picture;
     
     try {

@@ -95,7 +95,7 @@ const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      console.log(`Response from ${url}:`, data);
+      // console.log(`Response from ${url}:`, data);
 
       if (response.ok) {
         setState(data);
@@ -162,7 +162,7 @@ const UserProvider = ({ children }) => {
       return;
     }
 
-    console.log('Adding Event:', eventDetails);
+    // console.log('Adding Event:', eventDetails);
   
     try {
       const response = await fetch(`https://${backend_url}/api/events/`, {
@@ -175,7 +175,7 @@ const UserProvider = ({ children }) => {
       });
   
       const data = await response.json();
-      console.log('Response from Add Event:', data);
+      // console.log('Response from Add Event:', data);
   
       if (response.ok) {
         setEvents((prevEvents) => [...prevEvents, data]);
@@ -190,7 +190,7 @@ const UserProvider = ({ children }) => {
 
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
-    console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
+    // console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
     
     updatedDetails = verifyEventDetails(updatedDetails)
     if(!updatedDetails){
@@ -208,7 +208,7 @@ const UserProvider = ({ children }) => {
       });
   
       const data = await response.json();
-      console.log('Response from Update Event:', data);
+      // console.log('Response from Update Event:', data);
   
       if (response.ok) {
         setEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
@@ -224,7 +224,7 @@ const UserProvider = ({ children }) => {
   {/* TODO after deletion you can still see and interact with the 
     deleted event in UI although it is gone from backend database */}
   const deleteEvent = useCallback(async (updatedDetails) => {
-    console.log(`Deleting Event ${updatedDetails.id}`);
+    // console.log(`Deleting Event ${updatedDetails.id}`);
 
     try {
       const response = await fetch(`https://${backend_url}/api/events/${updatedDetails.id}/`, {
@@ -238,7 +238,7 @@ const UserProvider = ({ children }) => {
       if (response.ok) {
         setEvents(prevEvents => {
           const updatedEvents = prevEvents.filter(event => event.id !== updatedDetails.id);
-          console.log('Updated Events:', updatedEvents);
+          // console.log('Updated Events:', updatedEvents);
           return updatedEvents;
         });
 
@@ -253,7 +253,7 @@ const UserProvider = ({ children }) => {
 
   {/* Beginning of Calendar CRUD Requests */}
   const addCalendar = useCallback(async (calendarDetails) => {
-    console.log('Adding Calendar:', calendarDetails);
+    // console.log('Adding Calendar:', calendarDetails);
 
     try {
       const response = await fetch(`https://${backend_url}/api/calendars/`, {
@@ -266,7 +266,7 @@ const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      console.log('Response from Add Calendar:', data);
+      // console.log('Response from Add Calendar:', data);
       {/* TODO decide if the backend response should also return an array of invitation objects along with calendar */}
       if (response.ok) {
         setCalendars(prevCalendars => [...prevCalendars, data.calendar]);
@@ -280,7 +280,7 @@ const UserProvider = ({ children }) => {
 
   // Update an existing calendar
   const updateCalendar = useCallback(async (cal_id, updatedDetails) => {
-    console.log(`Updating Calendar ${cal_id}:`, updatedDetails);
+    // console.log(`Updating Calendar ${cal_id}:`, updatedDetails);
 
     try {
       const response = await fetch(`https://${backend_url}/api/calendars/${cal_id}/`, {
@@ -293,7 +293,7 @@ const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      console.log('Response from Update Calendar:', data);
+      // console.log('Response from Update Calendar:', data);
 
       if (response.ok) {
         setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === cal_id ? data.calendar : calendar));
@@ -307,7 +307,7 @@ const UserProvider = ({ children }) => {
 
   // Delete an existing calendar
   const deleteCalendar = useCallback(async (calendarDetails) => {
-    console.log("Deleting Calendar: ",  calendarDetails);
+    // console.log("Deleting Calendar: ",  calendarDetails);
 
     try {
       const response = await fetch(`https://${backend_url}/api/calendars/${calendarDetails.cal_id}/`, {
@@ -349,7 +349,7 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Invitation accepted:', data);
+        // console.log('Invitation accepted:', data);
         // Update invitations state to reflect the change
         setInvitations(prevInvitations => prevInvitations.filter(invite => invite.token !== invite_token));
       } else {

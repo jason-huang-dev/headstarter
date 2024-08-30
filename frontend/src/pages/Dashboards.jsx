@@ -68,7 +68,7 @@ const Dashboards = () => {
   }, [events]);
 
   const handleTitleClick = (index) => {
-    console.log(`Title clicked: ${index}`);
+    // console.log(`Title clicked: ${index}`);
     setActiveIndices((prevIndices) => 
       prevIndices.includes(index)
         ? prevIndices.filter((i) => i !== index) 
@@ -77,7 +77,7 @@ const Dashboards = () => {
   };
 
   const handleItemClick = (cal_id) => {
-    console.log(`Calendar clicked with ID: ${cal_id}`);
+    // console.log(`Calendar clicked with ID: ${cal_id}`);
     
     setActiveItems((prevIndices) => {
       // Toggle the active item
@@ -98,7 +98,7 @@ const Dashboards = () => {
 
   const handleEditClick = (cal_id) => {
     const calendar = calendars.find(cal => cal.cal_id === cal_id)
-    console.log("Edit clicked: ", calendar);
+    // console.log("Edit clicked: ", calendar);
   
     // Extract email addresses from shared_users, but only people that are registered
     const emailList = calendar.shared_users ? calendar.shared_users.map(user => user.email) : [];
@@ -145,13 +145,13 @@ const Dashboards = () => {
   }
 
   const submitEditCalendar = (calendarDetails) =>{
-    console.log("Calendar Update: ", calendarDetails)
+    // console.log("Calendar Update: ", calendarDetails)
     updateCalendar(calendarDetails.cal_id,calendarDetails)
     setIsRightBarOpen(false);
   }
 
   const handleCalendarDelete = (calendarDetails) =>{
-    console.log("Delete Calendar: ", calendarDetails)
+    // console.log("Delete Calendar: ", calendarDetails)
     deleteCalendar(calendarDetails)
 
     setIsRightBarOpen(false);
@@ -164,7 +164,7 @@ const Dashboards = () => {
       activeItems.includes(event.cal_id)
     );
     setFilteredEvents(newFilteredEvents)
-    console.log("Events after addition: ", events)
+    // console.log("Events after addition: ", events)
     setIsRightBarOpen(false);
   }
 
