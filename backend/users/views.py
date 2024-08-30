@@ -62,7 +62,6 @@ def google_auth(request):
         # Extract email, name, and picture from the ID token
         email = idinfo['email']
         name = idinfo.get('name', '')
-        picture_url = idinfo.get('picture')
 
         # Try to get an existing user with this email
         user = User.objects.filter(email=email).first()
@@ -79,14 +78,6 @@ def google_auth(request):
             user.set_unusable_password()
             user.save()
 
-        # Handle profile picture
-        base64_image = None
-        if picture_url:
-            response = requests.get(picture_url)
-            if response.status_code == 200:
-                # Convert image to base64
-                base64_image = base64.b64encode(response.content).decode('utf-8')
-
         # Create or update social account
         social_account, created = SocialAccount.objects.get_or_create(
             provider='google',
@@ -102,7 +93,6 @@ def google_auth(request):
             'user_id': user.pk,
             'email': user.email,
             'username': user.username,
-            'picture': base64_image  # Return the base64 encoded image
         })
 
     except ValueError as e:

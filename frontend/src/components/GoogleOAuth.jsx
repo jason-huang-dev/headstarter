@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * GoogleOAuth component that handles Google OAuth authentication.
@@ -17,8 +18,16 @@ const GoogleOAuth = () => {
   const navigate = useNavigate();
 
   const handleLoginSuccess = async (credentialResponse) => {
+    // console.log('Login Success: ', credentialResponse.credential);
+    // console.log('Post UrL: ', `https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`);
+    
+    // Decode the JWT to get user info, including the picture URL
+    const decoded = jwtDecode(credentialResponse.credential);
+    // console.log("Decoded jwt token: ", decoded)
+    const pictureUrl = decoded.picture;
+    
     try {
-      const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google`, {
+      const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/google/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,13 +37,14 @@ const GoogleOAuth = () => {
         }),
       });
 
-      const data = await response.json();
+      let data = await response.json();
 
       if (response.ok) {
-        // Convert the base64 image to a data URL
-        if (data.picture) {
-          data.picture = `data:image/jpeg;base64,${data.picture}`;
-        }
+        // Combine the backend response with the picture URL
+        data = {
+          ...data,
+          picture: pictureUrl
+        };
 
         setUser(data);
         navigate('/dashboards', { state: { user: data } }); // Navigate to the dashboards page
