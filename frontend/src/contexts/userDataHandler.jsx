@@ -253,7 +253,7 @@ const UserProvider = ({ children }) => {
 
   {/* Beginning of Calendar CRUD Requests */}
   const addCalendar = useCallback(async (calendarDetails) => {
-    // console.log('Adding Calendar:', calendarDetails);
+    console.log('Adding Calendar:', calendarDetails);
 
     try {
       const response = await fetch(`https://${backend_url}/api/calendars/`, {
@@ -266,8 +266,7 @@ const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      // console.log('Response from Add Calendar:', data);
-      {/* TODO decide if the backend response should also return an array of invitation objects along with calendar */}
+      console.log('Response from Add Calendar:', data);
       if (response.ok) {
         setCalendars(prevCalendars => [...prevCalendars, data.calendar]);
       } else {
