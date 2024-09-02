@@ -28,6 +28,7 @@ from django.conf.urls.static import static
 from calendars.views import calendar_view, calendar_detailed_view, get_shared_calendars
 from events.views import event_view, event_detailed_view
 from invitations.views import create_invitation, respond_invitation, get_invites_by_email
+from ai.views import get_ai_response
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -53,7 +54,10 @@ urlpatterns = [
     path('api/invitations/accept/', respond_invitation, name='accept_decline_invitation'),
     path('api/invitations/', get_invites_by_email, name='get_invites_by_email'),
 
-    path('api/test', test_connection, name="test_connection")
+    path('api/test', test_connection, name="test_connection"),
+
+    # AI Path
+    path('api/ai/', get_ai_response, name='get_ai_response')
 ]
 
 # Serve media files in development

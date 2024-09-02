@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'invitations.apps.InvitationsConfig',
     'whitenoise.runserver_nostatic',
+    'ai.apps.AIConfig',
 ]
 
 MIDDLEWARE = [
