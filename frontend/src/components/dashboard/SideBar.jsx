@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { ProfileIcon } from "../reusable";
 import { iconsite } from "../../assets/png";
-import { ChevronFirst, ChevronLast, CalendarPlus, Plus, BrainCircuit, Brain} from "lucide-react";
+import { ChevronFirst, ChevronLast, CalendarPlus, Plus, Cpu} from "lucide-react";
 import { googleLogout } from "@react-oauth/google";
 import { Inbox } from 'lucide-react';
+import { useUserContext } from "../../contexts/userDataHandler";
 
 const SidebarContext = React.createContext();
 
@@ -21,6 +22,7 @@ const SidebarContext = React.createContext();
 export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const {postAI} = useUserContext()
 
   const handleProfileIconClick = () => {
     if (!isOpen) {
@@ -165,29 +167,15 @@ return (
         <div className="flex flex-col items-center mx-3 my-1">
           <button
             onClick={() => {
-              addCalendar(setIsOpen);
+              postAI('test message');
               if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
           >
-            <BrainCircuit style={{ width: "30px", height: "30px" }} />
+            <Cpu style={{ width: "30px", height: "30px" }} />
           </button>
           {isOpen && <span className="mt-2 text-sm">AI 1</span>}
-        </div>
-
-        <div className="flex flex-col items-center mx-3 my-1">
-          <button
-            onClick={() => {
-              addEvent(setIsOpen);
-              if (isOpenInbox) setIsOpenInbox(false);  // Close the Inbox if it's open
-            }}
-            className={`py-2 rounded-lg 
-            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
-          >
-            <Brain style={{ width: "30px", height: "30px" }} />
-          </button>
-          {isOpen && <span className="mt-2 text-sm">AI 2</span>}
         </div>
       </div>
   
