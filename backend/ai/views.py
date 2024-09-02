@@ -12,7 +12,6 @@ import os
 
 logger = logging.getLogger(__name__)
 @api_view(['POST'])
-@csrf_exempt
 @permission_classes([AllowAny])
 def get_ai_response(request):
     if request.method == 'POST':
