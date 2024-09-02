@@ -38,7 +38,10 @@ def get_ai_response(request):
                 return Response({'error': 'API request failed'}, status=response.status_code)
             
             # Return the JSON content from the API response
-            return Response(response.json())
+            response_data = response.json()
+            return Response({
+                "message": response_data.get('choices', [{}])[0].get('message', {}).get('content', 'No content')
+            })
         
         except json.JSONDecodeError:
             return Response({'error': 'Invalid JSON format'}, status=400)
