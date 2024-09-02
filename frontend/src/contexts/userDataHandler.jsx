@@ -360,6 +360,33 @@ const UserProvider = ({ children }) => {
     }
   }, [user?.token]);
 
+  const postAI = async (message) => {
+    console.log("Message to send to AI: ", message)
+    try{
+      const response = await fetch(`https://${backend_url}/api/ai/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+        body: JSON.stringify({ 
+          message: message 
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Received AI response: ', data);
+      } else {
+        const error = await response.json();
+        console.error('Error receiving AI response: ', error);
+      }
+    }
+    catch (error){
+      console.error('Error:', error);
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -367,6 +394,7 @@ const UserProvider = ({ children }) => {
         shared_calendars,
         invitations,
         events,
+        postAI,
         setCalendars,
         setEvents,
         addEvent,
