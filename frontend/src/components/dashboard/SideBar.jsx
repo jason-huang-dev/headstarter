@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { ProfileIcon } from "../reusable";
 import { iconsite } from "../../assets/png";
-import { ChevronFirst, ChevronLast, CalendarPlus, Plus } from "lucide-react";
+import { ChevronFirst, ChevronLast, CalendarPlus, Plus, BrainCircuit, Brain} from "lucide-react";
 import { googleLogout } from "@react-oauth/google";
 import { Inbox } from 'lucide-react';
 
@@ -157,6 +157,37 @@ return (
             <Plus style={{ width: "30px", height: "30px" }} />
           </button>
           {isOpen && <span className="mt-2 text-sm">Add Event</span>}
+        </div>
+      </div>
+
+      {/* Button for AI */}
+      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-4`}>
+        <div className="flex flex-col items-center mx-3 my-1">
+          <button
+            onClick={() => {
+              addCalendar(setIsOpen);
+              if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
+            }}
+            className={`py-2 rounded-lg 
+            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
+          >
+            <BrainCircuit style={{ width: "30px", height: "30px" }} />
+          </button>
+          {isOpen && <span className="mt-2 text-sm">AI 1</span>}
+        </div>
+
+        <div className="flex flex-col items-center mx-3 my-1">
+          <button
+            onClick={() => {
+              addEvent(setIsOpen);
+              if (isOpenInbox) setIsOpenInbox(false);  // Close the Inbox if it's open
+            }}
+            className={`py-2 rounded-lg 
+            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
+          >
+            <Brain style={{ width: "30px", height: "30px" }} />
+          </button>
+          {isOpen && <span className="mt-2 text-sm">AI 2</span>}
         </div>
       </div>
   
