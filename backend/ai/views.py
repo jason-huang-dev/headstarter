@@ -3,7 +3,9 @@ import requests
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
 import json
 import logging
 import os
@@ -11,6 +13,7 @@ import os
 logger = logging.getLogger(__name__)
 @api_view(['POST'])
 @csrf_exempt
+@permission_classes([AllowAny])
 def get_ai_response(request):
     if request.method == 'POST':
         try:
