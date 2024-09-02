@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 def get_ai_response(request):
     if request.method == 'POST':
         try:
-
             user_message = request.data.get('message', 'No message provided')
 
             response = requests.post(
@@ -34,11 +33,13 @@ def get_ai_response(request):
                     ]
                 }
             )
+            
             if response.status_code != 200:
                 logger.error(f"API request failed with status {response.status_code}: {response.text}")
                 return Response({'error': 'API request failed'}, status=response.status_code)
-                
-            return Response(response)
+            
+            # Return the JSON content from the API response
+            return Response(response.json())
         
         except json.JSONDecodeError:
             return Response({'error': 'Invalid JSON format'}, status=400)
