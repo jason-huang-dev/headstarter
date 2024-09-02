@@ -1,6 +1,6 @@
 
 import requests
-from django.http import JsonResponse
+from rest_framework.response import Response
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
@@ -33,14 +33,14 @@ def get_ai_response(request):
             )
             if response.status_code != 200:
                 logger.error(f"API request failed with status {response.status_code}: {response.text}")
-                return JsonResponse({'error': 'API request failed'}, status=response.status_code)
+                return Response({'error': 'API request failed'}, status=response.status_code)
                 
-            return JsonResponse(response.json(), safe=False)
+            return Response(response)
         
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            return Response({'error': 'Invalid JSON format'}, status=400)
         except Exception as e:
             logger.exception("An error occurred")
-            return JsonResponse({'error': str(e)}, status=500)
+            return Response({'error': str(e)}, status=500)
     
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    return Response({'error': 'Invalid request method'}, status=405)
