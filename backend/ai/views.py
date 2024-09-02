@@ -8,7 +8,7 @@ import logging
 import os
 
 logger = logging.getLogger(__name__)
-
+@csrf_exempt
 def get_ai_response(self, request):
     if request.method == 'POST':
         try:
