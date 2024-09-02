@@ -22,7 +22,7 @@ def get_ai_response(request):
             response = requests.post(
                 url="https://openrouter.ai/api/v1/chat/completions",
                 headers={
-                    "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                    "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
                     "HTTP-Referer": 'https://timemesh.vercel.app',
                     "X-Title": "TimeMesh",
                 },
