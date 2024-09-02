@@ -20,7 +20,7 @@
             event.preventDefault();
             const message = document.getElementById('message').value;
             
-            fetch('https://timemesh.vercel.app/api/ai/', {
+            fetch('https://timemesh.vercel.app/api/ai/', { // Adjust URL as needed
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,11 +29,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.choices && data.choices.length > 0) {
-                    document.getElementById('response').textContent = data.choices[0].message.content;
-                } else {
-                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-                }
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
             })
             .catch(error => {
                 document.getElementById('response').textContent = 'Error: ' + error.message;
