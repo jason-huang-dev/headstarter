@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['timemesh-backend.vercel.app', 'timemesh-backend.vercel.app/adm
 # Application definition
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://timemesh-rr1s.onrender.com", "https://timemesh.vercel.app", "https://timemesh-backend.vercel.app/admin",
+    "https://timemesh-rr1s.onrender.com", "https://timemesh.vercel.app", "https://timemesh-backend.vercel.app/admin", "https://openrouter.ai/api/v1/chat/completions",
 ]
 
 INSTALLED_APPS = [
@@ -196,6 +196,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://timemesh-rr1s.onrender.com", 
     "https://timemesh.vercel.app", 
     "https://timemesh-backend.vercel.app/admin",
+    "https://openrouter.ai/api/v1/chat/completions",
 ]
 # Base dir of your project
 BASE_DIR = Path(__file__).resolve().parent.parent
