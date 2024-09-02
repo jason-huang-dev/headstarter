@@ -3,11 +3,13 @@ import requests
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 import json
 import logging
 import os
 
 logger = logging.getLogger(__name__)
+@api_view(['POST'])
 @csrf_exempt
 def get_ai_response(self, request):
     if request.method == 'POST':
