@@ -28,7 +28,7 @@ from django.conf.urls.static import static
 from calendars.views import calendar_view, calendar_detailed_view, get_shared_calendars
 from events.views import event_view, event_detailed_view
 from invitations.views import create_invitation, respond_invitation, get_invites_by_email
-from ai.views import get_ai_response
+from ai.views import get_ai_response, show_ai_form
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -57,7 +57,8 @@ urlpatterns = [
     path('api/test', test_connection, name="test_connection"),
 
     # AI Path
-    path('api/ai/', get_ai_response, name='get_ai_response')
+    path('api/ai/', get_ai_response, name='get_ai_response'),
+    path('ai-form/', show_ai_form, name='ai_form'),
 ]
 
 # Serve media files in development

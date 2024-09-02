@@ -5,7 +5,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from django.shortcuts import render
 import json
 import logging
 import os
@@ -47,3 +47,6 @@ def get_ai_response(request):
             return Response({'error': str(e)}, status=500)
     
     return Response({'error': 'Invalid request method'}, status=405)
+
+def show_ai_form(request):
+    return render(request, 'ai_response_form.html')
