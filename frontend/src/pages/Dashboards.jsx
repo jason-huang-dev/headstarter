@@ -139,7 +139,7 @@ const Dashboards = () => {
     setIsOpenInbox(false);
   };
 
-  const clickSendHandler = (setIsOpen) => {
+  const openAIHandler = (setIsOpen) => {
     setRightBarContent('ai'); 
     setIsRightBarOpen(true); 
     setIsOpen(false); 
@@ -156,7 +156,6 @@ const Dashboards = () => {
       role: "user",
       message: message
     });
-    setIsRightBarOpen(false);
   }
 
   const submitEditCalendar = (calendarDetails) =>{
@@ -192,6 +191,7 @@ const Dashboards = () => {
         user={user} 
         addCalendar={addCalendarHandler} 
         addEvent={addEventHandler} 
+        openAI={openAIHandler}
         isRightBarOpen={isRightBarOpen} 
         setIsOpenInbox={setIsOpenInbox}
         isOpenInbox={isOpenInbox}

@@ -19,7 +19,7 @@ const SidebarContext = React.createContext();
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @returns {JSX.Element} The Drawer component.
  */
-export const SideBar = ({ user, children, addCalendar, addEvent, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
+export const SideBar = ({ user, children, addCalendar, addEvent, openAI, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const {postAI} = useUserContext()
@@ -167,7 +167,7 @@ return (
         <div className="flex flex-col items-center mx-3 my-1">
           <button
             onClick={() => {
-              postAI('test message');
+              openAI(setIsOpen);
               if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
@@ -175,7 +175,7 @@ return (
           >
             <Cpu style={{ width: "30px", height: "30px" }} />
           </button>
-          {isOpen && <span className="mt-2 text-sm">AI 1</span>}
+          {isOpen && <span className="mt-2 text-sm">Chrony AI</span>}
         </div>
       </div>
   
