@@ -22,7 +22,6 @@ const SidebarContext = React.createContext();
 export const SideBar = ({ user, children, addCalendar, addEvent, openAI, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const {postAI} = useUserContext()
 
   const handleProfileIconClick = () => {
     if (!isOpen) {

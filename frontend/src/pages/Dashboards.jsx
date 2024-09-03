@@ -29,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {messages, calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, sendAI} = useUserContext();
+  const {messages, calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, postAI} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -141,6 +141,7 @@ const Dashboards = () => {
 
   const openAIHandler = (setIsOpen) => {
     setRightBarContent('ai'); 
+    console.log(rightBarContent)
     setIsRightBarOpen(true); 
     setIsOpen(false); 
     setIsOpenInbox(false);
@@ -152,7 +153,7 @@ const Dashboards = () => {
   }
 
   const sendUserInput = (message) =>{
-    sendAI({
+    postAI({
       role: "user",
       message: message
     });
