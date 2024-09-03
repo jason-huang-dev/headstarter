@@ -1,6 +1,7 @@
 {
     "functions": {
         "calendar_app/wsgi.py": {
+            "source": "calendar_app/wsgi.py",
             "memory": 1024,
             "maxDuration": 60
         }
