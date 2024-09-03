@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { sideBarAccordians, calendarForm, eventForm, colorsForEvent } from "../constants"; 
+import { sideBarAccordians, calendarForm, eventForm, colorsForEvent, chronyAIForm} from "../constants"; 
 import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, InboxOverview} from '../components/dashboard';
 import { useUserContext } from '../contexts/userDataHandler';
@@ -448,7 +448,16 @@ const Dashboards = () => {
           rightBarTitle="Chrony Chat"
           className="fixed right-0 top-0 h-screen w-80"
         >
-
+          <Form
+            formFields={{user_message: ''}}
+            formDetails={chronyAIForm()}
+          >
+            {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
+                </div>
+              )}
+          </Form>
         </RightBar>
       ) : (
         <Popup 
@@ -456,6 +465,16 @@ const Dashboards = () => {
           onClose={() => setIsRightBarOpen(false)} 
           title="Chrony Chat"
         >
+          <Form
+            formFields={{user_message: ''}}
+            formDetails={chronyAIForm()}
+          >
+            {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
+                </div>
+              )}
+          </Form>
         </Popup>
       ))}
 

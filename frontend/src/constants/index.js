@@ -1,7 +1,7 @@
 import {CalendarCheck, BellPlus, ListChecks, UserRoundPlus, Calendar as CalendarIcon, Inbox} from 'lucide-react';
 // import png for Features
 import {ConceptCalAddEvent, ConceptCalEventDetails, ConceptCalFriendsDetails, ConceptCalUpdates} from "../assets/png";
-import {calendarForm, eventForm, colorsForEvent} from './dashboards';
+import {calendarForm, eventForm, colorsForEvent, chronyAIForm} from './dashboards';
 import {CalendarUser} from "../assets/svg";
 
 /**
@@ -128,4 +128,4 @@ const sideBarAccordians = (calendars, shared_calendars) => [
   }
 ];
 
-export { benefits, actionData, services, navigation, sideBarAccordians, calendarForm, eventForm, colorsForEvent }; 
+export { benefits, actionData, services, navigation, sideBarAccordians, calendarForm, eventForm, colorsForEvent, chronyAIForm}; 

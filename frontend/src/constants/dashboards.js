@@ -72,4 +72,12 @@ const eventForm = (calendars) => [
     { label: 'End Date & Time', name: 'end', type: 'datetime-local' },
 ];
 
-export {calendarForm, eventForm, colorsForEvent}
+const chronyAIForm = () => [
+  {
+    label: 'User Input',
+    type: 'text',
+    name: 'user_input'
+  }
+]
+
+export {calendarForm, eventForm, colorsForEvent, chronyAIForm}
