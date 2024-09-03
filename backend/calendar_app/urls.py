@@ -28,7 +28,7 @@ from django.conf.urls.static import static
 from calendars.views import calendar_view, calendar_detailed_view, get_shared_calendars
 from events.views import event_view, event_detailed_view
 from invitations.views import create_invitation, respond_invitation, get_invites_by_email
-from ai.views import get_ai_response, show_ai_form
+from ai.views import get_ai_response
 
 urlpatterns = [
     path('admin/', admin.site.urls),
