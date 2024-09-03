@@ -82,6 +82,20 @@ const UserProvider = ({ children }) => {
    */
   const [shared_calendars, setSharedCalendars] = useState([]);
 
+  /**
+   * SharedCalendar object representing a calendar shared with the user by another user.
+   * 
+   * @property {Array<Objects>} messages - A list of emails of users with whom the calendar is shared.
+   * @property {string} role - The sender of the message "assistant" for the AI and "user" for the actual messager
+   * @property {string} message - The message from the sender
+   */
+  const [messages, setMessages] = useState([
+    { 
+      role: "assistant",
+      message: "🐢 Greetings! I’m Chrony, your personal scheduling assistant. I’m here to ensure your calendar is organized and efficient. How can I assist you in managing your time today?"
+    }
+  ]);
+
   {/* Beginning of User Data Fetching */}
   // Reusable function to fetch data from the API and set the corresponding state
   const fetchData = async (url, setState, setState2 = null) => {
@@ -362,6 +376,7 @@ const UserProvider = ({ children }) => {
 
   const postAI = async (message) => {
     console.log("Message to send to AI: ", message)
+    setMessages([...messages, message])
     try{
       const response = await fetch(`https://${backend_url}/api/ai/`, {
         method: 'POST',
@@ -370,12 +385,13 @@ const UserProvider = ({ children }) => {
           'Authorization': `Token ${user.token}`,
         },
         body: JSON.stringify({ 
-          message: message 
+          messages: messages 
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
+        setMessages([...messages, data])
         console.log('Received AI response: ', data);
       } else {
         const error = await response.json();
@@ -394,9 +410,11 @@ const UserProvider = ({ children }) => {
         shared_calendars,
         invitations,
         events,
+        messages,
         postAI,
         setCalendars,
         setEvents,
+        setMessages,
         addEvent,
         addCalendar,
         updateEvent,
