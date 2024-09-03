@@ -76,7 +76,7 @@ const chronyAIForm = () => [
   {
     label: 'User Input',
     type: 'text',
-    name: 'user_input'
+    name: 'user_message'
   }
 ]
 

@@ -453,10 +453,11 @@ const Dashboards = () => {
             formDetails={chronyAIForm()}
           >
             {({ formDetails, setFormDetails }) => (
-                <div className="mb-2">
-                  <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
-                </div>
-              )}
+            
+              <div className="mb-2">
+                <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
+              </div>
+            )}
           </Form>
         </RightBar>
       ) : (
@@ -470,10 +471,10 @@ const Dashboards = () => {
             formDetails={chronyAIForm()}
           >
             {({ formDetails, setFormDetails }) => (
-                <div className="mb-2">
-                  <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
-                </div>
-              )}
+              <div className="mb-2">
+                <Button onClick={() => sendUserInput(formDetails.user_message)}>Send</Button>
+              </div>
+            )}
           </Form>
         </Popup>
       ))}
