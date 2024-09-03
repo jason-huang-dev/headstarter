@@ -38,7 +38,7 @@ def get_ai_response(request):
                 },
                 json={
                     "model": "nousresearch/hermes-3-llama-3.1-405b",
-                    "messages": INITIAL_SYSTEM_PROMPT + conversation_history
+                    "messages": [INITIAL_SYSTEM_PROMPT] + conversation_history
                 }
             )
             
