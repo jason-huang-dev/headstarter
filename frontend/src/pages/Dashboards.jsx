@@ -29,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar} = useUserContext();
+  const {messages, calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, sendAI} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -139,8 +139,23 @@ const Dashboards = () => {
     setIsOpenInbox(false);
   };
 
+  const clickSendHandler = (setIsOpen) => {
+    setRightBarContent('ai'); 
+    setIsRightBarOpen(true); 
+    setIsOpen(false); 
+    setIsOpenInbox(false);
+  };
+  
   const submitAddCalendar = (calendarDetails) =>{
     addCalendar(calendarDetails);
+    setIsRightBarOpen(false);
+  }
+
+  const sendUserInput = (message) =>{
+    sendAI({
+      role: "user",
+      message: message
+    });
     setIsRightBarOpen(false);
   }
 
@@ -333,95 +348,116 @@ const Dashboards = () => {
       )}
 
 
-    {/* Content for adding a new event */}
-    {isRightBarOpen && rightBarContent === 'event' && (
+      {/* Content for adding a new event */}
+      {isRightBarOpen && rightBarContent === 'event' && (
+        screenWidth > 1150 ? (
+          <RightBar 
+            isRightBarOpen={isRightBarOpen} 
+            setIsRightBarOpen={setIsRightBarOpen} 
+            rightBarTitle="Add Event"
+            className="fixed right-0 top-0 h-screen w-80"
+          >
+            <Form
+              formFields={eventFormFields}
+              fields={eventForm(calendars)}
+            >
+              {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  {/* Color Selection */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
+                    <div className="flex items-center space-x-2 mt-2">
+                      {colorsForEvent.map((option, index) => (
+                        <label key={index} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="color"
+                            value={option.color}
+                            checked={formDetails.color === option.color}
+                            onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
+                            className="hidden"
+                          />
+                          <span
+                            className="w-6 h-6 rounded-full cursor-pointer"
+                            style={{
+                              backgroundColor: option.color,
+                              border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
+                            }}
+                          ></span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+                </div>
+              )}
+            </Form>
+          </RightBar>
+        ) : (
+          <Popup 
+            isOpen={isRightBarOpen} 
+            onClose={() => setIsRightBarOpen(false)} 
+            title="Add Event"
+          >
+            <Form
+              formFields={eventFormFields}
+              fields={eventForm(calendars)}
+            >
+              {({ formDetails, setFormDetails }) => (
+                <div className="mb-2">
+                  {/* Color Selection */}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
+                    <div className="flex items-center space-x-2 mt-2">
+                      {colorsForEvent.map((option, index) => (
+                        <label key={index} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="color"
+                            value={option.color}
+                            checked={formDetails.color === option.color}
+                            onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
+                            className="hidden"
+                          />
+                          <span
+                            className="w-6 h-6 rounded-full cursor-pointer"
+                            style={{
+                              backgroundColor: option.color,
+                              border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
+                            }}
+                          ></span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+                </div>
+              )}
+            </Form>
+          </Popup>
+        )
+      )}
+
+      {/* Content for AI chat bot */}
+      {isRightBarOpen && rightBarContent === 'ai' && (
       screenWidth > 1150 ? (
         <RightBar 
           isRightBarOpen={isRightBarOpen} 
           setIsRightBarOpen={setIsRightBarOpen} 
-          rightBarTitle="Add Event"
+          rightBarTitle="Chrony Chat"
           className="fixed right-0 top-0 h-screen w-80"
         >
-          <Form
-            formFields={eventFormFields}
-            fields={eventForm(calendars)}
-          >
-            {({ formDetails, setFormDetails }) => (
-              <div className="mb-2">
-                {/* Color Selection */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
-                  <div className="flex items-center space-x-2 mt-2">
-                    {colorsForEvent.map((option, index) => (
-                      <label key={index} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="color"
-                          value={option.color}
-                          checked={formDetails.color === option.color}
-                          onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
-                          className="hidden"
-                        />
-                        <span
-                          className="w-6 h-6 rounded-full cursor-pointer"
-                          style={{
-                            backgroundColor: option.color,
-                            border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
-                          }}
-                        ></span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
-              </div>
-            )}
-          </Form>
+
         </RightBar>
       ) : (
         <Popup 
           isOpen={isRightBarOpen} 
           onClose={() => setIsRightBarOpen(false)} 
-          title="Add Event"
+          title="Chrony Chat"
         >
-          <Form
-            formFields={eventFormFields}
-            fields={eventForm(calendars)}
-          >
-            {({ formDetails, setFormDetails }) => (
-              <div className="mb-2">
-                {/* Color Selection */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Select Event Color</label>
-                  <div className="flex items-center space-x-2 mt-2">
-                    {colorsForEvent.map((option, index) => (
-                      <label key={index} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="color"
-                          value={option.color}
-                          checked={formDetails.color === option.color}
-                          onChange={(e) => setFormDetails({ ...formDetails, color: e.target.value })}
-                          className="hidden"
-                        />
-                        <span
-                          className="w-6 h-6 rounded-full cursor-pointer"
-                          style={{
-                            backgroundColor: option.color,
-                            border: formDetails.color === option.color ? '2px solid #94a3b8' : '2px solid transparent',
-                          }}
-                        ></span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
-              </div>
-            )}
-          </Form>
         </Popup>
-      )
-    )}
+      ))}
+
     </div>
   ); 
 };
