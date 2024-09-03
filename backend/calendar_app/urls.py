@@ -58,7 +58,6 @@ urlpatterns = [
 
     # AI Path
     path('api/ai/', get_ai_response, name='get_ai_response'),
-    path('ai-form/', show_ai_form, name='ai_form'),
 ]
 
 # Serve media files in development
