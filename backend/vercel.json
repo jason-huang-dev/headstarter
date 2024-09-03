@@ -1,11 +1,11 @@
 {
-    "builds": [
-        {
-            "src": "calendar_app/wsgi.py",
-            "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" , "maxDuration": "60" }
+    "functions": {
+        "calendar_app/wsgi.py": {
+            "runtime": "python3.12",
+            "memory": 1024,
+            "maxDuration": 60
         }
-    ],
+    },
     "routes": [
         {
             "src": "/(.*)",
