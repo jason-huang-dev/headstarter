@@ -1,7 +1,6 @@
 {
     "functions": {
         "calendar_app/wsgi.py": {
-            "runtime": "vercel-python@3.12",
             "memory": 1024,
             "maxDuration": 60
         }
