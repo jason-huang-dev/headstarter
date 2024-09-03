@@ -49,7 +49,7 @@ def get_ai_response(request):
             # Return the JSON content from the API response
             response_data = response.json()
             return Response({
-                "message": response_data.get('choices', [{}])[0].get('message', {}).get('content', 'No content')
+                "message": response_data.get('choices', [{}])[0].get('message', {})
             })
         
         except json.JSONDecodeError:
