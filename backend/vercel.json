@@ -11,5 +11,10 @@
             "src": "/(.*)",
             "dest": "calendar_app/wsgi.py"
         }
-    ]
+    ],
+    "functions": {
+        "ai/**/*": {
+        "maxDuration": 300 
+        }
+    }
 }

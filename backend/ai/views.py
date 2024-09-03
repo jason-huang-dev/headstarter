@@ -2,14 +2,10 @@
 import requests
 from rest_framework.response import Response
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.shortcuts import render
 import json
 import logging
-import os
-
 logger = logging.getLogger(__name__)
 
 
