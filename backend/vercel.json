@@ -3,7 +3,7 @@
         {
             "src": "calendar_app/wsgi.py",
             "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" , "maxDuration": "60" }
         }
     ],
     "routes": [
@@ -11,10 +11,5 @@
             "src": "/(.*)",
             "dest": "calendar_app/wsgi.py"
         }
-    ],
-    "functions": {
-        "ai/**/*": {
-        "maxDuration": 60 
-        }
-    }
+    ]
 }
