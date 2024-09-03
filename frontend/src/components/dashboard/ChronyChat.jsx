@@ -23,7 +23,7 @@ const ChronyChat = () => {
             <div className="chat-messages">
                 {messages.map((element, index) => (
                     <div key={index} className="message">
-                        <span className={`message-${element.role}`}>{element.message}</span>
+                        <span>{element.message}</span>
                     </div>
                 ))}
             </div>
@@ -32,7 +32,6 @@ const ChronyChat = () => {
             <div className="input-container flex justify-between items-center">
                 <input 
                     type="text" 
-                    className="message-input" 
                     placeholder="Enter what you want to ask the AI" 
                     value={message} 
                     onChange={(e) => setMessage(e.target.value)} 
