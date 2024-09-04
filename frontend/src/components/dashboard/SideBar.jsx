@@ -48,7 +48,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent, openAI, isRight
       googleLogout();
 
       // Backend: Sign out from Django backend
-      const response = await fetch(`https://${import.meta.env.VITE_BACKEND_URL}/api/auth/signout/`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signout/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
