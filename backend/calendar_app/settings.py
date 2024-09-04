@@ -32,13 +32,8 @@ OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['timemesh-backend.vercel.app', 'timemesh-backend.vercel.app/admin',]
+ALLOWED_HOSTS = ['*']
 
-# Application definition
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://timemesh-rr1s.onrender.com", "https://timemesh.vercel.app", "https://timemesh-backend.vercel.app/admin", "https://openrouter.ai/api/v1/chat/completions",
-]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -188,17 +183,21 @@ REST_AUTH = {
 # Additional AllAuth settings
 ACCOUNT_UNIQUE_EMAIL = True
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = False
-
-CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOWED_ORIGINS = [
+if os.getenv('DEV_MODE') == 'true':
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    ALLOWED_HOSTS = ['timemesh-backend.vercel.app', 'timemesh-backend.vercel.app/admin',]
+    CORS_ALLOWED_ORIGINS = [
     "https://timemesh-rr1s.onrender.com", 
     "https://timemesh.vercel.app", 
     "https://timemesh-backend.vercel.app/admin",
     "https://openrouter.ai/api/v1/chat/completions",
-]
+    ]
+    CSRF_TRUSTED_ORIGINS = [
+    "https://timemesh-rr1s.onrender.com", "https://timemesh.vercel.app", "https://timemesh-backend.vercel.app/admin", "https://openrouter.ai/api/v1/chat/completions",
+    ]
+CORS_ALLOW_CREDENTIALS = True
+
 # Base dir of your project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
