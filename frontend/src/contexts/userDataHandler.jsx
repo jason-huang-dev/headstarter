@@ -92,7 +92,7 @@ const UserProvider = ({ children }) => {
   const [messages, setMessages] = useState([
     { 
       role: "assistant",
-      message: "🐢 Greetings! I’m Chrony, your personal scheduling assistant. I’m here to ensure your calendar is organized and efficient. How can I assist you in managing your time today?"
+      content: "🐢 Greetings! I’m Chrony, your personal scheduling assistant. I’m here to ensure your calendar is organized and efficient. How can I assist you in managing your time today?"
     }
   ]);
 
@@ -376,7 +376,6 @@ const UserProvider = ({ children }) => {
 
   const postAI = async (message) => {
     console.log("Message to send to AI: ", message)
-    setMessages([...messages, message])
     try{
       const response = await fetch(`${backend_url}/api/ai/`, {
         method: 'POST',
@@ -385,14 +384,15 @@ const UserProvider = ({ children }) => {
           'Authorization': `Token ${user.token}`,
         },
         body: JSON.stringify({ 
-          messages: messages 
+          messages: [...messages, message]
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setMessages([...messages, data])
-        console.log('Received AI response: ', data);
+        setMessages([...messages, message, data.message])
+        console.log('Array after response:', messages);
+        console.log('Received AI response: ', data.message);
       } else {
         const error = await response.json();
         console.error('Error receiving AI response: ', error);
