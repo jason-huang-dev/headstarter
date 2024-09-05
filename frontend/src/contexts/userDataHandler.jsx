@@ -400,6 +400,14 @@ const UserProvider = ({ children }) => {
     }
     catch (error){
       console.error('Error:', error);
+      setMessages((messages) => [
+        ...messages, 
+        message, 
+        {
+          role: "assistant",
+          content: "Sorry, I'm not able to respond right now. Please try again later."
+        }
+      ])
     }
   }
 
