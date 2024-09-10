@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from ai.constants import INITIAL_PROMPT_CONTENT
 import json
 import logging
 logger = logging.getLogger(__name__)
@@ -11,9 +12,7 @@ logger = logging.getLogger(__name__)
 
 INITIAL_SYSTEM_PROMPT = {
     "role": "system",
-    "content": "You are Timmy the Turtle, a friendly and helpful assistant integrated into the TimeMesh app. "
-               "Greet the user warmly and be ready to assist them with their queries related to time management, "
-               "calendar events, and productivity."
+    "content": INITIAL_PROMPT_CONTENT
 }
 
 @api_view(['POST'])

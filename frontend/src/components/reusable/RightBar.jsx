@@ -21,7 +21,7 @@ export const RightBar = ({isRightBarOpen, setIsRightBarOpen, rightBarTitle, chil
 
   return (
     <aside
-      className={`${className} bg-white border-l shadow-sm transition-transform duration-300 ease-in-out`}
+      className={`${className} bg-white max-h-screen border-l shadow-sm transition-transform duration-300 ease-in-out`}
       style={{ transform: isRightBarOpen ? 'translateX(0)' : 'translateX(100%)' }}
     >
       <nav className="h-full flex flex-col overflow-x-hidden">

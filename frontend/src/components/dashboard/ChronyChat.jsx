@@ -36,9 +36,9 @@ const ChronyChat = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen justify-center items-center">
+        <div className="flex flex-col h-auto max-h-max justify-center items-center">
             <div
-                className="flex flex-col w-full max-w-lg h-5/6 border p-0.25 rounded-lg"
+                className="flex flex-col w-full max-w-lg h-full border p-0.25 rounded-lg"
             >
                 {/* Rendering of the previous messages */}
                 <div className="flex-1 overflow-y-auto mb-2">
@@ -62,10 +62,10 @@ const ChronyChat = () => {
                 </div>
 
                 {/* The input component for the ChatBot */}
-                <div className="items-center overflow-hidden flex border-t pt-2 justify-between ">
+                <div className="items-center overflow-hidden flex border-t justify-between ">
                     <input
                         type="text"
-                        className="flex-grow px-3 py-3 border rounded-md"
+                        className="flex-grow ml-1 px-3 py-3 border rounded-md"
                         placeholder="Enter your message"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
@@ -74,7 +74,7 @@ const ChronyChat = () => {
                     />
                     <Button
                         onClick={handleSendMessage}
-                        className="flex ml-1 mt-2"
+                        className="flex mx-1 mt-2"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Sending...' : <Send className="text-white" />}

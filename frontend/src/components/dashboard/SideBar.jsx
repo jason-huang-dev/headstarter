@@ -76,7 +76,7 @@ export const SideBar = ({ user, children, addCalendar, addEvent, openAI, isRight
 
 return (
   <aside
-    className={`h-screen transition-width duration-300 ease-in-out ${
+    className={`h-screen transition-width duration-300 ease-in-out max-h-screen ${
       isOpen ? "w-64" : "w-20"
     }`}
   >
