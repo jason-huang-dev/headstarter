@@ -32,7 +32,7 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
         </div>
   
         {/* Main Content Area with Scroll */}
-        <div className="overflow-y-auto max-h-[60vh]">
+        <div className="h-[60vh]">
           {children}
         </div>
       </div>
