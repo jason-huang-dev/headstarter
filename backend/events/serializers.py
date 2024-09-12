@@ -16,6 +16,21 @@ class EventSerializer(serializers.ModelSerializer):
     ::field Event model : The model class that this serializer is for. Set to `Event`.
     ::field tuple fields : Specifies the fields to include in the serialized representation. Set to `'__all__'` to include all fields.
     """
+    repeated_dates = serializers.ListField(child=serializers.DateTimeField(), required=False)
+
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ['id', 'cal_id', 'title', 'description', 'start', 'end', 'bg_color', 'user', 'repeat_type', 'repeat_until', 'repeat_days', 'repeated_dates']
+
+    def create(self, validated_data):
+        repeated_dates = validated_data.pop('repeated_dates', [])
+        event = Event.objects.create(**validated_data)
+        event.set_repeated_dates(repeated_dates)
+        event.save()
+        return event
+
+    def update(self, instance, validated_data):
+        repeated_dates = validated_data.pop('repeated_dates', None)
+        if repeated_dates is not None:
+            instance.set_repeated_dates(repeated_dates)
+        return super().update(instance, validated_data)

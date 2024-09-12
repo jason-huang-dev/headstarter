@@ -60,17 +60,52 @@ const calendarForm = [
 ];
   
 const eventForm = (calendars) => [
-    {
-      label: "Calendar",
-      type: "select",
-      name: "cal_id",
-      options: calendars, // Update options as needed
-      option_label: "title",
-      option_key: "cal_id"
-    },
-    { label: 'Event Title', type: 'text', name: 'title' },
-    { label: 'Start Date & Time', name: 'start', type: 'datetime-local' },
-    { label: 'End Date & Time', name: 'end', type: 'datetime-local' },
+  {
+    label: "Calendar",
+    type: "select",
+    name: "cal_id",
+    options: calendars,
+    option_label: "title",
+    option_key: "cal_id",
+    required: true
+  },
+  { label: 'Event Title', type: 'text', name: 'title', required: true },
+  { label: 'Start Date & Time', name: 'start', type: 'datetime-local', required: true },
+  { label: 'End Date & Time', name: 'end', type: 'datetime-local', required: true },
+  {
+    label: "Repeat",
+    type: "select",
+    name: "repeat_type",
+    options: [
+      { value: "NONE", label: "Does not repeat" },
+      { value: "DAILY", label: "Daily" },
+      { value: "WEEKLY", label: "Weekly" },
+      { value: "MONTHLY", label: "Monthly" },
+      { value: "YEARLY", label: "Yearly" },
+    ],
+    defaultValue: "NONE"
+  },
+  {
+    label: 'Repeat Until',
+    name: 'repeat_until',
+    type: 'date',
+    ifPrev: (formDetails) => formDetails.repeat_type !== 'NONE'
+  },
+  {
+    label: 'Repeat Days',
+    name: 'repeat_days',
+    type: 'checkbox',
+    options: [
+      { value: 'MON', label: 'Monday' },
+      { value: 'TUE', label: 'Tuesday' },
+      { value: 'WED', label: 'Wednesday' },
+      { value: 'THU', label: 'Thursday' },
+      { value: 'FRI', label: 'Friday' },
+      { value: 'SAT', label: 'Saturday' },
+      { value: 'SUN', label: 'Sunday' },
+    ],
+    ifPrev: (formDetails) => formDetails.repeat_type === 'WEEKLY'
+  }
 ];
 
 const chronyAIForm = () => [

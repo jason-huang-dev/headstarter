@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
 /**
  * Renders a dynamic form based on the provided field configuration.
  * 
@@ -92,6 +93,33 @@ const Form = ({ fields, formFields, children }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSubmit = () => {
+    if (validateForm()) {
+      const submissionData = { ...formDetails };
+      
+      // Ensure cal_id is a number
+      submissionData.cal_id = parseInt(submissionData.cal_id, 10);
+  
+      // Handle repeat_days for weekly repeats
+      if (submissionData.repeat_type === 'WEEKLY' && Array.isArray(submissionData.repeat_days)) {
+        submissionData.repeat_days = submissionData.repeat_days.filter(day => day !== false);
+      } else {
+        delete submissionData.repeat_days;
+      }
+  
+      // Remove repeat_until if repeat_type is NONE
+      if (submissionData.repeat_type === 'NONE') {
+        delete submissionData.repeat_until;
+      }
+  
+      // Here you would typically send submissionData to your server
+      console.log("Form Submitted:", submissionData);
+      // Call your API function here, e.g., createEvent(submissionData)
+    } else {
+      console.log("Validation Errors:", errors);
+    }
+  };
+
   const filteredFields = fields.filter((field, index) => {
     if (field.ifPrev) {
       return index === 0 || formDetails[fields[index - 1].name];
@@ -128,12 +156,16 @@ const Form = ({ fields, formFields, children }) => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 required={required}
               >
-                <option value="" disabled>{placeholder}</option>
+                <option value="" disabled>{placeholder || "Select an option"}</option>
                 {typeof options === 'function' 
-                  ? options({ formDetails, setFormDetails }) 
+                  ? options({ formDetails, setFormDetails }).map((option) => (
+                      <option key={option.value || option[option_key]} value={option.value || option[option_key]}>
+                        {option.label || option[option_label]}
+                      </option>
+                    ))
                   : options.map((option) => (
-                      <option key={option[option_key]} value={option[option_key]}>
-                        {option[option_label]}
+                      <option key={option.value || option[option_key]} value={option.value || option[option_key]}>
+                        {option.label || option[option_label]}
                       </option>
                     ))
                 }
@@ -148,28 +180,7 @@ const Form = ({ fields, formFields, children }) => {
                 required={required}
                 className="mr-2"
               />
-            ) : type === "file" ? (
-              /* For to input type file */
-              <>
-                <input
-                  type={type}
-                  name={name}
-                  id="fileInput"
-                  onChange={(e) => handleChange(e, onChange, validate)}
-                  accept={accept}
-                  required={required}
-                  className="mr-2 hidden"
-                />
-                {/* Custom button to trigger file input */}
-                <label
-                htmlFor="fileInput"
-                className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                  {formDetails[name] ? `Selected: ${formDetails[name].name}` : 'Upload a file'}
-                </label>
-              </>
             ) : (
-            /* Defaults to input type text */
             <input
               type={type}
               name={name}

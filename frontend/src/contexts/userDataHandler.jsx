@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import { parseISO, format, addDays, isSameDay, startOfDay, setHours, setMinutes, setSeconds } from 'date-fns';
 
 const UserContext = createContext();
 
@@ -96,6 +97,44 @@ const UserProvider = ({ children }) => {
     }
   ]);
 
+
+  const processEvents = (events) => {
+    return events.map(event => {
+      // Parse the original event times
+      const startDate = parseISO(event.start);
+      const endDate = parseISO(event.end);
+      
+      // Process recurring dates if they exist
+      let recurringDates = [];
+      if (event.repeat_type !== 'NONE' && event.repeated_dates && Array.isArray(event.repeated_dates)) {
+        recurringDates = event.repeated_dates.map(date => {
+          const recurrenceDate = parseISO(date);
+          
+          // Calculate the duration of the original event
+          const duration = endDate.getTime() - startDate.getTime();
+          const recurrenceEnd = new Date(recurrenceDate.getTime() + duration);
+  
+          return {
+            id: `${event.id}_${date}`,
+            title: `${event.title} (${event.repeat_type.charAt(0) + event.repeat_type.slice(1).toLowerCase()})`,
+            start: format(recurrenceDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+            end: format(recurrenceEnd, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+            bg_color: event.bg_color,
+            isRecurring: true,
+            originalEventId: event.id
+          };
+        });
+      }
+      
+      return {
+        ...event,
+        start: format(startDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+        end: format(endDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+        recurringDates: recurringDates
+      };
+    });
+  };
+
   {/* Beginning of User Data Fetching */}
   // Reusable function to fetch data from the API and set the corresponding state
   const fetchData = async (url, setState, setState2 = null) => {
@@ -109,11 +148,16 @@ const UserProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      // console.log(`Response from ${url}:`, data);
 
       if (response.ok) {
-        setState(data);
-        if (setState2) setState2(data);
+        if (url.includes('/api/events/')) {
+          const processedEvents = processEvents(data);
+          setState(processedEvents);
+          if (setState2) setState2(processedEvents);
+        } else {
+          setState(data);
+          if (setState2) setState2(data);
+        }
       } else {
         if (data.message === "No invitations found"){
           setInvitations([])
@@ -513,7 +557,8 @@ const UserProvider = ({ children }) => {
         deleteCalendar,
         acceptInvitation,
         postImportCal,
-        getExportCal
+        getExportCal,
+        processEvents,
       }}
     >
       {children}

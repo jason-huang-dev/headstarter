@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useMemo} from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,22 +24,32 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
   const [eventDetails, setEventDetails] = useState({}); 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   
+  const expandedEvents = useMemo(() => {
+    const allEvents = events.flatMap(event => {
+      if (event.recurringDates && event.recurringDates.length > 0) {
+        return [event, ...event.recurringDates];
+      }
+      return [event];
+    });
+
+    return allEvents.map(event => ({
+      ...event,
+      start: new Date(event.start),
+      end: new Date(event.end)
+    }));
+  }, [events]);
+
   const editEventHandler = () => {
-    setRightBarContent('update_event'); 
-    setIsRightBarOpen(true); 
+    setRightBarContent('update_event');
+    setIsRightBarOpen(true);
   };
 
-  const handleEventUpdate = (eventDetails) =>{
+  const handleEventUpdate = (eventDetails) => {
     updateEvent(eventDetails);
-    // console.log("Event updated: ", eventDetails)
     setIsRightBarOpen(false);
-  }
+  };
 
-  // Event handler for when an event is selected
   const handleEventSelect = (event) => {
-    // console.log("Selected event:", event);
-    
-    // Convert UTC to local time and format for datetime-local input
     const formatDateForInput = (dateString) => {
       const date = new Date(dateString);
       return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -53,7 +63,8 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
     const formattedEvent = {
       ...event,
       start: localStart,
-      end: localEnd
+      end: localEnd,
+      repeat_until: event.repeat_until ? moment(event.repeat_until).format('YYYY-MM-DD') : null,
     };
     
     setEventDetails(formattedEvent);
@@ -61,13 +72,12 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
   };
 
   const handleEventDelete = (eventDetails) => {
-    deleteEvent(eventDetails)
-    // console.log("Event deleted: ", eventDetails)
+    deleteEvent(eventDetails);
     setIsRightBarOpen(false);
-  }
+  };
   
-  const eventPropGetter = (event, start, end, isSelected) => {
-    const backgroundColor = event.bg_color || '#15803d'; 
+  const eventPropGetter = (event) => {
+    const backgroundColor = event.bg_color || '#15803d';
     const style = {
       backgroundColor: backgroundColor,
       borderRadius: '5px',
@@ -78,15 +88,14 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
     };
     return { style };
   };
-  
 
   return (
     <div className={`h-full pt-5 ${popupIsOpen ? 'pr-100' : isRightBarOpen ? 'pr-80' : ''}`}>
       <Calendar
         localizer={localizer}
-        events={events} // Events passed as a prop
-        startAccessor={(event) => new Date(event.start)}
-        endAccessor={(event) => new Date(event.end)}
+        events={expandedEvents}
+        startAccessor="start"
+        endAccessor="end"
         views={{ month: true, week: true, agenda: true }}
         defaultView={Views.MONTH}
         components={{ toolbar: CustomToolbar }}
@@ -106,7 +115,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
             formFields={eventDetails}
             fields={eventForm(calendars)}
           >
-            {({ formDetails, setFormDetails, validateForm }) => (
+            {({ formDetails, setFormDetails }) => (
               <div className="mb-2">
                 {/* Color Selection */}
                 <div className="mb-4">
@@ -133,10 +142,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
                     ))}
                   </div>
                 </div>
-                <Button onClick={() => validateForm() ?
-                  handleEventUpdate(formDetails):
-                  alert('Please fill all the fields')
-                }>Update Event</Button>
+                <Button onClick={() => handleEventUpdate(formDetails)}>Update Event</Button>
                 <Button 
                   className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                   onClick={() => handleEventDelete(formDetails)}
@@ -185,10 +191,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
                       ))}
                     </div>
                   </div>
-                  <Button onClick={() => validateForm() ?
-                  handleEventUpdate(formDetails):
-                  alert('Please fill all the fields')
-                  }>Update Event</Button>
+                  <Button onClick={() => handleEventUpdate(formDetails)}>Update Event</Button>
                   <Button 
                     className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                     onClick={() => handleEventDelete(formDetails)}
