@@ -24,9 +24,9 @@ export const RightBar = ({isRightBarOpen, setIsRightBarOpen, rightBarTitle, chil
       className={`${className} bg-white max-h-screen border-l shadow-sm transition-transform duration-300 ease-in-out`}
       style={{ transform: isRightBarOpen ? 'translateX(0)' : 'translateX(100%)' }}
     >
-      <nav className="h-full flex flex-col overflow-x-hidden">
+      <nav className="h-full flex flex-col overflow-hidden">
         {/* Header of the RightBar with a close button and title */}
-        <div className="p-4 pb-2 flex justify-between items-center">
+        <div className="p-4 pb-2 flex justify-between items-center border-b">
           <button
             onClick={() => setIsRightBarOpen(false)}
             className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
@@ -40,11 +40,12 @@ export const RightBar = ({isRightBarOpen, setIsRightBarOpen, rightBarTitle, chil
         </div>
 
         {/* Main content area to display children */}
-        <div className="p-4">
+        <div className="flex-1 flex flex-col justify-between p-4 overflow-y-auto">
           {children}
         </div>
       </nav>
     </aside>
+
   );
 };
 
