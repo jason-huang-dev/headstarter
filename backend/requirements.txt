@@ -9,6 +9,7 @@ dj-rest-auth==6.0.0
 Django==5.1
 django-allauth==0.63.6
 django-cors-headers==4.4.0
+django-dynamic-host==0.0.2
 django-environ==0.11.2
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
@@ -16,7 +17,9 @@ google-auth==2.32.0
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
 httplib2==0.22.0
+icalendar==5.0.13
 idna==3.7
+importlib_metadata==8.4.0
 oauthlib==3.2.2
 packaging==24.1
 pillow==10.4.0
@@ -26,12 +29,16 @@ pyasn1_modules==0.4.0
 pycparser==2.22
 PyJWT==2.8.0
 pyparsing==3.1.2
+python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
+pytz==2024.2
 requests==2.32.3
 requests-oauthlib==2.0.0
 rsa==4.9
+six==1.16.0
 sqlparse==0.5.1
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
 whitenoise==6.7.0
+zipp==3.20.1

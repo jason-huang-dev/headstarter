@@ -25,7 +25,7 @@ from users.views import google_auth, sign_out, test_connection
 from django.conf import settings
 from django.conf.urls.static import static
 
-from calendars.views import calendar_view, calendar_detailed_view, get_shared_calendars
+from calendars.views import calendar_view, calendar_detailed_view, get_shared_calendars, import_ics_calendar, export_ics_calendar
 from events.views import event_view, event_detailed_view
 from invitations.views import create_invitation, respond_invitation, get_invites_by_email
 from ai.views import get_ai_response
@@ -48,6 +48,8 @@ urlpatterns = [
     path('api/calendars/', calendar_view, name='calendar_view'), # Handles GET and POST for all calendars
     path('api/calendars/<int:cal_id>/', calendar_detailed_view, name='calendar_detailed_view'),  # Handles PUT, DELETE, GET for individual calendars
     path('api/calendars/shared/', get_shared_calendars, name='get_shared_calendars'),
+    path('api/calendars/import/', import_ics_calendar, name='import_calendar'), # Handles POST for calendar imports
+    path('api/calendars/export/', export_ics_calendar, name='export_calendar'), # Handles GET for calendar exports
 
     ## Invitations Paths
     path('api/invitations/create/', create_invitation, name='create_invitation'),

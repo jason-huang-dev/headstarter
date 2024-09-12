@@ -1,4 +1,5 @@
 import Button from "./Button";
+import IconButton from "./IconButton";
 import Notification from "./Notification";
 import TagLine from "./TagLine";
 import ProfileIcon from "./ProfileIcon";
@@ -8,4 +9,4 @@ import { RightBar } from "./RightBar";
 import Form from "./Form";
 import {Popup} from "./Popup";
 
-export {Button, Notification, Popup, TagLine, ProfileIcon, Accordion, AccordionItem, RightBar, Form}
+export {Button, Notification, Popup, TagLine, ProfileIcon, Accordion, AccordionItem, RightBar, Form, IconButton}

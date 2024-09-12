@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ProfileIcon } from "../reusable";
+import { IconButton, ProfileIcon } from "../reusable";
 import { iconsite } from "../../assets/png";
-import { ChevronFirst, ChevronLast, CalendarPlus, Plus, Cpu} from "lucide-react";
+import { ChevronFirst, ChevronLast, CalendarPlus, Plus, Cpu, Upload} from "lucide-react";
 import { googleLogout } from "@react-oauth/google";
 import { Inbox } from 'lucide-react';
 import { useUserContext } from "../../contexts/userDataHandler";
@@ -19,7 +19,7 @@ const SidebarContext = React.createContext();
  * @param {Function} props.setIsRightBarOpen - Function to set the visibility of the right sidebar.
  * @returns {JSX.Element} The Drawer component.
  */
-export const SideBar = ({ user, children, addCalendar, addEvent, openAI, isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
+export const SideBar = ({ user, children, addCalendar, addEvent, openAI, importHandler,isRightBarOpen, setIsOpenInbox, isOpenInbox, setIsRightBarOpen }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -131,61 +131,74 @@ return (
       </div>
 
       {/* Buttons Add Calendar and Add Event */}
-      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-4`}>
+      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-2`}>
         <div className="flex flex-col items-center mx-3 my-1">
-          <button
+          <IconButton
+            icon={CalendarPlus}
+            tooltip="Add Calendar"
             onClick={() => {
               addCalendar(setIsOpen);
               if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
-          >
-            <CalendarPlus style={{ width: "30px", height: "30px" }} />
-          </button>
-          {isOpen && <span className="mt-2 text-sm">Add Calendar</span>}
-        </div>
+            size={35}
+          />
+        </div>        
 
         <div className="flex flex-col items-center mx-3 my-1">
-          <button
+          <IconButton
+            icon={Plus}
+            tooltip="Add Event"
             onClick={() => {
               addEvent(setIsOpen);
-              if (isOpenInbox) setIsOpenInbox(false);  // Close the Inbox if it's open
+              if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
-          >
-            <Plus style={{ width: "30px", height: "30px" }} />
-          </button>
-          {isOpen && <span className="mt-2 text-sm">Add Event</span>}
-        </div>
+            size={35}
+          />
+        </div> 
       </div>
 
-      {/* Button for AI */}
-      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-4`}>
-        <div className="flex flex-col items-center mx-3 my-1">
-          <button
+      {/* Button for AI and Import Calendar */}
+      <div className={`flex ${isOpen ? "flex-row" : "flex-col border-b"} justify-center mx-4 py-2`}>
+      <div className="flex flex-col items-center mx-3 my-1">
+          <IconButton
+            icon={Cpu}
+            tooltip="Chrony AI"
             onClick={() => {
               openAI(setIsOpen);
               if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
             }}
             className={`py-2 rounded-lg 
             ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
-          >
-            <Cpu style={{ width: "30px", height: "30px" }} />
-          </button>
-          {isOpen && <span className="mt-2 text-sm">Chrony AI</span>}
-        </div>
+            size={35}
+          />
+        </div> 
+
+        <div className="flex flex-col items-center mx-3 my-1">
+          <IconButton
+            icon={Upload}
+            tooltip="Import Calendar"
+            onClick={() => {
+              importHandler(setIsOpen);
+              if (isOpenInbox) setIsOpenInbox(false); // Close the Inbox if it's open
+            }}
+            className={`py-2 rounded-lg 
+            ${isOpen ? "px-3 bg-gray-100 hover:bg-gray-200 transition-colors duration-200" : "px-3 transition-colors group hover:bg-gray-100 bg-white"}`}
+            size={35}
+          />
+        </div> 
       </div>
   
       <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
-        <ul className="overflow-y-auto flex-1 px-3 py-5">
+        <ul className="overflow-y-auto flex-1 px-2 py-2">
           {children({ isOpen, setIsOpen })}
         </ul>
       </SidebarContext.Provider>
   
-      {/* SideBar's profile icon and name overview at the 
-                bottom of the sidebar. Pfp centers when closed */}
+      {/* SideBar's profile icon and name overview at the bottom of the sidebar. Pfp centers when closed */}
       <div className="border-t flex p-3 items-center">
         <div className={`flex ${isOpen ? "w-full justify-start" : "mx-3 justify-center"}`}>
           <ProfileIcon user={user} size={35} username={isOpen} onSignOut={handleSignOut} isDropdownOpen={isDropdownOpen} handleProfileIconClick={handleProfileIconClick} />

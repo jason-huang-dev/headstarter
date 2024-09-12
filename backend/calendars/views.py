@@ -1,11 +1,15 @@
 from datetime import datetime
+from io import BytesIO
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from icalendar import Calendar as ICalendar, Event as ICalEvent
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from events.models import Event
 from .models import Calendar
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from .serializers import CalendarSerializer
@@ -265,3 +269,85 @@ def process_email_invitations(calendar, emails, user):
             invitations.append(invite)
     
     return invitations, email_statuses
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def import_ics_calendar(request):
+    """
+    Import calendar data from an uploaded .ics file.
+    """
+    file = request.FILES.get('ics_file')
+    if not file:
+        return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        title = request.data.get('title', 'My Calendar')
+        description = request.data.get('description', '')
+        emails = request.data.get('email_list', [])  # Get the list of emails
+
+        # Create the calendar
+        calendar = Calendar.objects.create(user=request.user, title=title, description=description)
+        # Read and parse the ICS file
+        ics_data = file.read()
+        calendar_ics = ICalendar.from_ical(ics_data)
+
+        # Process calendar data
+        for component in calendar_ics.walk():
+            if component.name == "VEVENT":
+                summary = component.get('summary', 'No Title')
+                description = component.get('description', '')
+                start = component.get('dtstart').dt
+                end = component.get('dtend').dt
+
+                # Save or update the calendar events in your database
+                Event.objects.create(
+                    cal_id = calendar,
+                    title = summary,
+                    description = description,
+                    start = start,
+                    end = end,
+                    user = request.user
+                )
+
+        return Response({'success': 'File imported successfully'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def export_ics_calendar(request):
+    """
+    Export calendar data as a .ics file.
+    """
+    try:
+        # Get calendar title and events from the request
+        calendar_title = request.GET.get("calendar_title", "My Calendar")
+        events = request.GET.get("events", [])
+
+        # Create an ICS calendar
+        ics_calendar = Calendar()
+        ics_calendar.add('prodid', '-//My Calendar Application//EN')
+        ics_calendar.add('version', '2.0')
+        ics_calendar.add('x-wr-calname', calendar_title)
+
+        # Add events to the ICS calendar
+        for event_data in events:
+            ics_event = ICalEvent()
+            ics_event.add('summary', event_data['title'])
+            ics_event.add('description', event_data.get('description', ''))
+            ics_event.add('dtstart', event_data['start'])
+            ics_event.add('dtend', event_data['end'])
+            ics_event.add('color', event_data.get('bg_color', '#808080'))  # Optional field for background color
+            ics_calendar.add_component(ics_event)
+
+        # Save calendar to a BytesIO stream
+        ics_file = BytesIO()
+        ics_file.write(ics_calendar.to_ical())
+        ics_file.seek(0)
+
+        response = HttpResponse(ics_file.read(), content_type='text/calendar')
+        response['Content-Disposition'] = 'attachment; filename="calendar.ics"'
+
+        return response
+    except Exception as e:
+        return HttpResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

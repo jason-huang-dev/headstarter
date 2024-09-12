@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { sideBarAccordians, calendarForm, eventForm, colorsForEvent, chronyAIForm} from "../constants"; 
+import { sideBarAccordians, calendarForm, eventForm, colorsForEvent, chronyAIForm, importExportForm, importExportFormFields} from "../constants"; 
 import { Accordion, AccordionItem, RightBar, Popup, Form, Button } from '../components/reusable';
 import { SideBar, CalendarOverview, InboxOverview, ChronyChat} from '../components/dashboard';
 import { useUserContext } from '../contexts/userDataHandler';
@@ -29,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar} = useUserContext();
+  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, postImportCal, getExportCal} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -141,22 +141,33 @@ const Dashboards = () => {
 
   const openAIHandler = (setIsOpen) => {
     setRightBarContent('ai'); 
-    console.log(rightBarContent)
     setIsRightBarOpen(true); 
     setIsOpen(false); 
     setIsOpenInbox(false);
   };
   
+  const importCalHandler = (setIsOpen) => {
+    setRightBarContent('import');
+    setIsRightBarOpen(true);
+    setIsOpen(false)
+    setIsOpenInbox(false);
+  }
+
   const submitAddCalendar = (calendarDetails) =>{
     addCalendar(calendarDetails);
     setIsRightBarOpen(false);
   }
 
-  const sendUserInput = (message) =>{
-    postAI({
-      role: "user",
-      message: message
-    });
+  const clickedImportCalendar = (importCalenderDetails) => {
+    alert("Importing your calendar")
+    postImportCal(importCalenderDetails)
+    setIsRightBarOpen(false);
+  }
+
+  const clickedExportCalendar = (exportCalenderDetails) => {
+    alert("Exporting your calendar")
+    getExportCal(exportCalenderDetails, filteredEvents)
+    setIsRightBarOpen(false);
   }
 
   const submitEditCalendar = (calendarDetails) =>{
@@ -193,6 +204,7 @@ const Dashboards = () => {
         addCalendar={addCalendarHandler} 
         addEvent={addEventHandler} 
         openAI={openAIHandler}
+        importHandler={importCalHandler}
         isRightBarOpen={isRightBarOpen} 
         setIsOpenInbox={setIsOpenInbox}
         isOpenInbox={isOpenInbox}
@@ -265,7 +277,7 @@ const Dashboards = () => {
               formFields={calendarFormFields}
               fields={calendarForm}
             >
-              {({ formDetails, setFormDetails }) => (
+              {({ formDetails, setFormDetails, validateForm}) => (
                 <div className="mb-2">
                   {/* Display each email with a delete button */}
                   {formDetails.email_list.map((email, index) => (
@@ -285,7 +297,10 @@ const Dashboards = () => {
                       </button>
                     </div>
                   ))}
-                  <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
+                  <Button onClick={() => validateForm() ?
+                    rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails) :
+                    alert("Please fill in all fields.")
+                  }>
                     {rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
                   </Button>
                   {rightBarContent === 'edit_calendar' && (
@@ -310,7 +325,7 @@ const Dashboards = () => {
               formFields={calendarFormFields}
               fields={calendarForm}
             >
-              {({ formDetails, setFormDetails }) => (
+              {({ formDetails, setFormDetails, validateForm}) => (
                 <div className="mb-2">
                   {/* Display each email with a delete button */}
                   {formDetails.email_list.map((email, index) => (
@@ -330,7 +345,10 @@ const Dashboards = () => {
                       </button>
                     </div>
                   ))}
-                  <Button onClick={() => rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails)}>
+                  <Button onClick={() => validateForm() ?
+                    rightBarContent === 'add_calendar' ? submitAddCalendar(formDetails): submitEditCalendar(formDetails) :
+                    alert("Please fill in all fields.")
+                  }>
                     {rightBarContent === 'add_calendar' ? "Add Calendar" : "Edit Calendar"}
                   </Button>
                   {rightBarContent === 'edit_calendar' && (
@@ -362,7 +380,7 @@ const Dashboards = () => {
               formFields={eventFormFields}
               fields={eventForm(calendars)}
             >
-              {({ formDetails, setFormDetails }) => (
+              {({ formDetails, setFormDetails, validateForm }) => (
                 <div className="mb-2">
                   {/* Color Selection */}
                   <div className="mb-4">
@@ -389,7 +407,10 @@ const Dashboards = () => {
                       ))}
                     </div>
                   </div>
-                  <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+                  <Button onClick={() => validateForm()?
+                    submitAddEvent(formDetails) :
+                    alert("Form is not filled in properly")
+                  }>Add Event</Button>
                 </div>
               )}
             </Form>
@@ -404,7 +425,7 @@ const Dashboards = () => {
               formFields={eventFormFields}
               fields={eventForm(calendars)}
             >
-              {({ formDetails, setFormDetails }) => (
+              {({ formDetails, setFormDetails, validateForm }) => (
                 <div className="mb-2">
                   {/* Color Selection */}
                   <div className="mb-4">
@@ -431,7 +452,10 @@ const Dashboards = () => {
                       ))}
                     </div>
                   </div>
-                  <Button onClick={() => submitAddEvent(formDetails)}>Add Event</Button>
+                  <Button onClick={() => validateForm()?
+                    submitAddEvent(formDetails) :
+                    alert("Form is not filled in properly")
+                  }>Add Event</Button>
                 </div>
               )}
             </Form>
@@ -460,6 +484,60 @@ const Dashboards = () => {
         </Popup>
       ))}
 
+      {/* Content for Import and Export of Calendars */}
+      {isRightBarOpen && rightBarContent === 'import' && (
+      screenWidth > 1150 ? (
+        <RightBar 
+          isRightBarOpen={isRightBarOpen} 
+          setIsRightBarOpen={setIsRightBarOpen} 
+          rightBarTitle="Import Calendar"
+          className="fixed right-0 top-0 h-screen w-80"
+        >
+          <Form
+            formFields={importExportFormFields}
+            fields={importExportForm()}
+          >
+            {({ formDetails, validateForm}) => (
+              <div className="mb-2">
+                {!formDetails["import_cal"] && <span className='text-color-3'>
+                  *Note will only export the current selected calendars
+                  </span>}
+                  <Button onClick={() => validateForm() ? 
+                    formDetails["import_cal"] ? clickedImportCalendar(formDetails):clickedExportCalendar(formDetails) :
+                    alert("Form is not filled in properly")
+                  }>
+                  {formDetails["import_cal"] ? 'Import' : 'Export'}
+                </Button>
+              </div>
+            )}
+          </Form>
+        </RightBar>
+      ) : (
+        <Popup 
+          isOpen={isRightBarOpen} 
+          onClose={() => setIsRightBarOpen(false)} 
+          title="Import Calendar"
+        >
+          <Form
+            formFields={importExportFormFields}
+            fields={importExportForm()}
+          >
+            {({ formDetails, validateForm }) => (
+              <div className="mb-2">
+                {!formDetails["import_cal"] && <span className='text-color-3'>
+                  *Note will only export the current selected calendars
+                </span>}
+                <Button onClick={() => validateForm() ? 
+                    formDetails["import_cal"] ? clickedImportCalendar(formDetails):clickedExportCalendar(formDetails) :
+                    alert("Form is not filled in properly")
+                  }>
+                  {formDetails["import_cal"] ? 'Import' : 'Export'}
+                </Button>
+              </div>
+            )}
+          </Form>
+        </Popup>
+      ))}
     </div>
   ); 
 };

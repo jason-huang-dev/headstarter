@@ -411,6 +411,88 @@ const UserProvider = ({ children }) => {
     }
   }
 
+  const postImportCal = async (importCalenderDetails) => {
+    console.log("Processing Import Request:", importCalenderDetails);
+    try {
+        // Create a FormData object
+        const formData = new FormData();
+
+        // Append each field to the FormData object
+        Object.keys(importCalenderDetails).forEach(key => {
+            formData.append(key, importCalenderDetails[key]);
+        });
+
+        const response = await fetch(`${backend_url}/api/calendars/import/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${user.token}`,
+                // No 'Content-Type' header is needed when using FormData; it will be set automatically
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            // Handle response errors, e.g., 4xx or 5xx HTTP status codes
+            const errorText = await response.text();
+            throw new Error(`Error ${response.status}: ${errorText}`);
+        }
+
+        // Parse the JSON response
+        const data = await response.json();
+        console.log("Import Successful:", data);
+
+        // Handle the successful response, e.g., show a message or update UI
+        // Example: display a success message
+        alert('Import successful!');
+    } catch (error) {
+        console.error("Error during import:", error.message);
+        // Handle or display the error as needed
+        alert(`Import failed: ${error.message}`);
+    }
+  };
+
+  
+
+  const getExportCal = async (exportCalenderDetails, filteredEvents) =>{
+    console.log("Processing Export Request:", filteredEvents)
+    try{
+      const response = await fetch(`${backend_url}/api/calendars/export/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${user.token}`,
+        },
+        body: JSON.stringify({ 
+          calendar_title: exportCalenderDetails.title,
+          events: filteredEvents
+        }),
+      });
+
+      if (!response.ok) {
+        // Handle response errors, e.g., 4xx or 5xx HTTP status codes
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
+      }
+
+      // Parse the JSON response
+      const data = await response.json();
+      console.log("Export Successful:", data);
+      // Handle the successful response, e.g., download a file, show a message, etc.
+      // Assuming the API returns a URL or file to download
+      if (data.downloadUrl) {
+        // For example, open the download URL in a new tab
+        window.open(data.downloadUrl, '_blank');
+      } else {
+        // Handle other successful responses
+        console.log('Export result:', data);
+      }
+    } catch (error) {
+      console.error("Error during export:", error.message);
+      // Handle or display the error as needed
+    }
+  };
+
+
   return (
     <UserContext.Provider
       value={{
@@ -430,6 +512,8 @@ const UserProvider = ({ children }) => {
         updateCalendar,
         deleteCalendar,
         acceptInvitation,
+        postImportCal,
+        getExportCal
       }}
     >
       {children}

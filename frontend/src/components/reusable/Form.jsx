@@ -12,7 +12,8 @@ import React, { useState } from 'react';
 * @component
  * @param {Object} props - The component properties.
  * @param {Array<Object>} props.fields - Configuration array for form fields, where each object defines an input field.
- * @param {string} props.fields.type - The type of the input element (e.g., "text", "checkbox", "select").
+ * @param {string} props.fields.type - The type of the input element (e.g., "text", "checkbox", "select", "file").
+ * @param {string} props.fields.accept - The allowed file types if the field type is "file"
  * @param {string} props.fields.name - The name attribute for the input element, used as a key in `formFields`.
  * @param {string} [props.fields.label] - The label text displayed above or beside the input element.
  * @param {string} [props.fields.placeholder] - Placeholder text displayed inside the input element (applies to "text" and "select").
@@ -35,26 +36,35 @@ const Form = ({ fields, formFields, children }) => {
   const [charCount, setCharCount] = useState({});
 
   const handleFormInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    let fieldValue = type === 'checkbox' ? checked : value;
+    const { name, value, type, checked, files } = e.target;
 
-    // Update character count if maxLength is defined
-    const field = fields.find(f => f.name === name);
-    if (field && field.maxLength) {
-      setCharCount(prevCount => ({
-        ...prevCount,
-        [name]: field.maxLength - value.length
+    if (type === 'file') {
+      setFormDetails(prevDetails => ({
+        ...prevDetails,
+        [name]: files[0] // Assuming single file upload
       }));
+    } 
+    else {
+      let fieldValue = type === 'checkbox' ? checked : value;
+
+      // Update character count if maxLength is defined
+      const field = fields.find(f => f.name === name);
+      if (field && field.maxLength) {
+        setCharCount(prevCount => ({
+          ...prevCount,
+          [name]: field.maxLength - value.length
+        }));
+      }
+
+      // Update form details
+      setFormDetails(prevDetails => ({
+        ...prevDetails,
+        [name]: fieldValue
+      }));
+
+      // Validate the field
+      validateField(name, fieldValue);
     }
-
-    // Update form details
-    setFormDetails(prevDetails => ({
-      ...prevDetails,
-      [name]: fieldValue
-    }));
-
-    // Validate the field
-    validateField(name, fieldValue);
   };
 
   const validateField = (name, value) => {
@@ -82,14 +92,6 @@ const Form = ({ fields, formFields, children }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // console.log("Form Submitted:", formDetails);
-    } else {
-      // console.log("Validation Errors:", errors);
-    }
-  };
-
   const filteredFields = fields.filter((field, index) => {
     if (field.ifPrev) {
       return index === 0 || formDetails[fields[index - 1].name];
@@ -110,7 +112,7 @@ const Form = ({ fields, formFields, children }) => {
       {filteredFields.map((field) => {
         const {
           type, name, label, placeholder, options, required,
-          className, labelAfter, onKeyDown, onChange, validate,
+          className, labelAfter, onKeyDown, onChange, validate, accept,
           option_key, option_label, maxLength
         } = field;
 
@@ -118,6 +120,7 @@ const Form = ({ fields, formFields, children }) => {
           <div key={name} className={`mb-4 ${className || ''}`}>
             {label && !labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
             {type === "select" ? (
+              /* For to input type select */
               <select
                 name={name}
                 value={formDetails[name] || ""}
@@ -136,6 +139,7 @@ const Form = ({ fields, formFields, children }) => {
                 }
               </select>
             ) : type === "checkbox" ? (
+              /* For to input type checkbox */
               <input
                 type={type}
                 name={name}
@@ -144,7 +148,28 @@ const Form = ({ fields, formFields, children }) => {
                 required={required}
                 className="mr-2"
               />
+            ) : type === "file" ? (
+              /* For to input type file */
+              <>
+                <input
+                  type={type}
+                  name={name}
+                  id="fileInput"
+                  onChange={(e) => handleChange(e, onChange, validate)}
+                  accept={accept}
+                  required={required}
+                  className="mr-2 hidden"
+                />
+                {/* Custom button to trigger file input */}
+                <label
+                htmlFor="fileInput"
+                className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                  {formDetails[name] ? `Selected: ${formDetails[name].name}` : 'Upload a file'}
+                </label>
+              </>
             ) : (
+            /* Defaults to input type text */
             <input
               type={type}
               name={name}
@@ -160,6 +185,7 @@ const Form = ({ fields, formFields, children }) => {
               maxLength={maxLength}
             />
             )}
+
             {label && labelAfter && <label className="block text-sm font-medium text-gray-700">{label}</label>}
             {maxLength && (
               <p className="text-gray-500 text-sm mt-1">
@@ -173,7 +199,7 @@ const Form = ({ fields, formFields, children }) => {
         );
       })}
       {typeof children === 'function' 
-        ? children({ formDetails, setFormDetails }) 
+        ? children({ formDetails, setFormDetails , validateForm}) 
         : children}
     </div>
   );

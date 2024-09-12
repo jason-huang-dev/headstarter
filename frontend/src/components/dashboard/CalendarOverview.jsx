@@ -106,7 +106,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
             formFields={eventDetails}
             fields={eventForm(calendars)}
           >
-            {({ formDetails, setFormDetails }) => (
+            {({ formDetails, setFormDetails, validateForm }) => (
               <div className="mb-2">
                 {/* Color Selection */}
                 <div className="mb-4">
@@ -133,7 +133,10 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
                     ))}
                   </div>
                 </div>
-                <Button onClick={() => handleEventUpdate(formDetails)}>Update Event</Button>
+                <Button onClick={() => validateForm() ?
+                  handleEventUpdate(formDetails):
+                  alert('Please fill all the fields')
+                }>Update Event</Button>
                 <Button 
                   className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                   onClick={() => handleEventDelete(formDetails)}
@@ -182,7 +185,10 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
                       ))}
                     </div>
                   </div>
-                  <Button onClick={() => handleEventUpdate(formDetails)}>Update Event</Button>
+                  <Button onClick={() => validateForm() ?
+                  handleEventUpdate(formDetails):
+                  alert('Please fill all the fields')
+                  }>Update Event</Button>
                   <Button 
                     className="text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                     onClick={() => handleEventDelete(formDetails)}
