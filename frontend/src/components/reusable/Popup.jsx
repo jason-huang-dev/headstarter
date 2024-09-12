@@ -20,20 +20,19 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-lg p-6 relative">
+        {/* Header with Close Button and Title */}
         <div className="flex justify-between items-center mb-4">
-          {/* Close button */}
           <button
             onClick={onClose}
             className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
           >
             <X /> {/* Close icon */}
           </button>
-          {/* Display title if provided */}
           {title && <h2 className="text-lg font-sora font-bold">{title}</h2>}
         </div>
-
-        {/* Main content area to display children */}
-        <div className="overflow-y-auto">
+  
+        {/* Main Content Area with Scroll */}
+        <div className="h-[60vh]">
           {children}
         </div>
       </div>
