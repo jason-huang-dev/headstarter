@@ -57,14 +57,23 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
         .slice(0, 16);
     };
   
-    const localStart = formatDateForInput(event.start);
-    const localEnd = formatDateForInput(event.end);
+    let localStart, localEnd;
+    if (event.isRecurring) {
+      // For recurring events, use the original event time
+      localStart = formatDateForInput(event.originalStart);
+      localEnd = formatDateForInput(event.originalEnd);
+    } else {
+      localStart = formatDateForInput(event.start);
+      localEnd = formatDateForInput(event.end);
+    }
     
     const formattedEvent = {
       ...event,
       start: localStart,
       end: localEnd,
       repeat_until: event.repeat_until ? moment(event.repeat_until).format('YYYY-MM-DD') : null,
+      originalStart: event.originalStart,
+      originalEnd: event.originalEnd,
     };
     
     setEventDetails(formattedEvent);

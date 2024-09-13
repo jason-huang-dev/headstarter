@@ -121,7 +121,9 @@ const UserProvider = ({ children }) => {
             end: format(recurrenceEnd, "yyyy-MM-dd'T'HH:mm:ssXXX"),
             bg_color: event.bg_color,
             isRecurring: true,
-            originalEventId: event.id
+            originalEventId: event.id,
+            originalStart: event.start,
+            originalEnd: event.end
           };
         });
       }
