@@ -1,8 +1,10 @@
 FROM node:22-bookworm-slim
 WORKDIR /app
-COPY package.json ./
+COPY package*.json ./
+COPY . .
+RUN rm -rf node_modules package-lock.json
 RUN npm install
-COPY src ./src
-COPY public ./public
-COPY vite.config.js ./
-CMD [ "sleep", "infinity" ]
+EXPOSE 5173
+
+CMD [ "npm", "run", "dev" ]
+# CMD ["sleep", "infinity"]
