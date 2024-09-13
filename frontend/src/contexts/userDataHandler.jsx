@@ -116,7 +116,7 @@ const UserProvider = ({ children }) => {
   
           return {
             id: `${event.id}_${date}`,
-            title: `${event.title} (${event.repeat_type.charAt(0) + event.repeat_type.slice(1).toLowerCase()})`,
+            title: `${event.title}`,
             start: format(recurrenceDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
             end: format(recurrenceEnd, "yyyy-MM-dd'T'HH:mm:ssXXX"),
             bg_color: event.bg_color,
