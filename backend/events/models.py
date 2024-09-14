@@ -10,6 +10,8 @@ from django.db import models
 from django.conf import settings
 from calendars.models import Calendar
 import json
+from django.utils import timezone
+from datetime import datetime
 
 class Event(models.Model):
     """
@@ -42,7 +44,7 @@ class Event(models.Model):
     
     # New fields for repeating events
     repeat_type = models.CharField(max_length=10, choices=REPEAT_CHOICES, default='NONE')
-    repeat_until = models.DateField(null=True, blank=True)
+    repeat_until = models.DateTimeField(null=True, blank=True)
     repeat_days = models.JSONField(null=True, blank=True)  # For storing days of the week for weekly repeats
     repeated_dates = models.JSONField(default=list, blank=True)  # New field to store repeated dates
 
@@ -55,7 +57,15 @@ class Event(models.Model):
         return f"{self.title}"
     
     def set_repeated_dates(self, dates):
-        self.repeated_dates = dates  # Store as a list directly
+        # Handle both datetime objects and string inputs
+        self.repeated_dates = [
+            date.isoformat() if isinstance(date, (datetime, timezone.datetime)) else date
+            for date in dates
+        ]
 
     def get_repeated_dates(self):
-        return self.repeated_dates  # Return the list directly
+        # Convert strings to datetime objects when retrieving
+        return [
+            timezone.datetime.fromisoformat(date) if isinstance(date, str) else date
+            for date in self.repeated_dates
+        ]
