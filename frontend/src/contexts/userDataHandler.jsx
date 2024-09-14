@@ -251,11 +251,9 @@ const UserProvider = ({ children }) => {
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
     // console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
-    updatedDetails = verifyEventDetails(updatedDetails);
-    if (!updatedDetails) {
-      return;
-    }
-    if (!updatedDetails) {
+    
+    updatedDetails = verifyEventDetails(updatedDetails)
+    if(!updatedDetails){
       return;
     }
 
@@ -298,9 +296,7 @@ const UserProvider = ({ children }) => {
           return updatedEvents;
         });
         return processedEvent; // Return the processed event
-      } else {
-        console.error('Error from server:', data);
-      }
+      } 
     } catch (error) {
       console.error('Error:', error);
     }
