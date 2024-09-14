@@ -88,7 +88,7 @@ const eventForm = (calendars) => [
   {
     label: 'Repeat Until',
     name: 'repeat_until',
-    type: 'date',
+    type: 'datetime-local',
     ifPrev: (formDetails) => formDetails.repeat_type !== 'NONE'
   },
   {

@@ -31,26 +31,16 @@ def event_view(request):
         return create_event(request)
 
 def generate_repeated_dates(event):
-    if isinstance(event.start, str):
-        start_date = parse_datetime(event.start)
-    else:
-        start_date = event.start
-    
-    start_date = timezone.localtime(start_date).date()
-    
-    if event.repeat_until:
-        if isinstance(event.repeat_until, str):
-            repeat_until = parse_date(event.repeat_until)
-        else:
-            repeat_until = event.repeat_until
-    else:
-        repeat_until = start_date + timedelta(days=365)  # Default to 1 year from start
+    start_date = event.start
+    repeat_until = event.repeat_until or (start_date + timedelta(days=365))  # Default to 1 year from start
+
+    # Ensure both start_date and repeat_until are timezone-aware
+    if timezone.is_naive(start_date):
+        start_date = timezone.make_aware(start_date)
+    if timezone.is_naive(repeat_until):
+        repeat_until = timezone.make_aware(repeat_until)
 
     repeated_dates = []
-
-    if event.repeat_type == 'NONE':
-        return []
-
     current_date = start_date
 
     # Limit the number of repeated dates to prevent excessive generation
@@ -58,26 +48,28 @@ def generate_repeated_dates(event):
 
     while current_date <= repeat_until and len(repeated_dates) < max_repetitions:
         if event.repeat_type == 'DAILY':
-            repeated_dates.append(current_date.isoformat())
+            repeated_dates.append(current_date)
             current_date += timedelta(days=1)
         elif event.repeat_type == 'WEEKLY':
             if event.repeat_days:
                 weekdays = [{'MON': 0, 'TUE': 1, 'WED': 2, 'THU': 3, 'FRI': 4, 'SAT': 5, 'SUN': 6}[day] for day in event.repeat_days]
                 if current_date.weekday() in weekdays:
-                    repeated_dates.append(current_date.isoformat())
+                    repeated_dates.append(current_date)
                 current_date += timedelta(days=1)
             else:
-                repeated_dates.append(current_date.isoformat())
+                repeated_dates.append(current_date)
                 current_date += timedelta(weeks=1)
         elif event.repeat_type == 'MONTHLY':
-            repeated_dates.append(current_date.isoformat())
+            repeated_dates.append(current_date)
             next_month = (current_date.month % 12) + 1
             year_increment = (current_date.month + 1) // 13
             current_date = current_date.replace(year=current_date.year + year_increment, month=next_month)
         elif event.repeat_type == 'YEARLY':
-            repeated_dates.append(current_date.isoformat())
+            repeated_dates.append(current_date)
             current_date = current_date.replace(year=current_date.year + 1)
-    repeated_dates = [date for date in repeated_dates if date != start_date.isoformat()]
+    
+    # Filter out the original start date
+    repeated_dates = [date for date in repeated_dates if date != start_date]
     return repeated_dates
 
 def get_events(request):
@@ -104,9 +96,9 @@ def get_events(request):
                     repeated_dates = generate_repeated_dates(event)
                     filtered_repeated_dates = [
                         date for date in repeated_dates
-                        if start_date.date() <= datetime.fromisoformat(date).date() < end_date.date()
+                        if start_date <= date < end_date
                     ]
-                    event_data['repeated_dates'] = filtered_repeated_dates
+                    event_data['repeated_dates'] = [date.isoformat() for date in filtered_repeated_dates]
 
                 all_events.append(event_data)
 
@@ -116,7 +108,7 @@ def get_events(request):
                 event_data = EventSerializer(event).data
                 if event.repeat_type != 'NONE':
                     repeated_dates = generate_repeated_dates(event)
-                    event_data['repeated_dates'] = repeated_dates
+                    event_data['repeated_dates'] = [date.isoformat() for date in repeated_dates]
                 all_events.append(event_data)
 
         return Response(all_events, status=status.HTTP_200_OK)
@@ -158,7 +150,18 @@ def create_event(request):
     try:
         calendar = get_object_or_404(Calendar, pk=cal_id)
         if repeat_until:
-            repeat_until = parse_date(repeat_until)
+            repeat_until = parse_datetime(repeat_until)
+            if timezone.is_naive(repeat_until):
+                repeat_until = timezone.make_aware(repeat_until)
+        
+        start = parse_datetime(start)
+        end = parse_datetime(end)
+        
+        # Ensure start and end are timezone-aware
+        if timezone.is_naive(start):
+            start = timezone.make_aware(start)
+        if timezone.is_naive(end):
+            end = timezone.make_aware(end)
         
         event = Event.objects.create(
             cal_id=calendar,
@@ -258,9 +261,9 @@ def update_event(request, event_id):
         if description is not None:
             event.description = description
         if start:
-            event.start = start
+            event.start = parse_datetime(start)
         if end:
-            event.end = end
+            event.end = parse_datetime(end)
         if bg_color:
             event.bg_color = bg_color
         if repeat_type:
@@ -268,7 +271,7 @@ def update_event(request, event_id):
         if repeat_days is not None:
             event.repeat_days = repeat_days
         if repeat_until:
-            event.repeat_until = repeat_until
+            event.repeat_until = parse_datetime(repeat_until)
 
         # Regenerate repeated dates if repeat-related fields have changed
         if any(field in request.data for field in ['repeat_type', 'repeat_days', 'repeat_until', 'start', 'end']):
