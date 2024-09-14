@@ -217,8 +217,8 @@ const UserProvider = ({ children }) => {
 
   // Adds a new event 
   const addEvent = useCallback(async (eventDetails) => {
-    eventDetails = verifyEventDetails(eventDetails);
-    if (!eventDetails) {
+    eventDetails = verifyEventDetails(eventDetails)
+    if(!eventDetails){
       return;
     }
   
@@ -252,10 +252,10 @@ const UserProvider = ({ children }) => {
   const updateEvent = useCallback(async (updatedDetails) => {
     // console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
     
-    updatedDetails = verifyEventDetails(updatedDetails)
-    if(!updatedDetails){
-      return;
-    }
+    updatedDetails = verifyEventDetails(updatedDetails);
+  if (!updatedDetails) {
+    return;
+  }
 
     try {
       const response = await fetch(`${backend_url}/api/events/${updatedDetails.id}/`, {
