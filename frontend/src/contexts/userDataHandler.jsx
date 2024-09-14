@@ -251,9 +251,8 @@ const UserProvider = ({ children }) => {
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
     // console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
-    
-    updatedDetails = verifyEventDetails(updatedDetails)
-    if(!updatedDetails){
+    updatedDetails = verifyEventDetails(updatedDetails);
+    if (!updatedDetails) {
       return;
     }
 
@@ -266,19 +265,44 @@ const UserProvider = ({ children }) => {
         },
         body: JSON.stringify(updatedDetails),
       });
-  
+
       const data = await response.json();
-      // console.log('Response from Update Event:', data);
-  
+
       if (response.ok) {
-        fetchData(`${backend_url}/api/events/`, setEvents);
+        // Process the updated event data
+        const processedEvent = processEvents([data])[0];
+        setEvents(prevEvents => {
+          const updatedEvents = prevEvents.map(event => {
+            if (event.id === processedEvent.id) {
+              return processedEvent;
+            }
+            // Update recurring instances
+            if (event.originalEventId === processedEvent.id) {
+              const recurrenceDate = new Date(event.start);
+              const duration = new Date(processedEvent.end) - new Date(processedEvent.start);
+              const recurrenceEnd = new Date(recurrenceDate.getTime() + duration);
+              return {
+                ...event,
+                title: processedEvent.title,
+                bg_color: processedEvent.bg_color,
+                start: format(recurrenceDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+                end: format(recurrenceEnd, "yyyy-MM-dd'T'HH:mm:ssXXX"),
+                originalStart: processedEvent.start,
+                originalEnd: processedEvent.end
+              };
+            }
+            return event;
+          });
+          return updatedEvents;
+        });
+        return processedEvent; // Return the processed event
       } else {
         console.error('Error from server:', data);
       }
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user?.token]);
+  }, [user?.token, processEvents]);
 
   // Delete an existing event
   {/* TODO after deletion you can still see and interact with the 
