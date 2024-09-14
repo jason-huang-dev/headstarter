@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from io import BytesIO
 from django.http import HttpResponse
@@ -291,22 +292,31 @@ def import_ics_calendar(request):
         ics_data = file.read()
         calendar_ics = ICalendar.from_ical(ics_data)
 
+        # Dictionary to store event summaries and their associated colors
+        color_map = {}
+
         # Process calendar data
         for component in calendar_ics.walk():
             if component.name == "VEVENT":
-                summary = component.get('summary', 'No Title')
-                description = component.get('description', '')
-                start = component.get('dtstart').dt
-                end = component.get('dtend').dt
+                summary = component.get('SUMMARY', 'No Title')
+                description = component.get('DESCRIPTION', '')
+                start = component.get('DTSTART').dt
+                end = component.get('DTEND').dt
+                logger.info("Summary: %s \nDescription: %s \nStart: %s \nEnd: %s \n", summary, description, start, end)
+
+                # Check if the summary already has a color, if not generate one
+                if summary not in color_map:
+                    color_map[summary] = generate_random_color()
 
                 # Save or update the calendar events in your database
                 Event.objects.create(
-                    cal_id = calendar,
-                    title = summary,
-                    description = description,
-                    start = start,
-                    end = end,
-                    user = request.user
+                    cal_id=calendar,
+                    title=summary,
+                    description=description,
+                    start=start,
+                    end=end,
+                    user=request.user,
+                    bg_color=color_map[summary]
                 )
 
         return Response({'success': 'File imported successfully'}, status=status.HTTP_200_OK)
@@ -351,3 +361,12 @@ def export_ics_calendar(request):
         return response
     except Exception as e:
         return HttpResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function to generate random colors, avoiding very light colors
+def generate_random_color():
+    # Generate RGB values between 0 and 200 to avoid light colors (values near 255 are too white)
+    r = random.randint(0, 240)
+    g = random.randint(0, 240)
+    b = random.randint(0, 240)
+    # Convert RGB to HEX format
+    return f"#{r:02x}{g:02x}{b:02x}"

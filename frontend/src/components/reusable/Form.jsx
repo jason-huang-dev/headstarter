@@ -180,7 +180,28 @@ const Form = ({ fields, formFields, children }) => {
                 required={required}
                 className="mr-2"
               />
+            ) : type === "file" ? (
+              /* For to input type file */
+              <>
+                <input
+                  type={type}
+                  name={name}
+                  id="fileInput"
+                  onChange={(e) => handleChange(e, onChange, validate)}
+                  accept={accept}
+                  required={required}
+                  className="mr-2 hidden"
+                />
+                {/* Custom button to trigger file input */}
+                <label
+                htmlFor="fileInput"
+                className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                  {formDetails[name] ? `Selected: ${formDetails[name].name}` : 'Upload a file'}
+                </label>
+              </>
             ) : (
+            /* Defaults to input type text */
             <input
               type={type}
               name={name}
