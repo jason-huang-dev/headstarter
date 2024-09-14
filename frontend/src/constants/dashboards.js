@@ -88,23 +88,24 @@ const eventForm = (calendars) => [
   {
     label: 'Repeat Until',
     name: 'repeat_until',
-    type: 'datetime-local',
-    ifPrev: (formDetails) => formDetails.repeat_type !== 'NONE'
+    type: 'date',
+    ifPrev: (formDetails) => formDetails.repeat_type && formDetails.repeat_type !== 'NONE'
   },
   {
     label: 'Repeat Days',
     name: 'repeat_days',
-    type: 'checkbox',
+    type: 'checkbox-group',
     options: [
-      { value: 'MON', label: 'Monday' },
-      { value: 'TUE', label: 'Tuesday' },
-      { value: 'WED', label: 'Wednesday' },
-      { value: 'THU', label: 'Thursday' },
-      { value: 'FRI', label: 'Friday' },
-      { value: 'SAT', label: 'Saturday' },
-      { value: 'SUN', label: 'Sunday' },
+      { value: 'MON', label: 'Mon' },
+      { value: 'TUE', label: 'Tue' },
+      { value: 'WED', label: 'Wed' },
+      { value: 'THU', label: 'Thu' },
+      { value: 'FRI', label: 'Fri' },
+      { value: 'SAT', label: 'Sat' },
+      { value: 'SUN', label: 'Sun' },
     ],
-    ifPrev: (formDetails) => formDetails.repeat_type === 'WEEKLY'
+    ifPrev: (formDetails) => formDetails.repeat_type === 'WEEKLY',
+    className: "flex flex-wrap gap-2"
   }
 ];
 
