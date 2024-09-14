@@ -255,6 +255,9 @@ const UserProvider = ({ children }) => {
     if (!updatedDetails) {
       return;
     }
+    if (!updatedDetails) {
+      return;
+    }
 
     try {
       const response = await fetch(`${backend_url}/api/events/${updatedDetails.id}/`, {
@@ -265,7 +268,6 @@ const UserProvider = ({ children }) => {
         },
         body: JSON.stringify(updatedDetails),
       });
-
       const data = await response.json();
 
       if (response.ok) {
@@ -292,7 +294,7 @@ const UserProvider = ({ children }) => {
               };
             }
             return event;
-          });
+            });
           return updatedEvents;
         });
         return processedEvent; // Return the processed event
