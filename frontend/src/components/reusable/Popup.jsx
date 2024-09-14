@@ -19,9 +19,9 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-lg p-6 relative">
+      <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-lg p-6 relative flex flex-col max-h-[90vh]">
         {/* Header with Close Button and Title */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 flex-shrink-0">
           <button
             onClick={onClose}
             className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
@@ -32,7 +32,7 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
         </div>
   
         {/* Main Content Area with Scroll */}
-        <div className="h-[60vh]">
+        <div className="overflow-y-auto flex-grow">
           {children}
         </div>
       </div>
@@ -40,7 +40,7 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-// Define PropTypes for the Popup component to ensure correct prop types
+// PropTypes definition remains the same
 Popup.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
