@@ -271,7 +271,7 @@ const UserProvider = ({ children }) => {
       // console.log('Response from Update Event:', data);
   
       if (response.ok) {
-        setEvents(prevEvents => prevEvents.map(event => event.id === updatedDetails.id ? data : event));
+        fetchData(`${backend_url}/api/events/`, setEvents);
       } else {
         console.error('Error from server:', data);
       }
@@ -490,6 +490,8 @@ const UserProvider = ({ children }) => {
         // Handle the successful response, e.g., show a message or update UI
         // Example: display a success message
         alert('Import successful!');
+        fetchData(`${backend_url}/api/calendars/`, setCalendars);
+        fetchData(`${backend_url}/api/events/`, setEvents);  
     } catch (error) {
         console.error("Error during import:", error.message);
         // Handle or display the error as needed

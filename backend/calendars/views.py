@@ -1,6 +1,7 @@
 import random
 from datetime import datetime
 from io import BytesIO
+from typing import List
 from dateutil import parser
 from pytz import UTC
 from django.http import HttpResponse
@@ -229,7 +230,7 @@ def get_shared_calendars(request):
         logger.exception("Error retrieving shared calendars")
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-def process_email_invitations(calendar, emails, user):
+def process_email_invitations(calendar, emails: List[str], user):
     """
     Process email invitations for a calendar.
 
@@ -240,7 +241,7 @@ def process_email_invitations(calendar, emails, user):
     """
     invitations = []
     email_statuses = []
-    
+    emails = [email.lower() for email in emails]
     for email in emails:
         if email:
             # Check if the email is already invited
