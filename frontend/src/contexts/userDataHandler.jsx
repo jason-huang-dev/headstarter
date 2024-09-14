@@ -217,12 +217,10 @@ const UserProvider = ({ children }) => {
 
   // Adds a new event 
   const addEvent = useCallback(async (eventDetails) => {
-    eventDetails = verifyEventDetails(eventDetails)
-    if(!eventDetails){
+    eventDetails = verifyEventDetails(eventDetails);
+    if (!eventDetails) {
       return;
     }
-
-    // console.log('Adding Event:', eventDetails);
   
     try {
       const response = await fetch(`${backend_url}/api/events/`, {
@@ -235,17 +233,19 @@ const UserProvider = ({ children }) => {
       });
   
       const data = await response.json();
-      // console.log('Response from Add Event:', data);
   
       if (response.ok) {
-        setEvents((prevEvents) => [...prevEvents, data]);
+        // Process the new event data
+        const processedEvent = processEvents([data])[0];
+        setEvents((prevEvents) => [...prevEvents, processedEvent]);
+        return processedEvent; // Return the processed event
       } else {
         console.error('Error from server:', data);
       }
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [user?.token]);
+  }, [user?.token, processEvents]);
   
 
   // Update an existing event

@@ -183,16 +183,19 @@ const Dashboards = () => {
     setIsRightBarOpen(false);
   }
 
-  const submitAddEvent = (eventDetails) =>{
-    addEvent(eventDetails);
-    // Filter events based on the updated active items
-    const newFilteredEvents = events.filter(event =>
-      activeItems.includes(event.cal_id)
-    );
-    setFilteredEvents(newFilteredEvents)
-    // console.log("Events after addition: ", events)
+  const submitAddEvent = (eventDetails) => {
+    const newEvent = addEvent(eventDetails);
+    if (newEvent) {
+      // Update filteredEvents if the new event's calendar is currently active
+      setFilteredEvents(prevFilteredEvents => {
+        if (activeItems.includes(newEvent.cal_id)) {
+          return [...prevFilteredEvents, newEvent];
+        }
+        return prevFilteredEvents;
+      });
+    }
     setIsRightBarOpen(false);
-  }
+  };
 
   const accordians = sideBarAccordians(calendars, shared_calendars)
 
