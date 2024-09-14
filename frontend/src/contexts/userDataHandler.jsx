@@ -499,9 +499,9 @@ const UserProvider = ({ children }) => {
 
   
 
-  const getExportCal = async (exportCalenderDetails, filteredEvents) =>{
-    console.log("Processing Export Request:", filteredEvents)
-    try{
+  const postExportCal = async (exportCalenderDetails, filteredEvents) => {
+    console.log("Processing Export Request:", filteredEvents);
+    try {
       const response = await fetch(`${backend_url}/api/calendars/export/`, {
         method: 'POST',
         headers: {
@@ -509,34 +509,37 @@ const UserProvider = ({ children }) => {
           'Authorization': `Token ${user.token}`,
         },
         body: JSON.stringify({ 
-          calendar_title: exportCalenderDetails.title,
+          cal_title: exportCalenderDetails.title,
           events: filteredEvents
         }),
       });
-
+  
       if (!response.ok) {
         // Handle response errors, e.g., 4xx or 5xx HTTP status codes
         const errorText = await response.text();
         throw new Error(`Error ${response.status}: ${errorText}`);
       }
-
-      // Parse the JSON response
-      const data = await response.json();
-      console.log("Export Successful:", data);
-      // Handle the successful response, e.g., download a file, show a message, etc.
-      // Assuming the API returns a URL or file to download
-      if (data.downloadUrl) {
-        // For example, open the download URL in a new tab
-        window.open(data.downloadUrl, '_blank');
-      } else {
-        // Handle other successful responses
-        console.log('Export result:', data);
-      }
+  
+      // Handle the file download
+      const blob = await response.blob();
+      console.log("Result: ", blob)
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'calendar.ics'; // Set the file name for the downloaded file
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+  
+      // Optionally, revoke the object URL after the download
+      window.URL.revokeObjectURL(url);
+  
     } catch (error) {
       console.error("Error during export:", error.message);
       // Handle or display the error as needed
     }
   };
+  
 
 
   return (
@@ -559,7 +562,7 @@ const UserProvider = ({ children }) => {
         deleteCalendar,
         acceptInvitation,
         postImportCal,
-        getExportCal,
+        postExportCal,
         processEvents,
       }}
     >

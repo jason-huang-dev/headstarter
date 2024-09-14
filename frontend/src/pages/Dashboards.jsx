@@ -29,7 +29,7 @@ const Dashboards = () => {
   const [rightBarContent, setRightBarContent] = useState(''); 
   const [isOpenInbox, setIsOpenInbox] = useState(false)
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, postImportCal, getExportCal} = useUserContext();
+  const {calendars, shared_calendars, events, addCalendar, addEvent, updateCalendar, deleteCalendar, postImportCal, postExportCal} = useUserContext();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [filteredEvents, setFilteredEvents] = useState(events||[])
   const [calendarFormFields, setCalendarFormFields] = useState({
@@ -166,7 +166,7 @@ const Dashboards = () => {
 
   const clickedExportCalendar = (exportCalenderDetails) => {
     alert("Exporting your calendar")
-    getExportCal(exportCalenderDetails, filteredEvents)
+    postExportCal(exportCalenderDetails, filteredEvents)
     setIsRightBarOpen(false);
   }
 

@@ -82,7 +82,7 @@ const Form = ({ fields, formFields, children }) => {
   const validateForm = () => {
     const newErrors = {};
     fields.forEach((field) => {
-      if (field.validate) {
+      if (field.required && field.validate) {
         const errorMessage = field.validate(formDetails[field.name]);
         if (errorMessage !== true) {
           newErrors[field.name] = errorMessage;

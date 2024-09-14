@@ -1,6 +1,8 @@
 import random
 from datetime import datetime
 from io import BytesIO
+from dateutil import parser
+from pytz import UTC
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -16,12 +18,22 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from .serializers import CalendarSerializer
 from invitations.models import CalendarInvite
 from invitations.serializers import CalendarInviteSerializer
+from django.utils.dateparse import parse_datetime
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
+
+# Function to generate random colors, avoiding very light colors
+def generate_random_color():
+    # Generate RGB values between 0 and 200 to avoid light colors (values near 255 are too white)
+    r = random.randint(0, 240)
+    g = random.randint(0, 240)
+    b = random.randint(0, 240)
+    # Convert RGB to HEX format
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -302,7 +314,7 @@ def import_ics_calendar(request):
                 description = component.get('DESCRIPTION', '')
                 start = component.get('DTSTART').dt
                 end = component.get('DTEND').dt
-                logger.info("Summary: %s \nDescription: %s \nStart: %s \nEnd: %s \n", summary, description, start, end)
+                #logger.info("Summary: %s \nDescription: %s \nStart: %s \nEnd: %s \n", summary, description, start, end)
 
                 # Check if the summary already has a color, if not generate one
                 if summary not in color_map:
@@ -323,7 +335,7 @@ def import_ics_calendar(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def export_ics_calendar(request):
     """
@@ -331,42 +343,56 @@ def export_ics_calendar(request):
     """
     try:
         # Get calendar title and events from the request
-        calendar_title = request.GET.get("calendar_title", "My Calendar")
-        events = request.GET.get("events", [])
+        calendar_title = request.data.get("cal_title", "My Calendar")
+        events = request.data.get("events", [])
+        logger.info("%s", events)
 
         # Create an ICS calendar
-        ics_calendar = Calendar()
+        ics_calendar = ICalendar()
         ics_calendar.add('prodid', '-//My Calendar Application//EN')
         ics_calendar.add('version', '2.0')
         ics_calendar.add('x-wr-calname', calendar_title)
 
         # Add events to the ICS calendar
         for event_data in events:
-            ics_event = ICalEvent()
-            ics_event.add('summary', event_data['title'])
-            ics_event.add('description', event_data.get('description', ''))
-            ics_event.add('dtstart', event_data['start'])
-            ics_event.add('dtend', event_data['end'])
-            ics_event.add('color', event_data.get('bg_color', '#808080'))  # Optional field for background color
-            ics_calendar.add_component(ics_event)
+            try:
+                ics_event = ICalEvent()
+                ics_event.add('SUMMARY', event_data['title'])
+                ics_event.add('DESCRIPTION', event_data.get('description', ''))
+
+                # Convert start and end to datetime using dateutil parser
+                start = parser.isoparse(event_data['start']) if isinstance(event_data['start'], str) else event_data['start']
+                end = parser.isoparse(event_data['end']) if isinstance(event_data['end'], str) else event_data['end']
+
+                # Convert to UTC .ics format if needed (DTSTART and DTEND for UTC)
+                start_utc = start.astimezone(UTC)
+                end_utc = end.astimezone(UTC)
+
+                # Add the event to the calendar using datetime objects
+                ics_event.add('DTSTART', start_utc)
+                ics_event.add('DTEND', end_utc)
+
+                # Add the event to the calendar
+                ics_calendar.add_component(ics_event)
+            except KeyError as key_err:
+                logger.error(f"Missing required field in event: {key_err}")
+                return HttpResponse({'error': f"Missing required field in event: {key_err}"}, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                logger.error(f"Error processing event: {e}")
+                return HttpResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Save calendar to a BytesIO stream
         ics_file = BytesIO()
         ics_file.write(ics_calendar.to_ical())
         ics_file.seek(0)
+        raw_ics_data = ics_file.getvalue()
+        # logger.info("ICS Data: %s", raw_ics_data.decode('utf-8'))
 
-        response = HttpResponse(ics_file.read(), content_type='text/calendar')
+        # Prepare the response with the correct content type
+        response = HttpResponse(raw_ics_data, content_type='text/calendar')
         response['Content-Disposition'] = 'attachment; filename="calendar.ics"'
 
         return response
     except Exception as e:
-        return HttpResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# Function to generate random colors, avoiding very light colors
-def generate_random_color():
-    # Generate RGB values between 0 and 200 to avoid light colors (values near 255 are too white)
-    r = random.randint(0, 240)
-    g = random.randint(0, 240)
-    b = random.randint(0, 240)
-    # Convert RGB to HEX format
-    return f"#{r:02x}{g:02x}{b:02x}"
+        logger.error(f"Error generating ICS calendar: {str(e)}", exc_info=True)  # Detailed logging with stack trace
+        return HttpResponse({'error': 'Internal Server Error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
