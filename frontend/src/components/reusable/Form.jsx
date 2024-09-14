@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * Renders a dynamic form based on the provided field configuration.
@@ -36,19 +36,76 @@ const Form = ({ fields, formFields, children }) => {
   const [errors, setErrors] = useState({});
   const [charCount, setCharCount] = useState({});
 
+  useEffect(() => {
+    // Set initial repeat day based on start date
+    if (formDetails.start && formDetails.repeat_type === 'WEEKLY') {
+      const startDate = new Date(formDetails.start);
+      const dayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][startDate.getDay()];
+      setFormDetails(prev => ({
+        ...prev,
+        repeat_days: [dayOfWeek]
+      }));
+    }
+  }, [formDetails.start, formDetails.repeat_type]);
+
   const handleFormInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
     if (type === 'file') {
       setFormDetails(prevDetails => ({
         ...prevDetails,
-        [name]: files[0] // Assuming single file upload
+        [name]: files[0]
       }));
     } 
+    else if (type === 'checkbox' && name.includes('[')) {
+      const [fieldName, fieldValue] = name.replace(']', '').split('[');
+      setFormDetails(prevDetails => {
+        const currentValues = prevDetails[fieldName] || [];
+        let updatedValues;
+        
+        if (fieldName === 'repeat_days') {
+          const startDate = new Date(prevDetails.start);
+          const startDayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][startDate.getDay()];
+          
+          if (fieldValue === startDayOfWeek) {
+            // Don't allow unchecking the start date's day
+            updatedValues = currentValues;
+          } else {
+            updatedValues = checked
+              ? [...currentValues, fieldValue]
+              : currentValues.filter(v => v !== fieldValue);
+          }
+          
+          // Ensure start date's day is always included
+          if (!updatedValues.includes(startDayOfWeek)) {
+            updatedValues.push(startDayOfWeek);
+          }
+        } else {
+          updatedValues = checked
+            ? [...currentValues, fieldValue]
+            : currentValues.filter(v => v !== fieldValue);
+        }
+        
+        return { ...prevDetails, [fieldName]: updatedValues };
+      });
+    }
     else {
       let fieldValue = type === 'checkbox' ? checked : value;
 
-      // Update character count if maxLength is defined
+      if (name === 'start') {
+        // Reset repeat_days when start date changes
+        setFormDetails(prevDetails => ({
+          ...prevDetails,
+          [name]: fieldValue,
+          repeat_days: []
+        }));
+      } else {
+        setFormDetails(prevDetails => ({
+          ...prevDetails,
+          [name]: fieldValue
+        }));
+      }
+
       const field = fields.find(f => f.name === name);
       if (field && field.maxLength) {
         setCharCount(prevCount => ({
@@ -57,13 +114,6 @@ const Form = ({ fields, formFields, children }) => {
         }));
       }
 
-      // Update form details
-      setFormDetails(prevDetails => ({
-        ...prevDetails,
-        [name]: fieldValue
-      }));
-
-      // Validate the field
       validateField(name, fieldValue);
     }
   };
@@ -120,9 +170,12 @@ const Form = ({ fields, formFields, children }) => {
     }
   };
 
-  const filteredFields = fields.filter((field, index) => {
+  const filteredFields = fields.filter((field) => {
     if (field.ifPrev) {
-      return index === 0 || formDetails[fields[index - 1].name];
+      if (typeof field.ifPrev === 'function') {
+        return field.ifPrev(formDetails);
+      }
+      return formDetails[fields[fields.indexOf(field) - 1].name];
     }
     return true;
   });
@@ -170,7 +223,23 @@ const Form = ({ fields, formFields, children }) => {
                     ))
                 }
               </select>
-            ) : type === "checkbox" ? (
+            ) : type === "checkbox-group" ? (
+              <div className={field.className || "flex flex-wrap gap-2"}>
+                {field.options.map((option) => (
+                  <label key={option.value} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name={`${name}[${option.value}]`}
+                      value={option.value}
+                      checked={formDetails[name]?.includes(option.value) || false}
+                      onChange={handleFormInputChange}
+                      className="form-checkbox"
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            ) :  type === "checkbox" ? (
               /* For to input type checkbox */
               <input
                 type={type}

@@ -40,7 +40,7 @@ export const Popup = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-// PropTypes definition remains the same
+// Define PropTypes for the Popup component to ensure correct prop types
 Popup.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
