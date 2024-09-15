@@ -99,7 +99,15 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
   };
 
   return (
-    <div className={`h-full pt-5 ${popupIsOpen ? 'pr-100' : isRightBarOpen ? 'pr-80' : ''}`}>
+    <div 
+      className={`h-full pt-5 max-h ${popupIsOpen ? 'pr-100' : isRightBarOpen ? 'pr-80' : ''}`}
+      // added to try to contain the parent div to limit size of Calendar
+      style={{
+        maxWidth: '100%', // Set a maximum width for the container
+        width: '1213px',      // Set the width to 100% of the parent container
+        overflowX: 'hidden', // Prevent horizontal overflow
+      }}
+    >
       <Calendar
         localizer={localizer}
         events={expandedEvents}
@@ -108,7 +116,7 @@ const CalendarOverview = ({events, isRightBarOpen, setIsRightBarOpen, rightBarCo
         views={{ month: true, week: true, agenda: true }}
         defaultView={Views.MONTH}
         components={{ toolbar: CustomToolbar }}
-        style={{ height: '100%' }}
+        style={{ height: '100%'}}
         onSelectEvent={handleEventSelect}
         eventPropGetter={eventPropGetter}
       />
