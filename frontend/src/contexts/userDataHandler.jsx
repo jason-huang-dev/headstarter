@@ -93,10 +93,34 @@ const UserProvider = ({ children }) => {
   const [messages, setMessages] = useState([
     { 
       role: "assistant",
-      content: "🐢 Greetings! I’m Chrony, your personal scheduling assistant. I’m here to ensure your calendar is organized and efficient. How can I assist you in managing your time today?"
+      content: 
+      `
+        🐢 Greetings! 
+        I’m Chrony, your personal scheduling assistant. 
+        I’m here to ensure your calendar is organized and efficient.
+        If you want me to generate events please include "generate events" in your request
+        How can I assist you in managing your time today?
+      `
     }
   ]);
 
+  /**
+   * 
+   */
+  const updateHandlers = {
+    calendars: () => {
+      fetchData(`${backend_url}/api/calendars/`, setCalendars);
+    },
+    events: () => {
+      fetchData(`${backend_url}/api/events/`, setEvents);
+    },
+    invitations: () => {
+      fetchData(`${backend_url}/api/invitations/`, setInvitations);
+    },
+    shared_calendars: () => {
+      fetchData(`${backend_url}/api/calendars/shared/`, setSharedCalendars);
+    }
+  };
 
   const processEvents = (events) => {
     return events.map(event => {
@@ -218,11 +242,15 @@ const UserProvider = ({ children }) => {
   // Adds a new event 
   const addEvent = useCallback(async (eventDetails) => {
     eventDetails = verifyEventDetails(eventDetails)
+    // const controller = new AbortController();
+    // const timeoutId = setTimeout(() => controller.abort(), 20000);  
+    // console.log("Start addEvent", eventDetails)
     if(!eventDetails){
       return;
     }
   
     try {
+      // console.log("Start Try", eventDetails)
       const response = await fetch(`${backend_url}/api/events/`, {
         method: 'POST',
         headers: {
@@ -230,14 +258,18 @@ const UserProvider = ({ children }) => {
           'Authorization': `Token ${user.token}`,
         },
         body: JSON.stringify(eventDetails),
+        // signal: controller.signal, // pass the signal for abort
       });
-  
+      // clearTimeout(timeoutId);
+      // console.log("Response object:", response)
       const data = await response.json();
-  
+
       if (response.ok) {
         // Process the new event data
         const processedEvent = processEvents([data])[0];
         setEvents((prevEvents) => [...prevEvents, processedEvent]);
+        alert("Sucessfully Created Event")
+        // console.log(processedEvent)
         return processedEvent; // Return the processed event
       } else {
         console.error('Error from server:', data);
@@ -251,11 +283,11 @@ const UserProvider = ({ children }) => {
   // Update an existing event
   const updateEvent = useCallback(async (updatedDetails) => {
     // console.log(`Updating Event ${updatedDetails.id}:`, updatedDetails);
-    
+
     updatedDetails = verifyEventDetails(updatedDetails);
-  if (!updatedDetails) {
-    return;
-  }
+    if (!updatedDetails) {
+      return;
+    }
 
     try {
       const response = await fetch(`${backend_url}/api/events/${updatedDetails.id}/`, {
@@ -295,6 +327,7 @@ const UserProvider = ({ children }) => {
             });
           return updatedEvents;
         });
+        alert("Sucessfully Updated Event")
         return processedEvent; // Return the processed event
       } 
     } catch (error) {
@@ -303,8 +336,6 @@ const UserProvider = ({ children }) => {
   }, [user?.token, processEvents]);
 
   // Delete an existing event
-  {/* TODO after deletion you can still see and interact with the 
-    deleted event in UI although it is gone from backend database */}
   const deleteEvent = useCallback(async (updatedDetails) => {
     // console.log(`Deleting Event ${updatedDetails.id}`);
 
@@ -321,6 +352,7 @@ const UserProvider = ({ children }) => {
         setEvents(prevEvents => {
           const updatedEvents = prevEvents.filter(event => event.id !== updatedDetails.id);
           // console.log('Updated Events:', updatedEvents);
+          alert("Event Sucessfully Deleted")
           return updatedEvents;
         });
 
@@ -351,6 +383,7 @@ const UserProvider = ({ children }) => {
       // console.log('Response from Add Calendar:', data);
       if (response.ok) {
         setCalendars(prevCalendars => [...prevCalendars, data.calendar]);
+        alert("Calendar Sucessfully Added")
       } else {
         console.error('Error from server:', data);
       }
@@ -378,6 +411,7 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         setCalendars(prevCalendars => prevCalendars.map(calendar => calendar.cal_id === cal_id ? data.calendar : calendar));
+        alert("Calendar Sucessfully Updated")
       } else {
         console.error('Error from server:', data);
       }
@@ -401,6 +435,8 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         setCalendars(prevCalendars => prevCalendars.filter(calendar => calendar.cal_id !== calendarDetails.cal_id));
+        setEvents(prevEvents => prevEvents.filter(event => event.cal_id !== calendarDetails.cal_id));
+        alert(`Deleted Calendar: ${calendarDetails.title}`)
       } else {
         const data = await response.json();
         if (data.error === "Cannot delete the last calendar"){
@@ -433,6 +469,9 @@ const UserProvider = ({ children }) => {
         // console.log('Invitation accepted:', data);
         // Update invitations state to reflect the change
         setInvitations(prevInvitations => prevInvitations.filter(invite => invite.token !== invite_token));
+        fetchData(`${backend_url}/api/events/`, setEvents);
+        fetchData(`${backend_url}/api/calendars/shared/`, setSharedCalendars);
+        alert('Invitation Acceptance Successful!');
       } else {
         const error = await response.json();
         console.error('Error accepting invitation:', error);
@@ -443,7 +482,7 @@ const UserProvider = ({ children }) => {
   }, [user?.token]);
 
   const postAI = async (message) => {
-    console.log("Message to send to AI: ", message)
+    // console.log("Message to send to AI: ", message)
     try{
       const response = await fetch(`${backend_url}/api/ai/`, {
         method: 'POST',
@@ -458,13 +497,28 @@ const UserProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setMessages([...messages, message, data.message])
-        console.log('Array after response:', messages);
-        console.log('Received AI response: ', data.message);
+        setMessages(prevMessages => {
+          const newMessages = [
+            ...prevMessages, 
+            message, 
+            {
+              role: "assistant",
+              content: data.message
+            }];
+          // console.log('Array after response:', newMessages);
+          return newMessages;
+      });
+        data.update.forEach(updateType => {
+          if (updateHandlers[updateType]) {
+            updateHandlers[updateType]();
+          }
+        });
+        // console.log('Received AI response: ', data.message);
       } else {
         const error = await response.json();
         console.error('Error receiving AI response: ', error);
       }
+      return true;  // Indicates that messages has been updated
     }
     catch (error){
       console.error('Error:', error);
@@ -476,11 +530,13 @@ const UserProvider = ({ children }) => {
           content: "Sorry, I'm not able to respond right now. Please try again later."
         }
       ])
+      return true;  // Indicates that messages has been updated
     }
   }
 
   const postImportCal = async (importCalenderDetails) => {
-    console.log("Processing Import Request:", importCalenderDetails);
+    // console.log("Processing Import Request:", importCalenderDetails);
+    alert("Processing Import Request May Take a Few Seconds")
     try {
         // Create a FormData object
         const formData = new FormData();
@@ -507,13 +563,13 @@ const UserProvider = ({ children }) => {
 
         // Parse the JSON response
         const data = await response.json();
-        console.log("Import Successful:", data);
+        // console.log("Import Successful:", data);
 
         // Handle the successful response, e.g., show a message or update UI
         // Example: display a success message
-        alert('Import successful!');
         fetchData(`${backend_url}/api/calendars/`, setCalendars);
         fetchData(`${backend_url}/api/events/`, setEvents);  
+        alert('Import successful!');
     } catch (error) {
         console.error("Error during import:", error.message);
         // Handle or display the error as needed
@@ -524,7 +580,8 @@ const UserProvider = ({ children }) => {
   
 
   const postExportCal = async (exportCalenderDetails, filteredEvents) => {
-    console.log("Processing Export Request:", filteredEvents);
+    // console.log("Processing Export Request:", filteredEvents);
+    alert("Processing Export Request May Take a Few Seconds")
     try {
       const response = await fetch(`${backend_url}/api/calendars/export/`, {
         method: 'POST',
@@ -546,7 +603,7 @@ const UserProvider = ({ children }) => {
   
       // Handle the file download
       const blob = await response.blob();
-      console.log("Result: ", blob)
+      // console.log("Result: ", blob)
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;

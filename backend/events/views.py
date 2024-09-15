@@ -31,6 +31,7 @@ def event_view(request):
         return create_event(request)
 
 def generate_repeated_dates(event):
+    # logger.info("Start of generate repeated dates")
     start_date = event.start
     repeat_until = event.repeat_until or (start_date + timedelta(days=365))  # Default to 1 year from start
 
@@ -45,8 +46,11 @@ def generate_repeated_dates(event):
 
     # Limit the number of repeated dates to prevent excessive generation
     max_repetitions = 100
+    loop_counter = 0
 
     while current_date <= repeat_until and len(repeated_dates) < max_repetitions:
+        # logger.info("In while loop - current date: %s", current_date)
+        loop_counter += 1
         if event.repeat_type == 'DAILY':
             repeated_dates.append(current_date)
             current_date += timedelta(days=1)
@@ -67,9 +71,17 @@ def generate_repeated_dates(event):
         elif event.repeat_type == 'YEARLY':
             repeated_dates.append(current_date)
             current_date = current_date.replace(year=current_date.year + 1)
+        elif event.repeat_type == "NONE":
+            break
+            
+        # Failsafe in case of an endless loop scenario
+        if loop_counter > max_repetitions:
+            logger.warning("Exceeded max repetition count: %d", max_repetitions)
+            break
     
     # Filter out the original start date
     repeated_dates = [date for date in repeated_dates if date != start_date]
+    # logger.info("End of generate repeated dates")
     return repeated_dates
 
 def get_events(request):
@@ -132,7 +144,7 @@ def create_event(request):
     ::raises ValidationError : Raised if the provided data is invalid
     ::raises NotFound : Raised if the specified calendar does not exist
     """
-    logger.debug('Request data: %s', request.data)
+    # logger.info('Request data: %s', request.data)
 
     cal_id = request.data.get('cal_id')
     title = request.data.get('title')
@@ -175,12 +187,13 @@ def create_event(request):
             repeat_days=repeat_days,
             repeat_until=repeat_until
         )
-
+        
         # Generate and save repeated dates
+        # logger.info('Start Event Generation: %s', event)
         repeated_dates = generate_repeated_dates(event)
         event.set_repeated_dates(repeated_dates)
         event.save()
-
+        # logger.info('Returning respons: %s', EventSerializer(event).data)
         return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
 
     except Exception as e:

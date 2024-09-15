@@ -30,7 +30,7 @@ const ChronyChat = () => {
         }
     };
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (message.trim()) {
             setDisplayedMessages((prevMessages) => [
                 ...prevMessages,
@@ -38,10 +38,15 @@ const ChronyChat = () => {
             ]); // Add user's message to displayed messages
 
             setIsLoading(true); // Start loading state
-            postAI({
+            const success = await postAI({
                 role: 'user',
                 content: message.trim(),
             });
+            if (success) {
+                // If successful, update displayed messages
+                setDisplayedMessages(messages);
+                console.log(messages)
+            }
             setMessage(''); // Clear the input after sending
         }
     };

@@ -159,13 +159,11 @@ const Dashboards = () => {
   }
 
   const clickedImportCalendar = (importCalenderDetails) => {
-    alert("Importing your calendar")
     postImportCal(importCalenderDetails)
     setIsRightBarOpen(false);
   }
 
   const clickedExportCalendar = (exportCalenderDetails) => {
-    alert("Exporting your calendar")
     postExportCal(exportCalenderDetails, filteredEvents)
     setIsRightBarOpen(false);
   }
