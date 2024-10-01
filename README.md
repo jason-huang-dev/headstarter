@@ -2,6 +2,16 @@
 
 ## Quick rundown
 
+<img width="706" alt="timemesh" src="https://github.com/user-attachments/assets/57c473d3-8cce-4c7e-8c2f-e655695207b7">
+
+TimeMesh is a user-friendly calendar application to simplify scheduling and event management. TimeMesh was selected in the top 3 out of 60,000 engineers in the Headstarter Fellowship 2024; 500+ users on waitlist.
+
+Features
+- [X] Unified Calendar Management 🗓️: Keep track of work, study, and personal schedules with a clear separation between different calendar types.
+- [X] Simplicity and Ease of Use ✨: Clean, intuitive interface that streamlines the scheduling process.
+- [X] Real-Time Updates 🔔: Instant notifications and updates on events.
+- [X] AI Support 🤖: AI capabilities for enhanced scheduling and organization.
+- [X] Beta Traction 🚀: Over 500 users on our waitlist, 90+ calendars, and 100+ events created during beta testing.
 
 ## Project Setup and Dependencies
 
